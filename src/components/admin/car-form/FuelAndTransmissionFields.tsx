@@ -42,7 +42,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
               <SelectContent>
                 {fuelTypes.map((fuelType) => (
                   <SelectItem key={fuelType.id} value={fuelType.id.toString()}>
-                    {fuelType.name} ({fuelType.count})
+                    {fuelType.name} {fuelType.count > 0 && `(${fuelType.count})`}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -52,13 +52,13 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
         )}
       />
       
-      {/* Type de transmission */}
+      {/* Type de transmission - maintenant simplifié à Automatique ou Manuelle */}
       <FormField
         control={form.control}
         name="transmission_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Type de boîte de vitesse</FormLabel>
+            <FormLabel>Boîte de vitesse</FormLabel>
             <Select
               disabled={loading}
               onValueChange={field.onChange}
@@ -66,7 +66,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
             >
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner un type" />
+                  <SelectValue placeholder="Automatique ou Manuelle" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>

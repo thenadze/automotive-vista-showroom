@@ -30,11 +30,11 @@ export const useCarFormData = (car?: Car) => {
         // Utiliser les types de carburant prédéfinis au lieu de les charger
         setFuelTypes(predefinedFuelTypes);
         
-        // Charger les types de boîte de vitesse
+        // Charger les types de boîte de vitesse (maintenant simplifiés à Automatique et Manuelle)
         const { data: transmissionsData, error: transmissionsError } = await supabase
           .from("transmission_types")
           .select("*")
-          .order("name");
+          .order("id");
           
         if (transmissionsError) throw transmissionsError;
         setTransmissions(transmissionsData || []);
