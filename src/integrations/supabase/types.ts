@@ -9,7 +9,186 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admins: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      car_brands: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      car_photos: {
+        Row: {
+          car_id: string
+          created_at: string | null
+          id: string
+          is_primary: boolean | null
+          photo_url: string
+        }
+        Insert: {
+          car_id: string
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          photo_url: string
+        }
+        Update: {
+          car_id?: string
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          photo_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_photos_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "cars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cars: {
+        Row: {
+          brand_id: number
+          created_at: string | null
+          fuel_type_id: number
+          id: string
+          model: string
+          transmission_id: number
+          updated_at: string | null
+          year: number
+        }
+        Insert: {
+          brand_id: number
+          created_at?: string | null
+          fuel_type_id: number
+          id?: string
+          model: string
+          transmission_id: number
+          updated_at?: string | null
+          year: number
+        }
+        Update: {
+          brand_id?: number
+          created_at?: string | null
+          fuel_type_id?: number
+          id?: string
+          model?: string
+          transmission_id?: number
+          updated_at?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cars_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "car_brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cars_fuel_type_id_fkey"
+            columns: ["fuel_type_id"]
+            isOneToOne: false
+            referencedRelation: "fuel_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cars_transmission_id_fkey"
+            columns: ["transmission_id"]
+            isOneToOne: false
+            referencedRelation: "transmission_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_info: {
+        Row: {
+          address: string | null
+          description: string
+          email: string | null
+          id: number
+          logo_url: string | null
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          description: string
+          email?: string | null
+          id?: number
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          description?: string
+          email?: string | null
+          id?: number
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      fuel_types: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      transmission_types: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

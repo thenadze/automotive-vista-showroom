@@ -14,6 +14,7 @@ const Navbar = () => {
         setIsAuthenticated(true);
         
         // Check if user is admin
+        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
         const { data: adminData } = await supabase
           .from("admins")
           .select("*")
@@ -30,6 +31,7 @@ const Navbar = () => {
       async (event, session) => {
         setIsAuthenticated(!!session);
         if (session) {
+          // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
           const { data: adminData } = await supabase
             .from("admins")
             .select("*")
