@@ -1,11 +1,11 @@
 
 import React from "react";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { CarFormValues } from "./formSchema";
 import { FuelTypeWithCount } from "./fuelTypes";
 import { TransmissionType } from "@/types";
+import FuelTypeSelect from "./FuelTypeSelect";
+import TransmissionSelect from "./TransmissionSelect";
 
 interface FuelAndTransmissionFieldsProps {
   form: UseFormReturn<CarFormValues>;
@@ -23,63 +23,17 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Type de carburant */}
-      <FormField
-        control={form.control}
-        name="fuel_type_id"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Type de carburant</FormLabel>
-            <Select
-              disabled={loading}
-              onValueChange={(value) => field.onChange(parseInt(value))}
-              value={field.value ? field.value.toString() : undefined}
-            >
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner un type" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent className="bg-white z-50">
-                {fuelTypes.map((fuelType) => (
-                  <SelectItem key={fuelType.id} value={fuelType.id.toString()}>
-                    {fuelType.name} {fuelType.count > 0 && `(${fuelType.count})`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
+      <FuelTypeSelect 
+        form={form} 
+        fuelTypes={fuelTypes} 
+        loading={loading} 
       />
       
       {/* Type de transmission */}
-      <FormField
-        control={form.control}
-        name="transmission_id"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Boîte de vitesse</FormLabel>
-            <Select
-              disabled={loading}
-              onValueChange={(value) => field.onChange(parseInt(value))}
-              value={field.value ? field.value.toString() : undefined}
-            >
-              <FormControl>
-                <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Sélectionner une boîte" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent className="bg-white z-50">
-                {transmissions.map((transmission) => (
-                  <SelectItem key={transmission.id} value={transmission.id.toString()}>
-                    {transmission.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
+      <TransmissionSelect 
+        form={form} 
+        transmissions={transmissions} 
+        loading={loading} 
       />
     </div>
   );
