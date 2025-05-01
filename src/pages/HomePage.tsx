@@ -3,70 +3,136 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { CompanyInfo, Car, CarWithDetails, CarPhoto } from "@/types";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
 
 const HomePage = () => {
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [featuredCars, setFeaturedCars] = useState<CarWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Get company info
-        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-        const { data: companyData } = await supabase
+        setLoading(true);
+        setError(null);
+        
+        // Get company info avec timeout de sécurité
+        const companyPromise = supabase
           .from("company_info")
           .select("*")
           .single();
         
         // Get 3 random cars with their details
-        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-        const { data: carsData } = await supabase
+        const carsPromise = supabase
           .from("cars")
           .select(`
             *,
             car_photos (*)
           `)
           .limit(3);
+
+        // Exécuter les requêtes en parallèle pour optimiser
+        const [companyResult, carsResult] = await Promise.all([
+          companyPromise,
+          carsPromise
+        ]);
+
+        // Vérifier s'il y a des erreurs
+        if (companyResult.error) {
+          console.error("Erreur lors de la récupération des infos de l'entreprise:", companyResult.error);
+          toast({
+            title: "Erreur",
+            description: "Impossible de charger les informations de l'entreprise",
+            variant: "destructive",
+          });
+        } else {
+          setCompanyInfo(companyResult.data);
+        }
           
-        if (carsData) {
+        if (carsResult.error) {
+          console.error("Erreur lors de la récupération des voitures:", carsResult.error);
+          toast({
+            title: "Erreur",
+            description: "Impossible de charger les voitures",
+            variant: "destructive",
+          });
+        } else if (carsResult.data) {
           // Get car brands, fuel types, and transmission types
-          // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-          const { data: brands } = await supabase.from("car_brands").select("*");
-          // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-          const { data: fuelTypes } = await supabase.from("fuel_types").select("*");
-          // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-          const { data: transmissions } = await supabase.from("transmission_types").select("*");
+          const [brandsResult, fuelTypesResult, transmissionsResult] = await Promise.all([
+            supabase.from("car_brands").select("*"),
+            supabase.from("fuel_types").select("*"),
+            supabase.from("transmission_types").select("*")
+          ]);
           
           // Map additional data to cars
-          const carsWithDetails: CarWithDetails[] = carsData.map((car: any) => {
+          const carsWithDetails: CarWithDetails[] = carsResult.data.map((car: any) => {
             return {
               ...car,
-              brand: brands?.find(b => b.id === car.brand_id),
-              fuel_type: fuelTypes?.find(f => f.id === car.fuel_type_id),
-              transmission: transmissions?.find(t => t.id === car.transmission_id),
-              photos: car.car_photos
+              brand: brandsResult.data?.find(b => b.id === car.brand_id) || null,
+              fuel_type: fuelTypesResult.data?.find(f => f.id === car.fuel_type_id) || null,
+              transmission: transmissionsResult.data?.find(t => t.id === car.transmission_id) || null,
+              photos: car.car_photos || []
             };
           });
           
           setFeaturedCars(carsWithDetails);
         }
-        
-        setCompanyInfo(companyData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch (error: any) {
+        console.error("Erreur lors du chargement de la page d'accueil:", error);
+        setError("Une erreur est survenue lors du chargement des données.");
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger le contenu de la page d'accueil",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [toast]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      <div className="space-y-10">
+        {/* Hero Section Skeleton */}
+        <div className="bg-gray-200 animate-pulse h-64 rounded-lg"></div>
+        
+        {/* Featured Cars Skeleton */}
+        <div className="space-y-6">
+          <div className="h-8 bg-gray-200 animate-pulse rounded w-1/3 mx-auto"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="bg-gray-100 rounded-lg overflow-hidden">
+                <Skeleton className="w-full h-56" />
+                <div className="p-4 space-y-4">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64">
+        <div className="text-red-500 mb-4 text-xl">Erreur de chargement</div>
+        <p className="text-gray-600 mb-4">{error}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+        >
+          Rafraîchir la page
+        </button>
       </div>
     );
   }
@@ -104,16 +170,19 @@ const HomePage = () => {
                 <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                   <img
                     src={photoUrl}
-                    alt={`${car.brand?.name} ${car.model}`}
+                    alt={`${car.brand?.name || ''} ${car.model}`}
                     className="w-full h-56 object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/placeholder.svg";
+                    }}
                   />
                   <div className="p-4">
                     <h3 className="text-xl font-semibold mb-2">
-                      {car.brand?.name} {car.model} ({car.year})
+                      {car.brand?.name || 'Marque'} {car.model} ({car.year})
                     </h3>
                     <div className="flex justify-between text-sm text-gray-600 mb-4">
-                      <span>{car.fuel_type?.name}</span>
-                      <span>{car.transmission?.name}</span>
+                      <span>{car.fuel_type?.name || 'N/A'}</span>
+                      <span>{car.transmission?.name || 'N/A'}</span>
                     </div>
                     <Link
                       to={`/cars/${car.id}`}
