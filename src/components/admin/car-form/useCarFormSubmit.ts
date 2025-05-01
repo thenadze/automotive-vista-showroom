@@ -18,18 +18,21 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
       
       let carId = car?.id;
       
+      // Assurons-nous que les IDs sont bien des nombres entiers
+      const formData = {
+        year: values.year,
+        brand_id: values.brand_id,
+        model: values.model,
+        fuel_type_id: values.fuel_type_id,
+        transmission_id: values.transmission_id,
+        updated_at: new Date().toISOString(),
+      };
+      
       if (isEditMode && carId) {
         // Mise à jour d'une voiture existante
         const { error } = await supabase
           .from("cars")
-          .update({
-            year: values.year,
-            brand_id: values.brand_id,
-            model: values.model,
-            fuel_type_id: values.fuel_type_id,
-            transmission_id: values.transmission_id,
-            updated_at: new Date().toISOString(),
-          })
+          .update(formData)
           .eq("id", carId);
           
         if (error) throw error;
@@ -37,13 +40,7 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
         // Création d'une nouvelle voiture
         const { data: newCar, error } = await supabase
           .from("cars")
-          .insert({
-            year: values.year,
-            brand_id: values.brand_id,
-            model: values.model,
-            fuel_type_id: values.fuel_type_id,
-            transmission_id: values.transmission_id,
-          })
+          .insert(formData)
           .select()
           .single();
           

@@ -31,8 +31,8 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
             <FormLabel>Type de carburant</FormLabel>
             <Select
               disabled={loading}
-              onValueChange={field.onChange}
-              defaultValue={field.value?.toString()}
+              onValueChange={(value) => field.onChange(parseInt(value))}
+              value={field.value ? field.value.toString() : undefined}
             >
               <FormControl>
                 <SelectTrigger>
@@ -52,7 +52,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
         )}
       />
       
-      {/* Type de transmission - maintenant simplifié à Automatique ou Manuelle */}
+      {/* Type de transmission */}
       <FormField
         control={form.control}
         name="transmission_id"
@@ -61,8 +61,8 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
             <FormLabel>Boîte de vitesse</FormLabel>
             <Select
               disabled={loading}
-              onValueChange={field.onChange}
-              defaultValue={field.value?.toString()}
+              onValueChange={(value) => field.onChange(parseInt(value))}
+              value={field.value ? field.value.toString() : undefined}
             >
               <FormControl>
                 <SelectTrigger>

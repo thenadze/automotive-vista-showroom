@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +32,7 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
   // Gestion de la soumission du formulaire
   const { handleSubmit, loading: submitting, setLoading } = useCarFormSubmit(car, onSuccess);
   
-  // Initialisation du formulaire
+  // Initialisation du formulaire avec les valeurs par défaut
   const form = useForm<CarFormValues>({
     resolver: zodResolver(carFormSchema),
     defaultValues: {
