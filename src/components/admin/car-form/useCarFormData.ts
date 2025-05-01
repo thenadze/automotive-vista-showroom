@@ -39,7 +39,7 @@ export const useCarFormData = (car?: Car) => {
         if (transmissionsError) throw transmissionsError;
         setTransmissions(transmissionsData || []);
         
-        // Si en mode édition, charger les photos existantes
+        // Si en mode édition et car.id existe, charger les photos existantes
         if (car?.id) {
           const { data: photosData, error: photosError } = await supabase
             .from("car_photos")
@@ -64,7 +64,7 @@ export const useCarFormData = (car?: Car) => {
     };
     
     fetchData();
-  }, [car, toast]);
+  }, [car?.id, toast]); // Modification de la dépendance : uniquement car.id au lieu de car entier
 
   return {
     brands,

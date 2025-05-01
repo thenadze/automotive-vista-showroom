@@ -48,7 +48,11 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
           .single();
           
         if (error) throw error;
-        carId = newCar.id;
+        if (newCar) {
+          carId = newCar.id;
+        } else {
+          throw new Error("Erreur lors de la création de la voiture");
+        }
       }
       
       // Traitement des photos
