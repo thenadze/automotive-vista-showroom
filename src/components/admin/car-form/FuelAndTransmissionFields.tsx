@@ -69,7 +69,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
                   <SelectValue placeholder="Sélectionner une boîte" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent className="bg-white">
+              <SelectContent>
                 {transmissions.map((transmission) => (
                   <SelectItem key={transmission.id} value={transmission.id.toString()}>
                     {transmission.name}
