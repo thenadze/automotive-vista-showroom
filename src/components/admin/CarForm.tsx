@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Car } from "@/types";
-import PhotoUploader from "./PhotoUploader";
+import PhotoUploader from "./photo-uploader";
 import { carFormSchema, CarFormValues } from "./car-form/formSchema";
 import YearAndBrandFields from "./car-form/YearAndBrandFields";
 import ModelField from "./car-form/ModelField";
