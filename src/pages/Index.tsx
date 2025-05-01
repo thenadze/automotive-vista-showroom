@@ -3,7 +3,11 @@ import React from "react";
 import HomePage from "./HomePage";
 
 const Index = () => {
-  return <HomePage />;
+  return (
+    <React.Fragment>
+      <HomePage />
+    </React.Fragment>
+  );
 };
 
 export default Index;
