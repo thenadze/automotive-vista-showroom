@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LogIn, LogOut, User } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 
 /**
  * Barre de navigation du site avec gestion de l'authentification
@@ -14,28 +14,59 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+    
     const checkAuth = async () => {
       try {
+        if (!isMounted) return;
+        
         setLoading(true);
-        const { data } = await supabase.auth.getSession();
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (!isMounted) return;
+        
+        if (error) {
+          console.error("Erreur lors de la vérification de l'authentification:", error);
+          setLoading(false);
+          return;
+        }
         
         if (data.session) {
           setIsAuthenticated(true);
           
           // Vérifier si l'utilisateur est admin
-          // @ts-ignore
-          const { data: adminData } = await supabase
-            .from("admins")
-            .select("*")
-            .eq("id", data.session.user.id)
-            .single();
+          try {
+            // @ts-ignore
+            const { data: adminData, error: adminError } = await supabase
+              .from("admins")
+              .select("*")
+              .eq("id", data.session.user.id)
+              .single();
+              
+            if (!isMounted) return;
             
-          setIsAdmin(!!adminData);
+            if (adminError && adminError.code !== 'PGRST116') {
+              console.error("Erreur lors de la vérification du statut d'admin:", adminError);
+            }
+            
+            setIsAdmin(!!adminData);
+          } catch (err) {
+            console.error("Erreur lors de la vérification du statut d'admin:", err);
+            if (isMounted) {
+              setIsAdmin(false);
+            }
+          }
         }
       } catch (error) {
         console.error("Erreur d'authentification:", error);
+        if (isMounted) {
+          setIsAuthenticated(false);
+          setIsAdmin(false);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -43,17 +74,37 @@ const Navbar = () => {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (!isMounted) return;
+        
         setIsAuthenticated(!!session);
         
         if (session) {
-          // @ts-ignore
-          const { data: adminData } = await supabase
-            .from("admins")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
+          // Différer la vérification admin pour éviter des problèmes de récursivité
+          setTimeout(async () => {
+            if (!isMounted) return;
             
-          setIsAdmin(!!adminData);
+            try {
+              // @ts-ignore
+              const { data: adminData, error } = await supabase
+                .from("admins")
+                .select("*")
+                .eq("id", session.user.id)
+                .single();
+                
+              if (!isMounted) return;
+              
+              if (error && error.code !== 'PGRST116') {
+                console.error("Erreur lors de la vérification du statut d'admin:", error);
+              }
+              
+              setIsAdmin(!!adminData);
+            } catch (err) {
+              console.error("Erreur lors de la vérification du statut d'admin:", err);
+              if (isMounted) {
+                setIsAdmin(false);
+              }
+            }
+          }, 0);
         } else {
           setIsAdmin(false);
         }
@@ -61,12 +112,20 @@ const Navbar = () => {
     );
 
     return () => {
+      isMounted = false;
       authListener.subscription.unsubscribe();
     };
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Erreur lors de la déconnexion:", error);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+    }
   };
 
   return (
@@ -89,7 +148,9 @@ const Navbar = () => {
         
         <div>
           {loading ? (
-            <div className="h-8 w-8"></div>
+            <div className="h-8 w-8 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+            </div>
           ) : isAuthenticated ? (
             <Button variant="ghost" onClick={handleLogout}>
               <LogOut className="h-5 w-5 mr-2" />

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -12,13 +13,17 @@ import { Car } from '@/types';
 const CarEditPage = () => {
   const { id } = useParams<{ id: string }>();
   const isEditMode = id !== 'new';
-  const { isAdmin, loading: authLoading } = useAdminAuth();
+  const { isAdmin, loading: authLoading, isInitialized } = useAdminAuth();
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
+    // Ne charger les données que si l'utilisateur est admin et que l'authentification est initialisée
+    if (!isInitialized) return;
+    if (!isAdmin) return;
+
     // Si en mode édition, charger les données de la voiture
     const fetchCar = async () => {
       if (isEditMode && id) {
@@ -61,13 +66,14 @@ const CarEditPage = () => {
     if (isAdmin) {
       fetchCar();
     }
-  }, [id, isAdmin, isEditMode, navigate, toast]);
+  }, [id, isAdmin, isEditMode, navigate, toast, isInitialized]);
 
   const handleSuccess = () => {
     navigate('/admin');
   };
 
-  if (authLoading) {
+  // Afficher un indicateur de chargement pendant l'initialisation de l'authentification
+  if (authLoading || !isInitialized) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
@@ -75,8 +81,10 @@ const CarEditPage = () => {
     );
   }
 
-  if (!isAdmin) {
-    return null; // Redirection gérée par useAdminAuth
+  // Si l'utilisateur n'est pas admin et que l'authentification est initialisée, ne rien rendre
+  // La redirection est gérée par useAdminAuth
+  if (!isAdmin && isInitialized) {
+    return null;
   }
 
   return (

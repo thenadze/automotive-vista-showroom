@@ -11,35 +11,75 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
+    let isMounted = true;
+    
     const checkAuth = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        setIsAuthenticated(true);
+      try {
+        const { data, error } = await supabase.auth.getSession();
         
-        // Vérifier si l'utilisateur est admin
-        // @ts-ignore
-        const { data: adminData } = await supabase
-          .from("admins")
-          .select("*")
-          .eq("id", data.session.user.id)
-          .single();
+        // Vérifier si le composant est toujours monté avant de mettre à jour l'état
+        if (!isMounted) return;
+        
+        if (error) {
+          console.error("Erreur lors de la vérification de l'authentification:", error);
+          setAuthChecking(false);
+          return;
+        }
+        
+        if (data.session) {
+          setIsAuthenticated(true);
           
-        if (adminData) {
-          // Rediriger vers le dashboard d'administration si l'utilisateur est admin
-          navigate("/admin");
-        } else {
-          // Rediriger vers l'accueil si l'utilisateur n'est pas admin
-          navigate("/");
+          try {
+            // Vérifier si l'utilisateur est admin
+            // @ts-ignore
+            const { data: adminData, error: adminError } = await supabase
+              .from("admins")
+              .select("*")
+              .eq("id", data.session.user.id)
+              .single();
+              
+            if (!isMounted) return;
+            
+            if (adminError && adminError.code !== 'PGRST116') {
+              console.error("Erreur lors de la vérification du statut d'admin:", adminError);
+            }
+            
+            // Rediriger vers le dashboard approprié
+            if (adminData) {
+              // Rediriger vers le dashboard d'administration si l'utilisateur est admin
+              navigate("/admin");
+            } else {
+              // Rediriger vers l'accueil si l'utilisateur n'est pas admin
+              navigate("/");
+            }
+          } catch (err) {
+            console.error("Erreur lors de la vérification du statut d'admin:", err);
+            if (isMounted) {
+              navigate("/");
+            }
+          }
+        }
+        
+        setAuthChecking(false);
+      } catch (error) {
+        console.error("Erreur lors de la vérification de l'authentification:", error);
+        if (isMounted) {
+          setAuthChecking(false);
         }
       }
     };
     
     checkAuth();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -62,18 +102,27 @@ const LoginPage = () => {
         });
         
         // Vérifier si l'utilisateur est admin
-        // @ts-ignore
-        const { data: adminData } = await supabase
-          .from("admins")
-          .select("*")
-          .eq("id", data.user.id)
-          .single();
+        try {
+          // @ts-ignore
+          const { data: adminData, error: adminError } = await supabase
+            .from("admins")
+            .select("*")
+            .eq("id", data.user.id)
+            .single();
+            
+          if (adminError && adminError.code !== 'PGRST116') {
+            console.error("Erreur lors de la vérification du statut d'admin:", adminError);
+          }
           
-        if (adminData) {
-          // Rediriger vers le dashboard d'administration si l'utilisateur est admin
-          navigate("/admin");
-        } else {
-          // Rediriger vers l'accueil si l'utilisateur n'est pas admin
+          if (adminData) {
+            // Rediriger vers le dashboard d'administration si l'utilisateur est admin
+            navigate("/admin");
+          } else {
+            // Rediriger vers l'accueil si l'utilisateur n'est pas admin
+            navigate("/");
+          }
+        } catch (err) {
+          console.error("Erreur lors de la vérification du statut d'admin:", err);
           navigate("/");
         }
       }
@@ -87,6 +136,14 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
+
+  if (authChecking) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   if (isAuthenticated) {
     return null; // Redirection via useEffect
