@@ -66,7 +66,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
             >
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Automatique ou Manuelle" />
+                  <SelectValue placeholder="Sélectionner une boîte" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent className="bg-white">
