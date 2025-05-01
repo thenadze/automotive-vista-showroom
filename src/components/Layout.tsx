@@ -1,10 +1,10 @@
 
-import React, { Suspense, ErrorBoundary } from "react";
+import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Skeleton } from "./ui/skeleton";
 
-// Simple error boundary component
+// Simple error boundary component as a class
 class ErrorBoundaryComponent extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean }
@@ -51,7 +51,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-8">
         <ErrorBoundaryComponent>
-          <Suspense fallback={
+          <React.Suspense fallback={
             <div className="space-y-10">
               <Skeleton className="h-64 w-full" />
               <Skeleton className="h-40 w-full" />
@@ -59,7 +59,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
           }>
             {children}
-          </Suspense>
+          </React.Suspense>
         </ErrorBoundaryComponent>
       </main>
       <Footer />
