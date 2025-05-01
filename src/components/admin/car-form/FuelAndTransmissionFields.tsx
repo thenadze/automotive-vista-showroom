@@ -39,7 +39,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
                   <SelectValue placeholder="Sélectionner un type" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
                 {fuelTypes.map((fuelType) => (
                   <SelectItem key={fuelType.id} value={fuelType.id.toString()}>
                     {fuelType.name} {fuelType.count > 0 && `(${fuelType.count})`}
@@ -69,7 +69,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
                   <SelectValue placeholder="Sélectionner une boîte" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="bg-white z-50">
                 {transmissions.map((transmission) => (
                   <SelectItem key={transmission.id} value={transmission.id.toString()}>
                     {transmission.name}
