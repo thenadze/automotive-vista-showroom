@@ -65,7 +65,7 @@ const FuelAndTransmissionFields: React.FC<FuelAndTransmissionFieldsProps> = ({
               value={field.value ? field.value.toString() : undefined}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="bg-background">
                   <SelectValue placeholder="Sélectionner une boîte" />
                 </SelectTrigger>
               </FormControl>
