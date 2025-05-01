@@ -1,6 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
+import { validateFiles } from './utils/photoValidation';
 
 /**
  * Custom hook for handling photo upload functionality
@@ -21,40 +22,13 @@ export const usePhotoUploader = (
     };
   }, [previews]);
 
-  // Validation helper
-  const validateFiles = (files: File[]) => {
-    // Verify file sizes (max 5MB per file)
-    const oversizedFiles = files.filter(file => file.size > 5 * 1024 * 1024);
-    if (oversizedFiles.length > 0) {
-      toast({
-        title: "Fichiers trop volumineux",
-        description: "Certains fichiers dépassent la limite de 5MB.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    // Verify file types (images only)
-    const invalidFiles = files.filter(file => !file.type.startsWith('image/'));
-    if (invalidFiles.length > 0) {
-      toast({
-        title: "Format non supporté",
-        description: "Veuillez sélectionner uniquement des fichiers image (JPEG, PNG, etc.).",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    return true;
-  };
-
   // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0 || disabled) return;
     
     const newFiles = Array.from(e.target.files);
     
-    if (!validateFiles(newFiles)) return;
+    if (!validateFiles(newFiles, toast)) return;
     
     // Update selected files
     const updatedFiles = [...selectedFiles, ...newFiles];
@@ -107,7 +81,7 @@ export const usePhotoUploader = (
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const droppedFiles = Array.from(e.dataTransfer.files);
       
-      if (!validateFiles(droppedFiles)) return;
+      if (!validateFiles(droppedFiles, toast)) return;
       
       const updatedFiles = [...selectedFiles, ...droppedFiles];
       setSelectedFiles(updatedFiles);
