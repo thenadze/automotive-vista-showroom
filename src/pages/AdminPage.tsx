@@ -183,11 +183,18 @@ const AdminPage = () => {
   const onSubmitCompanyInfo = async (values: z.infer<typeof companyFormSchema>) => {
     try {
       if (companyInfo) {
-        // Update
+        // Update - Ensure required fields are included with their values
         // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
         const { data, error } = await supabase
           .from("company_info")
-          .update(values)
+          .update({
+            name: values.name,  // Required field
+            description: values.description,  // Required field
+            address: values.address,
+            phone: values.phone,
+            email: values.email || null,
+            logo_url: values.logo_url
+          })
           .eq("id", companyInfo.id);
           
         if (error) throw error;
@@ -197,11 +204,18 @@ const AdminPage = () => {
           description: "Les informations de l'entreprise ont été mises à jour avec succès.",
         });
       } else {
-        // Insert
+        // Insert - Ensure required fields are included with their values
         // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
         const { data, error } = await supabase
           .from("company_info")
-          .insert([values]);
+          .insert([{
+            name: values.name,  // Required field
+            description: values.description,  // Required field
+            address: values.address,
+            phone: values.phone,
+            email: values.email || null,
+            logo_url: values.logo_url
+          }]);
           
         if (error) throw error;
         
