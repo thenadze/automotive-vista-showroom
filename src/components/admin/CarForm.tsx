@@ -31,6 +31,11 @@ const carFormSchema = z.object({
   }),
 });
 
+// Type définissant un type de carburant avec le nombre d'annonces
+interface FuelTypeWithCount extends FuelType {
+  count?: number;
+}
+
 type CarFormProps = {
   car?: Car; // Pour l'édition d'une voiture existante
   onSuccess?: () => void;
@@ -41,7 +46,7 @@ type CarFormProps = {
  */
 const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
   const [brands, setBrands] = useState<CarBrand[]>([]);
-  const [fuelTypes, setFuelTypes] = useState<FuelType[]>([]);
+  const [fuelTypes, setFuelTypes] = useState<FuelTypeWithCount[]>([]);
   const [transmissions, setTransmissions] = useState<TransmissionType[]>([]);
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -49,6 +54,17 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isEditMode = !!car;
+
+  // Définition des types de carburant avec le nombre d'annonces
+  const predefinedFuelTypes: FuelTypeWithCount[] = [
+    { id: 1, name: "Essence", count: 17501 },
+    { id: 2, name: "Diesel", count: 12844 },
+    { id: 3, name: "Hybride", count: 1006 },
+    { id: 4, name: "Électrique", count: 1793 },
+    { id: 5, name: "GPL", count: 63 },
+    { id: 6, name: "Gaz naturel (CNG)", count: 2 },
+    { id: 7, name: "Autre", count: 26 },
+  ];
 
   // Initialisation du formulaire
   const form = useForm<z.infer<typeof carFormSchema>>({
@@ -69,45 +85,39 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
         setLoading(true);
         
         // Charger les marques
-        // @ts-ignore
-        const { data: brandsData } = await supabase
+        const { data: brandsData, error: brandsError } = await supabase
           .from("car_brands")
           .select("*")
           .order("name");
           
+        if (brandsError) throw brandsError;
         setBrands(brandsData || []);
         
-        // Charger les types de carburant
-        // @ts-ignore
-        const { data: fuelTypesData } = await supabase
-          .from("fuel_types")
-          .select("*")
-          .order("name");
-          
-        setFuelTypes(fuelTypesData || []);
+        // Utiliser les types de carburant prédéfinis au lieu de les charger
+        setFuelTypes(predefinedFuelTypes);
         
         // Charger les types de boîte de vitesse
-        // @ts-ignore
-        const { data: transmissionsData } = await supabase
+        const { data: transmissionsData, error: transmissionsError } = await supabase
           .from("transmission_types")
           .select("*")
           .order("name");
           
+        if (transmissionsError) throw transmissionsError;
         setTransmissions(transmissionsData || []);
         
         // Si en mode édition, charger les photos existantes
         if (car?.id) {
-          // @ts-ignore
-          const { data: photosData } = await supabase
+          const { data: photosData, error: photosError } = await supabase
             .from("car_photos")
             .select("photo_url")
             .eq("car_id", car.id);
             
+          if (photosError) throw photosError;
           if (photosData) {
-            setCurrentPhotos(photosData.map((photo: any) => photo.photo_url));
+            setCurrentPhotos(photosData.map((photo) => photo.photo_url));
           }
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Erreur lors du chargement des données:", error);
         toast({
           title: "Erreur",
@@ -136,7 +146,6 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
       
       if (isEditMode && carId) {
         // Mise à jour d'une voiture existante
-        // @ts-ignore
         const { error } = await supabase
           .from("cars")
           .update({
@@ -152,7 +161,6 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
         if (error) throw error;
       } else {
         // Création d'une nouvelle voiture
-        // @ts-ignore
         const { data: newCar, error } = await supabase
           .from("cars")
           .insert({
@@ -193,7 +201,6 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
             
           if (publicURL) {
             // Enregistrer la référence à la photo dans la base de données
-            // @ts-ignore
             const { error: photoError } = await supabase
               .from("car_photos")
               .insert({
@@ -327,7 +334,7 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
                     <SelectContent>
                       {fuelTypes.map((fuelType) => (
                         <SelectItem key={fuelType.id} value={fuelType.id.toString()}>
-                          {fuelType.name}
+                          {fuelType.name} ({fuelType.count})
                         </SelectItem>
                       ))}
                     </SelectContent>

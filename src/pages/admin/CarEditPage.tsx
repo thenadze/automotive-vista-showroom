@@ -25,7 +25,6 @@ const CarEditPage = () => {
       if (isEditMode && id) {
         try {
           setLoading(true);
-          // @ts-ignore
           const { data, error } = await supabase
             .from('cars')
             .select('*')
