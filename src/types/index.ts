@@ -27,10 +27,10 @@ export interface TransmissionType {
 export interface Car {
   id: string;
   year: number;
-  brand_id: string;  // Changed from number to string
+  brand_id: string;
   model: string;
-  fuel_type_id: number;
-  transmission_id: string;  // Changed from number to string
+  fuel_type_id: string;  // Modification de number à string
+  transmission_id: string;
   created_at: string;
   updated_at: string;
 }

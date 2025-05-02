@@ -30,11 +30,6 @@ const CarsList: React.FC<CarsListProps> = ({
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Récupérer le nom du type de carburant par ID
-  const getFuelTypeName = (fuelTypeId: number) => {
-    return fuelTypes.find(fuel => fuel.id === fuelTypeId)?.name || 'Inconnu';
-  };
-  
   // Gérer la suppression d'une voiture
   const handleDelete = async (carId: string) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette voiture ? Cette action est irréversible.')) {
@@ -114,7 +109,7 @@ const CarsList: React.FC<CarsListProps> = ({
                   <TableCell>{car.year}</TableCell>
                   <TableCell>{car.brand_id}</TableCell>
                   <TableCell>{car.model}</TableCell>
-                  <TableCell>{getFuelTypeName(car.fuel_type_id)}</TableCell>
+                  <TableCell>{car.fuel_type_id}</TableCell>
                   <TableCell>{car.transmission_id}</TableCell>
                   <TableCell className="text-right space-x-2">
                     <Button

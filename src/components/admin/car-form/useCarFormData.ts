@@ -3,11 +3,9 @@ import { useState, useEffect } from "react";
 import { Car, CarBrand, TransmissionType } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { FuelTypeWithCount, predefinedFuelTypes } from "./fuelTypes";
 
 export const useCarFormData = (car?: Car) => {
   const [brands, setBrands] = useState<CarBrand[]>([]);
-  const [fuelTypes, setFuelTypes] = useState<FuelTypeWithCount[]>([]);
   const [transmissions, setTransmissions] = useState<TransmissionType[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPhotos, setCurrentPhotos] = useState<string[]>([]);
@@ -27,10 +25,7 @@ export const useCarFormData = (car?: Car) => {
         if (brandsError) throw brandsError;
         setBrands(brandsData || []);
         
-        // Utiliser les types de carburant prédéfinis au lieu de les charger
-        setFuelTypes(predefinedFuelTypes);
-        
-        // Charger les types de boîte de vitesse (maintenant simplifiés à Automatique et Manuelle)
+        // Charger les types de boîte de vitesse
         const { data: transmissionsData, error: transmissionsError } = await supabase
           .from("transmission_types")
           .select("*")
@@ -64,11 +59,10 @@ export const useCarFormData = (car?: Car) => {
     };
     
     fetchData();
-  }, [car?.id, toast]); // Modification de la dépendance : uniquement car.id au lieu de car entier
+  }, [car?.id, toast]);
 
   return {
     brands,
-    fuelTypes,
     transmissions,
     loading,
     currentPhotos

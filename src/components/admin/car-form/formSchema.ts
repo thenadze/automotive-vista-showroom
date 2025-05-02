@@ -9,9 +9,7 @@ export const carFormSchema = z.object({
     .max(new Date().getFullYear() + 1, `L'année doit être au maximum ${new Date().getFullYear() + 1}`),
   brand_id: z.string().min(1, "La marque est requise"),
   model: z.string().min(1, "Le modèle est requis"),
-  fuel_type_id: z.coerce.number({
-    required_error: "Veuillez sélectionner un type de carburant",
-  }),
+  fuel_type_id: z.string().min(1, "Le type de carburant est requis"),
   transmission_id: z.string().min(1, "La boîte de vitesse est requise"),
 });
 

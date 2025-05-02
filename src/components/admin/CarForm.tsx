@@ -27,7 +27,7 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
   const isEditMode = !!car;
   
   // Récupération des données du formulaire (marques, types de carburant, etc.)
-  const { fuelTypes, loading, currentPhotos } = useCarFormData(car);
+  const { loading: dataLoading, currentPhotos } = useCarFormData(car);
   
   // Gestion de la soumission du formulaire
   const { handleSubmit, loading: submitting, setLoading } = useCarFormSubmit(car, onSuccess);
@@ -37,10 +37,10 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
     resolver: zodResolver(carFormSchema),
     defaultValues: {
       year: car?.year || new Date().getFullYear(),
-      brand_id: car?.brand_id || "",  // Maintenant chaîne vide par défaut
+      brand_id: car?.brand_id || "",
       model: car?.model || "",
-      fuel_type_id: car?.fuel_type_id || undefined,
-      transmission_id: car?.transmission_id || "",  // Maintenant chaîne vide par défaut
+      fuel_type_id: car?.fuel_type_id || "",
+      transmission_id: car?.transmission_id || "",
     },
   });
   
@@ -55,20 +55,21 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
     await handleSubmit(values, photos);
   };
 
+  const loading = dataLoading || submitting;
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <CarFormHeader isEditMode={isEditMode} />
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <YearAndBrandFields form={form} loading={loading || submitting} />
+          <YearAndBrandFields form={form} loading={loading} />
           
-          <ModelField form={form} loading={loading || submitting} />
+          <ModelField form={form} loading={loading} />
           
           <FuelAndTransmissionFields 
             form={form} 
-            fuelTypes={fuelTypes}
-            loading={loading || submitting} 
+            loading={loading} 
           />
           
           {/* Upload de photos */}
@@ -77,11 +78,11 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
             <PhotoUploader 
               onChange={handlePhotoChange} 
               existingPhotos={currentPhotos}
-              disabled={loading || submitting}
+              disabled={loading}
             />
           </div>
           
-          <FormActions loading={loading || submitting} isEditMode={isEditMode} />
+          <FormActions loading={loading} isEditMode={isEditMode} />
         </form>
       </Form>
     </div>
