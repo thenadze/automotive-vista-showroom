@@ -31,26 +31,26 @@ export const useCarDetails = (id: string | undefined) => {
         
         // Fetch related data separately
         const [brandResult, fuelTypeResult, transmissionResult, photosResult] = await Promise.all([
-          // Get brand
+          // Get brand - Use the direct name if it's a string, otherwise try to parse as integer
           supabase
             .from("car_brands")
             .select("*")
-            .eq("id", carData.brand_id)
-            .single(),
+            .eq("id", isNaN(parseInt(carData.brand_id)) ? carData.brand_id : parseInt(carData.brand_id))
+            .maybeSingle(),
           
-          // Get fuel type
+          // Get fuel type - Use the direct name if it's a string, otherwise try to parse as integer
           supabase
             .from("fuel_types")
             .select("*")
-            .eq("id", carData.fuel_type_id)
-            .single(),
+            .eq("id", isNaN(parseInt(carData.fuel_type_id)) ? carData.fuel_type_id : parseInt(carData.fuel_type_id))
+            .maybeSingle(),
             
-          // Get transmission
+          // Get transmission - Use the direct name if it's a string, otherwise try to parse as integer
           supabase
             .from("transmission_types")
             .select("*")
-            .eq("id", carData.transmission_id)
-            .single(),
+            .eq("id", isNaN(parseInt(carData.transmission_id)) ? carData.transmission_id : parseInt(carData.transmission_id))
+            .maybeSingle(),
           
           // Get photos
           supabase
@@ -65,8 +65,11 @@ export const useCarDetails = (id: string | undefined) => {
           brand = brandResult.data;
         } else {
           console.error("Error fetching brand:", brandResult.error);
-          // Create fallback brand object
-          brand = { id: parseInt(carData.brand_id), name: carData.brand_id };
+          // Create fallback brand object with proper typing
+          brand = { 
+            id: isNaN(parseInt(carData.brand_id)) ? 0 : parseInt(carData.brand_id), 
+            name: carData.brand_id 
+          };
         }
         
         let fuelType: FuelType | null = null;
@@ -74,7 +77,10 @@ export const useCarDetails = (id: string | undefined) => {
           fuelType = fuelTypeResult.data;
         } else {
           console.error("Error fetching fuel type:", fuelTypeResult.error);
-          fuelType = { id: parseInt(carData.fuel_type_id), name: carData.fuel_type_id };
+          fuelType = { 
+            id: isNaN(parseInt(carData.fuel_type_id)) ? 0 : parseInt(carData.fuel_type_id),
+            name: carData.fuel_type_id 
+          };
         }
         
         let transmission: TransmissionType | null = null;
@@ -82,7 +88,10 @@ export const useCarDetails = (id: string | undefined) => {
           transmission = transmissionResult.data;
         } else {
           console.error("Error fetching transmission:", transmissionResult.error);
-          transmission = { id: parseInt(carData.transmission_id), name: carData.transmission_id };
+          transmission = { 
+            id: isNaN(parseInt(carData.transmission_id)) ? 0 : parseInt(carData.transmission_id),
+            name: carData.transmission_id 
+          };
         }
         
         const photos = photosResult.error ? [] : (photosResult.data || []);
