@@ -16,6 +16,12 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
     try {
       setLoading(true);
       
+      // Vérifier d'abord que l'utilisateur est connecté
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) {
+        throw new Error("Vous devez être connecté pour effectuer cette action.");
+      }
+      
       let carId = car?.id;
       
       // Assurons-nous que les valeurs sont correctes pour la base de données
@@ -60,22 +66,22 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
       
       // Traitement des photos
       if (photos.length > 0 && carId) {
+        // Vérifier si le bucket car_photos existe, sinon le créer
+        const { data: buckets } = await supabase.storage.listBuckets();
+        const carPhotosBucket = buckets?.find(bucket => bucket.name === 'car_photos');
+        
+        if (!carPhotosBucket) {
+          // Créer le bucket car_photos si nécessaire
+          await supabase.storage.createBucket('car_photos', {
+            public: true
+          });
+        }
+        
         // Upload des nouvelles photos
         for (let i = 0; i < photos.length; i++) {
           const photo = photos[i];
           const fileExt = photo.name.split('.').pop();
           const fileName = `${carId}/${Date.now()}.${fileExt}`;
-          
-          // Vérifier si le bucket car_photos existe, sinon le créer
-          const { data: buckets } = await supabase.storage.listBuckets();
-          const carPhotosBucket = buckets?.find(bucket => bucket.name === 'car_photos');
-          
-          if (!carPhotosBucket) {
-            // Créer le bucket car_photos si nécessaire
-            await supabase.storage.createBucket('car_photos', {
-              public: true
-            });
-          }
           
           // Upload de la photo dans le bucket Supabase Storage
           const { error: uploadError } = await supabase.storage
