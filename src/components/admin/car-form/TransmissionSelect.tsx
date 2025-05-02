@@ -4,6 +4,13 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { UseFormReturn } from "react-hook-form";
 import { CarFormValues } from "./formSchema";
 import { TransmissionType } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface TransmissionSelectProps {
   form: UseFormReturn<CarFormValues>;
@@ -24,19 +31,25 @@ const TransmissionSelect: React.FC<TransmissionSelectProps> = ({
         <FormItem>
           <FormLabel>Boîte de vitesse</FormLabel>
           <FormControl>
-            <select
-              className="w-full h-10 rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            <Select
               disabled={loading}
               value={field.value?.toString() || ""}
-              onChange={(e) => field.onChange(parseInt(e.target.value))}
+              onValueChange={(value) => field.onChange(parseInt(value))}
             >
-              <option value="">Sélectionner une boîte</option>
-              {transmissions.map((transmission) => (
-                <option key={transmission.id} value={transmission.id.toString()}>
-                  {transmission.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full bg-white">
+                <SelectValue placeholder="Sélectionner une boîte" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                {transmissions.map((transmission) => (
+                  <SelectItem 
+                    key={transmission.id} 
+                    value={transmission.id.toString()}
+                  >
+                    {transmission.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormControl>
           <FormMessage />
         </FormItem>

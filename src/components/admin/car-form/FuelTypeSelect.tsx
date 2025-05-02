@@ -4,6 +4,13 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { UseFormReturn } from "react-hook-form";
 import { CarFormValues } from "./formSchema";
 import { FuelTypeWithCount } from "./fuelTypes";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface FuelTypeSelectProps {
   form: UseFormReturn<CarFormValues>;
@@ -24,19 +31,25 @@ const FuelTypeSelect: React.FC<FuelTypeSelectProps> = ({
         <FormItem>
           <FormLabel>Type de carburant</FormLabel>
           <FormControl>
-            <select
-              className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+            <Select
               disabled={loading}
               value={field.value?.toString() || ""}
-              onChange={(e) => field.onChange(parseInt(e.target.value))}
+              onValueChange={(value) => field.onChange(parseInt(value))}
             >
-              <option value="">Sélectionner un type</option>
-              {fuelTypes.map((fuelType) => (
-                <option key={fuelType.id} value={fuelType.id.toString()}>
-                  {fuelType.name} {fuelType.count > 0 && `(${fuelType.count})`}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full bg-white">
+                <SelectValue placeholder="Sélectionner un type" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                {fuelTypes.map((fuelType) => (
+                  <SelectItem 
+                    key={fuelType.id} 
+                    value={fuelType.id.toString()}
+                  >
+                    {fuelType.name} {fuelType.count > 0 && `(${fuelType.count})`}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FormControl>
           <FormMessage />
         </FormItem>
