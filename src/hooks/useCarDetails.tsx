@@ -97,6 +97,8 @@ export const useCarDetails = (id: string | undefined) => {
         const photos = photosResult.error ? [] : (photosResult.data || []);
         if (photosResult.error) {
           console.error("Error fetching photos:", photosResult.error);
+        } else {
+          console.log("Photos fetched successfully:", photos);
         }
         
         // Construct final car object with all details
