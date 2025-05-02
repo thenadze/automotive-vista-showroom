@@ -94,11 +94,24 @@ export const useCarDetails = (id: string | undefined) => {
           };
         }
         
-        const photos = photosResult.error ? [] : (photosResult.data || []);
+        // Traitement spécifique pour les photos
+        let photos: CarPhoto[] = [];
         if (photosResult.error) {
           console.error("Error fetching photos:", photosResult.error);
         } else {
-          console.log("Photos fetched successfully:", photos);
+          console.log("Photos fetched successfully:", photosResult.data);
+          photos = photosResult.data || [];
+          
+          // Vérifions que chaque photo a une URL valide
+          photos = photos.filter(photo => {
+            const hasValidUrl = !!photo.photo_url && typeof photo.photo_url === 'string';
+            if (!hasValidUrl) {
+              console.warn("Found photo with invalid URL:", photo);
+            }
+            return hasValidUrl;
+          });
+          
+          console.log("Filtered valid photos:", photos);
         }
         
         // Construct final car object with all details

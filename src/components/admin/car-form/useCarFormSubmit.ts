@@ -66,11 +66,15 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
       
       // Traitement des photos
       if (photos.length > 0 && carId) {
+        console.log(`Traitement de ${photos.length} photos pour la voiture ${carId}`);
+        
         // Upload des nouvelles photos dans le bucket Supabase Storage
         for (let i = 0; i < photos.length; i++) {
           const photo = photos[i];
           const fileExt = photo.name.split('.').pop();
           const fileName = `${carId}/${Date.now()}.${fileExt}`;
+          
+          console.log(`Upload de la photo ${i+1}/${photos.length}: ${fileName}`);
           
           // Upload de la photo dans le bucket Supabase Storage
           const { error: uploadError, data } = await supabase.storage
@@ -82,23 +86,31 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
             continue; // Continuer avec les autres photos même si une échoue
           }
           
+          console.log("Photo uploadée avec succès:", fileName);
+          
           // Récupérer l'URL publique de la photo
           const { data: publicURL } = supabase.storage
             .from("car_photos")
             .getPublicUrl(fileName);
             
           if (publicURL) {
+            console.log("URL publique récupérée:", publicURL.publicUrl);
+            
             // Enregistrer la référence à la photo dans la base de données
+            const photoData = {
+              car_id: carId,
+              photo_url: publicURL.publicUrl,
+              is_primary: i === 0 && !isEditMode, // La première photo est principale pour les nouvelles voitures
+            };
+            
             const { error: photoError } = await supabase
               .from("car_photos")
-              .insert({
-                car_id: carId,
-                photo_url: publicURL.publicUrl,
-                is_primary: i === 0 && !isEditMode, // La première photo est principale pour les nouvelles voitures
-              });
+              .insert(photoData);
               
             if (photoError) {
               console.error("Erreur lors de l'enregistrement de la référence photo:", photoError);
+            } else {
+              console.log("Référence photo enregistrée avec succès");
             }
           }
         }

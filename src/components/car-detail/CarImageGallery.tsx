@@ -15,10 +15,16 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
   // Filtrer les photos valides et les mettre à jour quand photos change
   useEffect(() => {
     if (photos && photos.length > 0) {
-      const filtered = photos.filter(photo => photo && photo.photo_url);
-      console.log("Filtered valid photos:", filtered);
+      // Vérifier que les photos ont des URLs valides
+      const filtered = photos.filter(photo => photo && photo.photo_url && typeof photo.photo_url === 'string');
+      console.log("Filtered valid photos for display:", filtered);
       setValidPhotos(filtered);
+      
+      if (filtered.length !== photos.length) {
+        console.warn(`${photos.length - filtered.length} photos ont été filtrées car elles n'avaient pas d'URL valide`);
+      }
     } else {
+      console.log("No photos available for the car");
       setValidPhotos([]);
     }
     setCurrentImageIndex(0);
