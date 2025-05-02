@@ -21,10 +21,10 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
       // Assurons-nous que les valeurs sont correctes pour la base de données
       const formData = {
         year: values.year,
-        brand_id: values.brand_id,
+        brand_id: values.brand_id,  // Maintenant une chaîne de caractères
         model: values.model,
         fuel_type_id: values.fuel_type_id,
-        transmission_id: values.transmission_id,
+        transmission_id: values.transmission_id,  // Maintenant une chaîne de caractères
         updated_at: new Date().toISOString(),
       };
       
