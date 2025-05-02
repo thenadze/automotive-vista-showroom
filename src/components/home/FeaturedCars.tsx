@@ -8,6 +8,8 @@ interface FeaturedCarsProps {
 }
 
 const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
+  console.log("FeaturedCars received:", featuredCars);
+  
   return (
     <section className="mb-12">
       <h2 className="text-3xl font-bold mb-6 text-center">Véhicules à la une</h2>
@@ -15,25 +17,25 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
       {featuredCars.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredCars.map(car => {
-            console.log("Featured car:", car);
-            console.log("Featured car photos:", car.photos);
+            // Trouver la photo principale ou prendre la première ou utiliser placeholder
+            let photoUrl = "/placeholder.svg";
             
-            // Trouver la photo principale ou prendre la première
-            const photoUrl = car.photos && car.photos.length > 0
-              ? (car.photos.find(p => p.is_primary)?.photo_url || car.photos[0].photo_url)
-              : "/placeholder.svg";
+            if (car.photos && car.photos.length > 0) {
+              const primaryPhoto = car.photos.find(p => p.is_primary);
+              photoUrl = (primaryPhoto || car.photos[0])?.photo_url || "/placeholder.svg";
+            }
             
-            console.log("Using photo URL:", photoUrl);
+            console.log(`Car ${car.id} using photo:`, photoUrl);
             
             return (
               <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="h-56 relative">
                   <img
                     src={photoUrl}
-                    alt={`${car.brand?.name || ''} ${car.model}`}
+                    alt={`${car.brand?.name || 'Marque'} ${car.model}`}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      console.log("Error loading featured car image:", photoUrl);
+                      console.log("Error loading featured car image, using placeholder");
                       (e.target as HTMLImageElement).src = "/placeholder.svg";
                     }}
                   />

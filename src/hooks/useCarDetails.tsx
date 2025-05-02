@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { CarWithDetails } from "@/types";
+import { CarWithDetails, CarPhoto } from "@/types";
 
 export const useCarDetails = (id: string | undefined) => {
   const [car, setCar] = useState<CarWithDetails | null>(null);
@@ -13,29 +13,46 @@ export const useCarDetails = (id: string | undefined) => {
       
       try {
         setLoading(true);
+        console.log("Fetching car details for ID:", id);
         
         // Get car details
-        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
         const { data: carData, error } = await supabase
           .from("cars")
           .select(`
             *,
-            car_photos (*)
+            brand:car_brands(*),
+            fuel_type:fuel_types(*),
+            transmission:transmission_types(*)
           `)
           .eq("id", id)
           .single();
           
-        if (error) throw error;
+        if (error) {
+          console.error("Error fetching car:", error);
+          throw error;
+        }
+        
+        console.log("Car data retrieved:", carData);
+        
+        // Get photos separately with a dedicated query
+        const { data: photosData, error: photosError } = await supabase
+          .from("car_photos")
+          .select("*")
+          .eq("car_id", id);
+          
+        if (photosError) {
+          console.error("Error fetching photos:", photosError);
+        }
+        
+        console.log("Photos data retrieved:", photosData);
         
         // Adapter les données pour correspondre à l'interface CarWithDetails
         const carWithDetails: CarWithDetails = {
           ...carData,
-          brand_id: carData.brand_id,
-          fuel_type_id: carData.fuel_type_id,
-          transmission_id: carData.transmission_id,
-          photos: carData.car_photos || []
+          photos: photosData || []
         };
         
+        console.log("Final car with details:", carWithDetails);
         setCar(carWithDetails);
       } catch (error) {
         console.error("Error fetching car details:", error);

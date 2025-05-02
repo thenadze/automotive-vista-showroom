@@ -10,29 +10,39 @@ interface CarImageGalleryProps {
 
 const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, model }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [validPhotos, setValidPhotos] = useState<CarPhoto[]>([]);
   
-  // Reset l'index lorsque les photos changent
+  // Filtrer les photos valides et les mettre à jour quand photos change
   useEffect(() => {
+    if (photos && photos.length > 0) {
+      const filtered = photos.filter(photo => photo && photo.photo_url);
+      console.log("Filtered valid photos:", filtered);
+      setValidPhotos(filtered);
+    } else {
+      setValidPhotos([]);
+    }
     setCurrentImageIndex(0);
   }, [photos]);
   
   const handlePrevImage = () => {
-    if (!photos?.length) return;
+    if (validPhotos.length === 0) return;
     setCurrentImageIndex((prev) => 
-      prev === 0 ? photos.length - 1 : prev - 1
+      prev === 0 ? validPhotos.length - 1 : prev - 1
     );
   };
   
   const handleNextImage = () => {
-    if (!photos?.length) return;
+    if (validPhotos.length === 0) return;
     setCurrentImageIndex((prev) => 
-      prev === photos.length - 1 ? 0 : prev + 1
+      prev === validPhotos.length - 1 ? 0 : prev + 1
     );
   };
 
-  // Vérifier si nous avons des photos valides
-  const validPhotos = photos?.filter(photo => photo && photo.photo_url) || [];
-  console.log("CarImageGallery valid photos:", validPhotos);
+  console.log("CarImageGallery rendering with:", { 
+    validPhotosCount: validPhotos.length, 
+    currentIndex: currentImageIndex,
+    currentPhotoUrl: validPhotos[currentImageIndex]?.photo_url || "none"
+  });
   
   return (
     <div className="relative h-96">
@@ -44,7 +54,6 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
             className="w-full h-full object-cover"
             onError={(e) => {
               console.error("Error loading image:", validPhotos[currentImageIndex]?.photo_url);
-              console.error("Image element:", e.target);
               (e.target as HTMLImageElement).src = "/placeholder.svg";
             }}
           />
@@ -54,6 +63,7 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
               <button
                 onClick={handlePrevImage}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full"
+                aria-label="Photo précédente"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -62,6 +72,7 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
               <button
                 onClick={handleNextImage}
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full"
+                aria-label="Photo suivante"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -80,6 +91,7 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
                   className={`w-3 h-3 rounded-full ${
                     currentImageIndex === index ? 'bg-white' : 'bg-white bg-opacity-50'
                   }`}
+                  aria-label={`Aller à la photo ${index + 1}`}
                 ></button>
               ))}
             </div>

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCarDetails } from "@/hooks/useCarDetails";
 import CarImageGallery from "@/components/car-detail/CarImageGallery";
@@ -13,6 +13,11 @@ const CarDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { car, loading } = useCarDetails(id);
 
+  useEffect(() => {
+    console.log("CarDetailPage rendered with car:", car);
+    console.log("Car photos:", car?.photos);
+  }, [car]);
+
   if (loading) {
     return <LoadingState />;
   }
@@ -21,10 +26,12 @@ const CarDetailPage: React.FC = () => {
     return <NotFoundState />;
   }
 
+  const brandName = car.brand?.name || car.brand_id;
+
   return (
     <div>
       <CarDetailHeader 
-        brandName={car.brand_id} 
+        brandName={brandName}
         model={car.model} 
         year={car.year} 
       />
@@ -32,7 +39,7 @@ const CarDetailPage: React.FC = () => {
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         <CarImageGallery 
           photos={car.photos} 
-          brandName={car.brand_id}
+          brandName={brandName}
           model={car.model}
         />
         
