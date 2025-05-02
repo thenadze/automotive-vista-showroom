@@ -25,6 +25,8 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
     );
   };
 
+  console.log("CarImageGallery photos:", photos);
+  
   return (
     <div className="relative h-96">
       {photos && photos.length > 0 ? (
@@ -33,6 +35,10 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
             src={photos[currentImageIndex]?.photo_url || "/placeholder.svg"}
             alt={`${brandName} ${model}`}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.log("Error loading image:", photos[currentImageIndex]?.photo_url);
+              (e.target as HTMLImageElement).src = "/placeholder.svg";
+            }}
           />
           
           {photos.length > 1 && (

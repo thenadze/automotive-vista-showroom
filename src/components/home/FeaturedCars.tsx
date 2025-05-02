@@ -15,20 +15,24 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
       {featuredCars.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredCars.map(car => {
+            console.log("Featured car photos:", car.photos);
             const primaryPhoto = car.photos?.find(p => p.is_primary);
             const firstPhoto = car.photos?.[0];
             const photoUrl = primaryPhoto?.photo_url || firstPhoto?.photo_url || "/placeholder.svg";
             
             return (
               <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img
-                  src={photoUrl}
-                  alt={`${car.brand?.name || ''} ${car.model}`}
-                  className="w-full h-56 object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/placeholder.svg";
-                  }}
-                />
+                <div className="h-56 relative">
+                  <img
+                    src={photoUrl}
+                    alt={`${car.brand?.name || ''} ${car.model}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.log("Error loading featured car image:", photoUrl);
+                      (e.target as HTMLImageElement).src = "/placeholder.svg";
+                    }}
+                  />
+                </div>
                 <div className="p-4">
                   <h3 className="text-xl font-semibold mb-2">
                     {car.brand?.name || 'Marque'} {car.model} ({car.year})

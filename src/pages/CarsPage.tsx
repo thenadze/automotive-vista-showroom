@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -57,60 +56,66 @@ const CarsPage = () => {
     const fetchCars = async () => {
       setLoading(true);
       
-      // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-      let query = supabase
-        .from("cars")
-        .select(`
-          *,
-          car_photos (*)
-        `);
-      
-      // Apply filters
-      if (selectedBrand !== null) {
-        query = query.eq('brand_id', selectedBrand);
-      }
-      
-      if (selectedFuel !== null) {
-        query = query.eq('fuel_type_id', selectedFuel);
-      }
-      
-      if (selectedTransmission !== null) {
-        query = query.eq('transmission_id', selectedTransmission);
-      }
-      
-      if (yearRange[0] > 0) {
-        query = query.gte('year', yearRange[0]);
-      }
-      
-      if (yearRange[1] < 3000) {
-        query = query.lte('year', yearRange[1]);
-      }
-      
-      const { data: carsData, error } = await query;
-      
-      if (error) {
-        console.error("Error fetching cars:", error);
-        setLoading(false);
-        return;
-      }
-      
-      if (carsData) {
-        // Convertir les données pour correspondre à l'interface CarWithDetails
-        const carsWithDetails: CarWithDetails[] = carsData.map(car => {
-          return {
-            ...car,
-            photos: car.car_photos || []
-          };
-        });
+      try {
+        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
+        let query = supabase
+          .from("cars")
+          .select(`
+            *,
+            car_photos (*)
+          `);
         
-        setCars(carsWithDetails);
+        // Apply filters
+        if (selectedBrand !== null) {
+          query = query.eq('brand_id', selectedBrand);
+        }
+        
+        if (selectedFuel !== null) {
+          query = query.eq('fuel_type_id', selectedFuel);
+        }
+        
+        if (selectedTransmission !== null) {
+          query = query.eq('transmission_id', selectedTransmission);
+        }
+        
+        if (yearRange[0] > 0) {
+          query = query.gte('year', yearRange[0]);
+        }
+        
+        if (yearRange[1] < 3000) {
+          query = query.lte('year', yearRange[1]);
+        }
+        
+        const { data: carsData, error } = await query;
+        
+        if (error) {
+          console.error("Error fetching cars:", error);
+          setLoading(false);
+          return;
+        }
+        
+        if (carsData) {
+          console.log("Cars data:", carsData);
+          
+          // Convertir les données pour correspondre à l'interface CarWithDetails
+          const carsWithDetails: CarWithDetails[] = carsData.map(car => {
+            return {
+              ...car,
+              photos: car.car_photos || []
+            };
+          });
+          
+          setCars(carsWithDetails);
+        }
+      } catch (err) {
+        console.error("Error in fetchCars:", err);
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
     };
     
     fetchCars();
-  }, [brands, fuelTypes, transmissions, selectedBrand, selectedFuel, selectedTransmission, yearRange]);
+  }, [selectedBrand, selectedFuel, selectedTransmission, yearRange]);
 
   const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value === "" ? null : e.target.value;
@@ -237,17 +242,24 @@ const CarsPage = () => {
           {cars.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {cars.map(car => {
+                console.log("Car photos:", car.photos);
                 const primaryPhoto = car.photos?.find(p => p.is_primary);
                 const firstPhoto = car.photos?.[0];
                 const photoUrl = primaryPhoto?.photo_url || firstPhoto?.photo_url || "/placeholder.svg";
                 
                 return (
                   <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img 
-                      src={photoUrl} 
-                      alt={`${car.brand_id} ${car.model}`}
-                      className="w-full h-56 object-cover"
-                    />
+                    <div className="h-56 w-full relative">
+                      <img 
+                        src={photoUrl} 
+                        alt={`${car.brand_id} ${car.model}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.log("Image error:", e);
+                          (e.target as HTMLImageElement).src = "/placeholder.svg";
+                        }}
+                      />
+                    </div>
                     <div className="p-4">
                       <h3 className="text-xl font-semibold mb-2">
                         {car.brand_id} {car.model} ({car.year})
