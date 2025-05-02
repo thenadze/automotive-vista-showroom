@@ -31,25 +31,25 @@ export const useCarDetails = (id: string | undefined) => {
         
         // Fetch related data separately
         const [brandResult, fuelTypeResult, transmissionResult, photosResult] = await Promise.all([
-          // Get brand - Use the direct name if it's a string, otherwise try to parse as integer
+          // Get brand - Try to fetch by name first since we're storing names in the ID field
           supabase
             .from("car_brands")
             .select("*")
-            .eq("id", isNaN(parseInt(carData.brand_id)) ? carData.brand_id : parseInt(carData.brand_id))
+            .eq("name", carData.brand_id)
             .maybeSingle(),
           
-          // Get fuel type - Use the direct name if it's a string, otherwise try to parse as integer
+          // Get fuel type - Try to fetch by name first
           supabase
             .from("fuel_types")
             .select("*")
-            .eq("id", isNaN(parseInt(carData.fuel_type_id)) ? carData.fuel_type_id : parseInt(carData.fuel_type_id))
+            .eq("name", carData.fuel_type_id)
             .maybeSingle(),
             
-          // Get transmission - Use the direct name if it's a string, otherwise try to parse as integer
+          // Get transmission - Try to fetch by name first
           supabase
             .from("transmission_types")
             .select("*")
-            .eq("id", isNaN(parseInt(carData.transmission_id)) ? carData.transmission_id : parseInt(carData.transmission_id))
+            .eq("name", carData.transmission_id)
             .maybeSingle(),
           
           // Get photos
@@ -67,7 +67,7 @@ export const useCarDetails = (id: string | undefined) => {
           console.error("Error fetching brand:", brandResult.error);
           // Create fallback brand object with proper typing
           brand = { 
-            id: isNaN(parseInt(carData.brand_id)) ? 0 : parseInt(carData.brand_id), 
+            id: 0, 
             name: carData.brand_id 
           };
         }
@@ -78,7 +78,7 @@ export const useCarDetails = (id: string | undefined) => {
         } else {
           console.error("Error fetching fuel type:", fuelTypeResult.error);
           fuelType = { 
-            id: isNaN(parseInt(carData.fuel_type_id)) ? 0 : parseInt(carData.fuel_type_id),
+            id: 0,
             name: carData.fuel_type_id 
           };
         }
@@ -89,7 +89,7 @@ export const useCarDetails = (id: string | undefined) => {
         } else {
           console.error("Error fetching transmission:", transmissionResult.error);
           transmission = { 
-            id: isNaN(parseInt(carData.transmission_id)) ? 0 : parseInt(carData.transmission_id),
+            id: 0,
             name: carData.transmission_id 
           };
         }
