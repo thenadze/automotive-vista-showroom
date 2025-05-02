@@ -40,7 +40,18 @@ const CarEditPage = () => {
           }
 
           if (data) {
-            setCar(data as Car);
+            // Convertir explicitement les données pour correspondre à l'interface Car
+            const carData: Car = {
+              id: data.id,
+              year: data.year,
+              brand_id: data.brand_id,
+              model: data.model,
+              fuel_type_id: data.fuel_type_id,
+              transmission_id: data.transmission_id,
+              created_at: data.created_at,
+              updated_at: data.updated_at
+            };
+            setCar(carData);
           } else {
             toast({
               title: 'Erreur',

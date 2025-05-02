@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,20 +29,11 @@ const CarDetailPage = () => {
           
         if (error) throw error;
         
-        // Get related data
-        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-        const brandRes = await supabase.from("car_brands").select("*").eq("id", carData.brand_id).single();
-        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-        const fuelRes = await supabase.from("fuel_types").select("*").eq("id", carData.fuel_type_id).single();
-        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-        const transRes = await supabase.from("transmission_types").select("*").eq("id", carData.transmission_id).single();
-        
-        // Combine all data
+        // Adapter les données pour correspondre à l'interface CarWithDetails
         const carWithDetails: CarWithDetails = {
           ...carData,
-          brand: brandRes.data || undefined,
-          fuel_type: fuelRes.data || undefined,
-          transmission: transRes.data || undefined,
+          brand_id: carData.brand_id,
+          transmission_id: carData.transmission_id,
           photos: carData.car_photos || []
         };
         
@@ -113,14 +103,19 @@ const CarDetailPage = () => {
             <>
               <img
                 src={car.photos[currentImageIndex]?.photo_url || "/placeholder.svg"}
-                alt={`${car.brand?.name} ${car.model}`}
+                alt={`${car.brand_id} ${car.model}`}
                 className="w-full h-full object-cover"
               />
               
               {car.photos.length > 1 && (
                 <>
                   <button
-                    onClick={handlePrevImage}
+                    onClick={() => {
+                      if (!car?.photos) return;
+                      setCurrentImageIndex((prev) => 
+                        prev === 0 ? car.photos!.length - 1 : prev - 1
+                      );
+                    }}
                     className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -128,7 +123,12 @@ const CarDetailPage = () => {
                     </svg>
                   </button>
                   <button
-                    onClick={handleNextImage}
+                    onClick={() => {
+                      if (!car?.photos) return;
+                      setCurrentImageIndex((prev) => 
+                        prev === car.photos!.length - 1 ? 0 : prev + 1
+                      );
+                    }}
                     className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -163,7 +163,7 @@ const CarDetailPage = () => {
         {/* Car Details */}
         <div className="p-6">
           <h1 className="text-3xl font-bold mb-2">
-            {car.brand?.name} {car.model} ({car.year})
+            {car.brand_id} {car.model} ({car.year})
           </h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -174,7 +174,7 @@ const CarDetailPage = () => {
                 <tbody>
                   <tr className="border-b">
                     <td className="py-2 font-medium">Marque</td>
-                    <td className="py-2">{car.brand?.name}</td>
+                    <td className="py-2">{car.brand_id}</td>
                   </tr>
                   <tr className="border-b">
                     <td className="py-2 font-medium">Modèle</td>
@@ -190,7 +190,7 @@ const CarDetailPage = () => {
                   </tr>
                   <tr>
                     <td className="py-2 font-medium">Transmission</td>
-                    <td className="py-2">{car.transmission?.name}</td>
+                    <td className="py-2">{car.transmission_id}</td>
                   </tr>
                 </tbody>
               </table>

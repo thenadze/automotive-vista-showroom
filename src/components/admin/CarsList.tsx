@@ -30,19 +30,9 @@ const CarsList: React.FC<CarsListProps> = ({
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Récupérer le nom de la marque par ID
-  const getBrandName = (brandId: number) => {
-    return brands.find(brand => brand.id === brandId)?.name || 'Inconnu';
-  };
-  
   // Récupérer le nom du type de carburant par ID
   const getFuelTypeName = (fuelTypeId: number) => {
     return fuelTypes.find(fuel => fuel.id === fuelTypeId)?.name || 'Inconnu';
-  };
-  
-  // Récupérer le nom du type de transmission par ID
-  const getTransmissionName = (transmissionId: number) => {
-    return transmissions.find(trans => trans.id === transmissionId)?.name || 'Inconnu';
   };
   
   // Gérer la suppression d'une voiture
@@ -122,10 +112,10 @@ const CarsList: React.FC<CarsListProps> = ({
               cars.map((car) => (
                 <TableRow key={car.id}>
                   <TableCell>{car.year}</TableCell>
-                  <TableCell>{getBrandName(car.brand_id)}</TableCell>
+                  <TableCell>{car.brand_id}</TableCell>
                   <TableCell>{car.model}</TableCell>
                   <TableCell>{getFuelTypeName(car.fuel_type_id)}</TableCell>
-                  <TableCell>{getTransmissionName(car.transmission_id)}</TableCell>
+                  <TableCell>{car.transmission_id}</TableCell>
                   <TableCell className="text-right space-x-2">
                     <Button
                       variant="outline"

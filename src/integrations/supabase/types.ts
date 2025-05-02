@@ -76,55 +76,41 @@ export type Database = {
       }
       cars: {
         Row: {
-          brand_id: number
+          brand_id: string
           created_at: string | null
           fuel_type_id: number
           id: string
           model: string
-          transmission_id: number
+          transmission_id: string
           updated_at: string | null
           year: number
         }
         Insert: {
-          brand_id: number
+          brand_id: string
           created_at?: string | null
           fuel_type_id: number
           id?: string
           model: string
-          transmission_id: number
+          transmission_id: string
           updated_at?: string | null
           year: number
         }
         Update: {
-          brand_id?: number
+          brand_id?: string
           created_at?: string | null
           fuel_type_id?: number
           id?: string
           model?: string
-          transmission_id?: number
+          transmission_id?: string
           updated_at?: string | null
           year?: number
         }
         Relationships: [
           {
-            foreignKeyName: "cars_brand_id_fkey"
-            columns: ["brand_id"]
-            isOneToOne: false
-            referencedRelation: "car_brands"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "cars_fuel_type_id_fkey"
             columns: ["fuel_type_id"]
             isOneToOne: false
             referencedRelation: "fuel_types"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "cars_transmission_id_fkey"
-            columns: ["transmission_id"]
-            isOneToOne: false
-            referencedRelation: "transmission_types"
             referencedColumns: ["id"]
           },
         ]

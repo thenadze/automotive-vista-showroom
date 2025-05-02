@@ -2,36 +2,56 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { CarWithDetails, CarBrand, FuelType, TransmissionType } from "@/types";
+import { CarWithDetails } from "@/types";
 
 const CarsPage = () => {
   const [cars, setCars] = useState<CarWithDetails[]>([]);
-  const [brands, setBrands] = useState<CarBrand[]>([]);
-  const [fuelTypes, setFuelTypes] = useState<FuelType[]>([]);
-  const [transmissions, setTransmissions] = useState<TransmissionType[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Filters
-  const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedFuel, setSelectedFuel] = useState<number | null>(null);
-  const [selectedTransmission, setSelectedTransmission] = useState<number | null>(null);
+  const [selectedTransmission, setSelectedTransmission] = useState<string | null>(null);
   const [yearRange, setYearRange] = useState<[number, number]>([0, 3000]);
+  const [brands, setBrands] = useState<string[]>([]);
+  const [fuelTypes, setFuelTypes] = useState<{id: number, name: string}[]>([]);
+  const [transmissions, setTransmissions] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchFilters = async () => {
-      // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-      const { data: brandsResponse } = await supabase.from("car_brands").select("*");
-      // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-      const { data: fuelResponse } = await supabase.from("fuel_types").select("*");
-      // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-      const { data: transmissionResponse } = await supabase.from("transmission_types").select("*");
-      
-      setBrands(brandsResponse || []);
-      setFuelTypes(fuelResponse || []);
-      setTransmissions(transmissionResponse || []);
+    // Charger les données pour les filtres depuis les voitures existantes
+    const fetchFilterOptions = async () => {
+      try {
+        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
+        const { data, error } = await supabase
+          .from("cars")
+          .select(`
+            brand_id,
+            fuel_type_id,
+            transmission_id
+          `);
+        
+        if (error) throw error;
+        
+        if (data) {
+          // Extraire les marques uniques
+          const uniqueBrands = Array.from(new Set(data.map(car => car.brand_id)));
+          setBrands(uniqueBrands);
+          
+          // Extraire les transmissions uniques
+          const uniqueTransmissions = Array.from(new Set(data.map(car => car.transmission_id)));
+          setTransmissions(uniqueTransmissions);
+          
+          // Récupérer les types de carburant
+          // @ts-ignore
+          const { data: fuelData } = await supabase.from("fuel_types").select("*");
+          setFuelTypes(fuelData || []);
+        }
+      } catch (error) {
+        console.error("Error fetching filter data:", error);
+      }
     };
     
-    fetchFilters();
+    fetchFilterOptions();
   }, []);
 
   useEffect(() => {
@@ -76,23 +96,17 @@ const CarsPage = () => {
       }
       
       if (carsData) {
-        // Enhance cars with their related data
-        const carsWithDetails: CarWithDetails[] = await Promise.all(
-          carsData.map(async (car: any) => {
-            // Find related data
-            const brand = brands.find(b => b.id === car.brand_id);
-            const fuelType = fuelTypes.find(f => f.id === car.fuel_type_id);
-            const transmission = transmissions.find(t => t.id === car.transmission_id);
-            
-            return {
-              ...car,
-              brand,
-              fuel_type: fuelType,
-              transmission,
-              photos: car.car_photos
-            };
-          })
-        );
+        // Convertir les données pour correspondre à l'interface CarWithDetails
+        const carsWithDetails: CarWithDetails[] = carsData.map(car => {
+          // Pour chaque voiture, trouver le type de carburant correspondant
+          const fuelType = fuelTypes.find(f => f.id === car.fuel_type_id);
+          
+          return {
+            ...car,
+            fuel_type: fuelType,
+            photos: car.car_photos || []
+          };
+        });
         
         setCars(carsWithDetails);
       }
@@ -100,14 +114,11 @@ const CarsPage = () => {
       setLoading(false);
     };
     
-    // Only fetch cars if we have loaded the filter data
-    if (brands.length > 0 && fuelTypes.length > 0 && transmissions.length > 0) {
-      fetchCars();
-    }
+    fetchCars();
   }, [brands, fuelTypes, transmissions, selectedBrand, selectedFuel, selectedTransmission, yearRange]);
 
   const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value === "" ? null : parseInt(e.target.value);
+    const value = e.target.value === "" ? null : e.target.value;
     setSelectedBrand(value);
   };
   
@@ -117,7 +128,7 @@ const CarsPage = () => {
   };
   
   const handleTransmissionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value === "" ? null : parseInt(e.target.value);
+    const value = e.target.value === "" ? null : e.target.value;
     setSelectedTransmission(value);
   };
   
@@ -156,7 +167,7 @@ const CarsPage = () => {
             >
               <option value="">Toutes les marques</option>
               {brands.map(brand => (
-                <option key={brand.id} value={brand.id}>{brand.name}</option>
+                <option key={brand} value={brand}>{brand}</option>
               ))}
             </select>
           </div>
@@ -184,7 +195,7 @@ const CarsPage = () => {
             >
               <option value="">Toutes les transmissions</option>
               {transmissions.map(trans => (
-                <option key={trans.id} value={trans.id}>{trans.name}</option>
+                <option key={trans} value={trans}>{trans}</option>
               ))}
             </select>
           </div>
@@ -239,16 +250,16 @@ const CarsPage = () => {
                   <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                     <img 
                       src={photoUrl} 
-                      alt={`${car.brand?.name} ${car.model}`}
+                      alt={`${car.brand_id} ${car.model}`}
                       className="w-full h-56 object-cover"
                     />
                     <div className="p-4">
                       <h3 className="text-xl font-semibold mb-2">
-                        {car.brand?.name} {car.model} ({car.year})
+                        {car.brand_id} {car.model} ({car.year})
                       </h3>
                       <div className="flex justify-between text-sm text-gray-600 mb-4">
                         <span>{car.fuel_type?.name}</span>
-                        <span>{car.transmission?.name}</span>
+                        <span>{car.transmission_id}</span>
                       </div>
                       <Link
                         to={`/cars/${car.id}`}
