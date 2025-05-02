@@ -15,10 +15,15 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
       {featuredCars.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredCars.map(car => {
+            console.log("Featured car:", car);
             console.log("Featured car photos:", car.photos);
-            const primaryPhoto = car.photos?.find(p => p.is_primary);
-            const firstPhoto = car.photos?.[0];
-            const photoUrl = primaryPhoto?.photo_url || firstPhoto?.photo_url || "/placeholder.svg";
+            
+            // Trouver la photo principale ou prendre la première
+            const photoUrl = car.photos && car.photos.length > 0
+              ? (car.photos.find(p => p.is_primary)?.photo_url || car.photos[0].photo_url)
+              : "/placeholder.svg";
+            
+            console.log("Using photo URL:", photoUrl);
             
             return (
               <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">

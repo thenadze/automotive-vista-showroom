@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CarPhoto } from "@/types";
 
 interface CarImageGalleryProps {
@@ -10,6 +10,11 @@ interface CarImageGalleryProps {
 
 const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, model }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Reset l'index lorsque les photos changent
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [photos]);
   
   const handlePrevImage = () => {
     if (!photos?.length) return;
@@ -25,23 +30,26 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
     );
   };
 
-  console.log("CarImageGallery photos:", photos);
+  // Vérifier si nous avons des photos valides
+  const validPhotos = photos?.filter(photo => photo && photo.photo_url) || [];
+  console.log("CarImageGallery valid photos:", validPhotos);
   
   return (
     <div className="relative h-96">
-      {photos && photos.length > 0 ? (
+      {validPhotos.length > 0 ? (
         <>
           <img
-            src={photos[currentImageIndex]?.photo_url || "/placeholder.svg"}
+            src={validPhotos[currentImageIndex]?.photo_url}
             alt={`${brandName} ${model}`}
             className="w-full h-full object-cover"
             onError={(e) => {
-              console.log("Error loading image:", photos[currentImageIndex]?.photo_url);
+              console.error("Error loading image:", validPhotos[currentImageIndex]?.photo_url);
+              console.error("Image element:", e.target);
               (e.target as HTMLImageElement).src = "/placeholder.svg";
             }}
           />
           
-          {photos.length > 1 && (
+          {validPhotos.length > 1 && (
             <>
               <button
                 onClick={handlePrevImage}
@@ -63,9 +71,9 @@ const CarImageGallery: React.FC<CarImageGalleryProps> = ({ photos, brandName, mo
           )}
           
           {/* Thumbnail navigation */}
-          {photos.length > 1 && (
+          {validPhotos.length > 1 && (
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-              {photos.map((_, index) => (
+              {validPhotos.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { CompanyInfo, CarWithDetails } from "@/types";
+import { CompanyInfo, CarWithDetails, CarPhoto } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 
 export const useHomepageData = () => {
@@ -12,7 +12,7 @@ export const useHomepageData = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    console.log("HomePage useEffect running");
+    console.log("HomePage useEffect running - fetching data");
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -21,7 +21,7 @@ export const useHomepageData = () => {
         // Fetch all data in parallel for better performance
         const [companyResult, carsResult, brandsResult, fuelTypesResult, transmissionsResult] = await Promise.all([
           supabase.from("company_info").select("*").single(),
-          supabase.from("cars").select(`*, car_photos (*)`).limit(3),
+          supabase.from("cars").select("*").limit(3),
           supabase.from("car_brands").select("*"),
           supabase.from("fuel_types").select("*"),
           supabase.from("transmission_types").select("*")
@@ -40,14 +40,43 @@ export const useHomepageData = () => {
           console.error("Cars fetch error:", carsResult.error);
           setFeaturedCars([]);
         } else {
-          const carsWithDetails = carsResult.data.map((car: any) => ({
-            ...car,
-            brand: brandsResult.data?.find(b => b.id === car.brand_id) || null,
-            fuel_type: fuelTypesResult.data?.find(f => f.id === car.fuel_type_id) || null,
-            transmission: transmissionsResult.data?.find(t => t.id === car.transmission_id) || null,
-            photos: car.car_photos || []
-          }));
+          console.log("Cars fetched successfully:", carsResult.data);
           
+          // Récupérer les photos pour chaque voiture
+          const carsWithPhotos = await Promise.all(
+            carsResult.data.map(async (car: any) => {
+              const { data: photoData, error: photoError } = await supabase
+                .from("car_photos")
+                .select("*")
+                .eq("car_id", car.id);
+              
+              if (photoError) {
+                console.error(`Error fetching photos for car ${car.id}:`, photoError);
+                return {
+                  ...car,
+                  photos: []
+                };
+              }
+              
+              console.log(`Photos for car ${car.id}:`, photoData);
+              return {
+                ...car,
+                photos: photoData || []
+              };
+            })
+          );
+          
+          // Enrichir les voitures avec les détails (marque, type de carburant, transmission)
+          const carsWithDetails = carsWithPhotos.map((car: any) => {
+            return {
+              ...car,
+              brand: brandsResult.data?.find(b => b.id === car.brand_id) || null,
+              fuel_type: fuelTypesResult.data?.find(f => f.id === car.fuel_type_id) || null,
+              transmission: transmissionsResult.data?.find(t => t.id === car.transmission_id) || null
+            };
+          });
+          
+          console.log("Cars with details:", carsWithDetails);
           setFeaturedCars(carsWithDetails);
         }
       } catch (err: any) {
