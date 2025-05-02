@@ -27,7 +27,7 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
   const isEditMode = !!car;
   
   // Récupération des données du formulaire (marques, types de carburant, etc.)
-  const { brands, fuelTypes, transmissions, loading, currentPhotos } = useCarFormData(car);
+  const { fuelTypes, loading, currentPhotos } = useCarFormData(car);
   
   // Gestion de la soumission du formulaire
   const { handleSubmit, loading: submitting, setLoading } = useCarFormSubmit(car, onSuccess);
@@ -37,10 +37,10 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
     resolver: zodResolver(carFormSchema),
     defaultValues: {
       year: car?.year || new Date().getFullYear(),
-      brand_id: car?.brand_id || undefined,
+      brand: car?.brand || "",
       model: car?.model || "",
       fuel_type_id: car?.fuel_type_id || undefined,
-      transmission_id: car?.transmission_id || undefined,
+      transmission: car?.transmission || "",
     },
   });
   
@@ -61,14 +61,13 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <YearAndBrandFields form={form} brands={brands} loading={loading || submitting} />
+          <YearAndBrandFields form={form} loading={loading || submitting} />
           
           <ModelField form={form} loading={loading || submitting} />
           
           <FuelAndTransmissionFields 
             form={form} 
-            fuelTypes={fuelTypes} 
-            transmissions={transmissions} 
+            fuelTypes={fuelTypes}
             loading={loading || submitting} 
           />
           
