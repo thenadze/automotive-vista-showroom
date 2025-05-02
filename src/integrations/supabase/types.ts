@@ -78,7 +78,7 @@ export type Database = {
         Row: {
           brand_id: string
           created_at: string | null
-          fuel_type_id: number
+          fuel_type_id: string
           id: string
           model: string
           transmission_id: string
@@ -88,7 +88,7 @@ export type Database = {
         Insert: {
           brand_id: string
           created_at?: string | null
-          fuel_type_id: number
+          fuel_type_id: string
           id?: string
           model: string
           transmission_id: string
@@ -98,22 +98,14 @@ export type Database = {
         Update: {
           brand_id?: string
           created_at?: string | null
-          fuel_type_id?: number
+          fuel_type_id?: string
           id?: string
           model?: string
           transmission_id?: string
           updated_at?: string | null
           year?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "cars_fuel_type_id_fkey"
-            columns: ["fuel_type_id"]
-            isOneToOne: false
-            referencedRelation: "fuel_types"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       company_info: {
         Row: {

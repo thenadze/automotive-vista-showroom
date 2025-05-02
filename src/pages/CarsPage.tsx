@@ -10,11 +10,11 @@ const CarsPage = () => {
   
   // Filters
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [selectedFuel, setSelectedFuel] = useState<number | null>(null);
+  const [selectedFuel, setSelectedFuel] = useState<string | null>(null);
   const [selectedTransmission, setSelectedTransmission] = useState<string | null>(null);
   const [yearRange, setYearRange] = useState<[number, number]>([0, 3000]);
   const [brands, setBrands] = useState<string[]>([]);
-  const [fuelTypes, setFuelTypes] = useState<{id: number, name: string}[]>([]);
+  const [fuelTypes, setFuelTypes] = useState<string[]>([]);
   const [transmissions, setTransmissions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -37,14 +37,13 @@ const CarsPage = () => {
           const uniqueBrands = Array.from(new Set(data.map(car => car.brand_id)));
           setBrands(uniqueBrands);
           
+          // Extraire les types de carburant uniques
+          const uniqueFuelTypes = Array.from(new Set(data.map(car => car.fuel_type_id)));
+          setFuelTypes(uniqueFuelTypes);
+          
           // Extraire les transmissions uniques
           const uniqueTransmissions = Array.from(new Set(data.map(car => car.transmission_id)));
           setTransmissions(uniqueTransmissions);
-          
-          // Récupérer les types de carburant
-          // @ts-ignore
-          const { data: fuelData } = await supabase.from("fuel_types").select("*");
-          setFuelTypes(fuelData || []);
         }
       } catch (error) {
         console.error("Error fetching filter data:", error);
@@ -98,12 +97,8 @@ const CarsPage = () => {
       if (carsData) {
         // Convertir les données pour correspondre à l'interface CarWithDetails
         const carsWithDetails: CarWithDetails[] = carsData.map(car => {
-          // Pour chaque voiture, trouver le type de carburant correspondant
-          const fuelType = fuelTypes.find(f => f.id === car.fuel_type_id);
-          
           return {
             ...car,
-            fuel_type: fuelType,
             photos: car.car_photos || []
           };
         });
@@ -123,7 +118,7 @@ const CarsPage = () => {
   };
   
   const handleFuelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value === "" ? null : parseInt(e.target.value);
+    const value = e.target.value === "" ? null : e.target.value;
     setSelectedFuel(value);
   };
   
@@ -181,7 +176,7 @@ const CarsPage = () => {
             >
               <option value="">Tous les carburants</option>
               {fuelTypes.map(fuel => (
-                <option key={fuel.id} value={fuel.id}>{fuel.name}</option>
+                <option key={fuel} value={fuel}>{fuel}</option>
               ))}
             </select>
           </div>
@@ -258,7 +253,7 @@ const CarsPage = () => {
                         {car.brand_id} {car.model} ({car.year})
                       </h3>
                       <div className="flex justify-between text-sm text-gray-600 mb-4">
-                        <span>{car.fuel_type?.name}</span>
+                        <span>{car.fuel_type_id}</span>
                         <span>{car.transmission_id}</span>
                       </div>
                       <Link

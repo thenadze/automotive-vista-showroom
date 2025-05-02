@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,6 +34,7 @@ const CarDetailPage = () => {
         const carWithDetails: CarWithDetails = {
           ...carData,
           brand_id: carData.brand_id,
+          fuel_type_id: carData.fuel_type_id,
           transmission_id: carData.transmission_id,
           photos: carData.car_photos || []
         };
@@ -110,12 +112,7 @@ const CarDetailPage = () => {
               {car.photos.length > 1 && (
                 <>
                   <button
-                    onClick={() => {
-                      if (!car?.photos) return;
-                      setCurrentImageIndex((prev) => 
-                        prev === 0 ? car.photos!.length - 1 : prev - 1
-                      );
-                    }}
+                    onClick={handlePrevImage}
                     className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,12 +120,7 @@ const CarDetailPage = () => {
                     </svg>
                   </button>
                   <button
-                    onClick={() => {
-                      if (!car?.photos) return;
-                      setCurrentImageIndex((prev) => 
-                        prev === car.photos!.length - 1 ? 0 : prev + 1
-                      );
-                    }}
+                    onClick={handleNextImage}
                     className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-40 hover:bg-opacity-60 text-white p-2 rounded-full"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -186,7 +178,7 @@ const CarDetailPage = () => {
                   </tr>
                   <tr className="border-b">
                     <td className="py-2 font-medium">Carburant</td>
-                    <td className="py-2">{car.fuel_type?.name}</td>
+                    <td className="py-2">{car.fuel_type_id}</td>
                   </tr>
                   <tr>
                     <td className="py-2 font-medium">Transmission</td>

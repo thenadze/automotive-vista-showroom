@@ -29,7 +29,7 @@ export interface Car {
   year: number;
   brand_id: string;
   model: string;
-  fuel_type_id: string;  // Modification de number à string
+  fuel_type_id: string;  // Maintenant une chaîne de caractères
   transmission_id: string;
   created_at: string;
   updated_at: string;
