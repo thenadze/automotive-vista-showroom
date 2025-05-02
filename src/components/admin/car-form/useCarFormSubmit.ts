@@ -38,9 +38,15 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
         if (error) throw error;
       } else {
         // Création d'une nouvelle voiture
+        // Ajout de la date de création pour les nouvelles voitures
+        const newCarData = { 
+          ...formData, 
+          created_at: new Date().toISOString() 
+        };
+
         const { data: newCar, error } = await supabase
           .from("cars")
-          .insert(formData)
+          .insert(newCarData)
           .select()
           .single();
           
@@ -60,13 +66,25 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
           const fileExt = photo.name.split('.').pop();
           const fileName = `${carId}/${Date.now()}.${fileExt}`;
           
+          // Vérifier si le bucket car_photos existe, sinon le créer
+          const { data: buckets } = await supabase.storage.listBuckets();
+          const carPhotosBucket = buckets?.find(bucket => bucket.name === 'car_photos');
+          
+          if (!carPhotosBucket) {
+            // Créer le bucket car_photos si nécessaire
+            await supabase.storage.createBucket('car_photos', {
+              public: true
+            });
+          }
+          
           // Upload de la photo dans le bucket Supabase Storage
           const { error: uploadError } = await supabase.storage
             .from("car_photos")
             .upload(fileName, photo);
             
           if (uploadError) {
-            throw uploadError;
+            console.error("Erreur lors de l'upload de la photo:", uploadError);
+            continue; // Continuer avec les autres photos même si une échoue
           }
           
           // Récupérer l'URL publique de la photo
@@ -85,7 +103,7 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
               });
               
             if (photoError) {
-              throw photoError;
+              console.error("Erreur lors de l'enregistrement de la référence photo:", photoError);
             }
           }
         }
