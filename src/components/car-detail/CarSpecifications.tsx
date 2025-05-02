@@ -15,7 +15,7 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
         <tbody>
           <tr className="border-b">
             <td className="py-2 font-medium">Marque</td>
-            <td className="py-2">{car.brand_id}</td>
+            <td className="py-2">{car.brand?.name || "Non spécifiée"}</td>
           </tr>
           <tr className="border-b">
             <td className="py-2 font-medium">Modèle</td>
@@ -27,11 +27,11 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
           </tr>
           <tr className="border-b">
             <td className="py-2 font-medium">Carburant</td>
-            <td className="py-2">{car.fuel_type_id}</td>
+            <td className="py-2">{car.fuel_type?.name || "Non spécifié"}</td>
           </tr>
           <tr>
             <td className="py-2 font-medium">Transmission</td>
-            <td className="py-2">{car.transmission_id}</td>
+            <td className="py-2">{car.transmission?.name || "Non spécifiée"}</td>
           </tr>
         </tbody>
       </table>
