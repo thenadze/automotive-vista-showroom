@@ -37,10 +37,10 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
     resolver: zodResolver(carFormSchema),
     defaultValues: {
       year: car?.year || new Date().getFullYear(),
-      brand: car?.brand || "",
+      brand_id: car?.brand_id || undefined,
       model: car?.model || "",
       fuel_type_id: car?.fuel_type_id || undefined,
-      transmission: car?.transmission || "",
+      transmission_id: car?.transmission_id || undefined,
     },
   });
   

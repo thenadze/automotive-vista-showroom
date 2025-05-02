@@ -17,7 +17,7 @@ const TransmissionSelect: React.FC<TransmissionSelectProps> = ({
   return (
     <FormField
       control={form.control}
-      name="transmission"
+      name="transmission_id"
       render={({ field }) => (
         <FormItem>
           <FormLabel>Boîte de vitesse</FormLabel>

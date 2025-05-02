@@ -36,7 +36,7 @@ const YearAndBrandFields: React.FC<YearAndBrandFieldsProps> = ({ form, loading }
       {/* Marque */}
       <FormField
         control={form.control}
-        name="brand"
+        name="brand_id"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Marque</FormLabel>
