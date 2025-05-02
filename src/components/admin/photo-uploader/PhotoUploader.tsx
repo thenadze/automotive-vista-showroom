@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import DropZone from './DropZone';
 import PreviewGrid from './PreviewGrid';
 import { usePhotoUploader } from './usePhotoUploader';
@@ -7,6 +7,7 @@ import { usePhotoUploader } from './usePhotoUploader';
 interface PhotoUploaderProps {
   onChange: (files: File[]) => void;
   existingPhotos?: string[];
+  onRemoveExisting?: (photoUrl: string) => void;
   disabled?: boolean;
 }
 
@@ -16,6 +17,7 @@ interface PhotoUploaderProps {
 const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   onChange,
   existingPhotos = [],
+  onRemoveExisting,
   disabled = false,
 }) => {
   const {
@@ -26,6 +28,11 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({
     handleDragOver,
     handleDrop
   } = usePhotoUploader(onChange, disabled);
+
+  const handleRemoveExisting = (index: number) => {
+    if (disabled || !onRemoveExisting) return;
+    onRemoveExisting(existingPhotos[index]);
+  };
 
   return (
     <div className="space-y-4">
@@ -44,6 +51,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({
         existingPhotos={existingPhotos}
         previews={previews}
         onRemove={handleRemove}
+        onRemoveExisting={handleRemoveExisting}
         disabled={disabled}
       />
     </div>

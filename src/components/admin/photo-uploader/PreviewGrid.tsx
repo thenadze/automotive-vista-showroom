@@ -6,6 +6,7 @@ interface PreviewGridProps {
   existingPhotos?: string[];
   previews: string[];
   onRemove: (index: number) => void;
+  onRemoveExisting?: (index: number) => void;
   disabled?: boolean;
 }
 
@@ -16,6 +17,7 @@ const PreviewGrid: React.FC<PreviewGridProps> = ({
   existingPhotos = [],
   previews,
   onRemove,
+  onRemoveExisting,
   disabled = false,
 }) => {
   return (
@@ -27,7 +29,7 @@ const PreviewGrid: React.FC<PreviewGridProps> = ({
           preview={photoUrl}
           index={index}
           disabled={disabled}
-          onRemove={onRemove}
+          onRemove={(idx) => onRemoveExisting ? onRemoveExisting(idx) : null}
           isExisting={true}
         />
       ))}

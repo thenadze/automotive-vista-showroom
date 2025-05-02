@@ -152,6 +152,39 @@ export type Database = {
         }
         Relationships: []
       }
+      objects: {
+        Row: {
+          bucket_id: string
+          id: number
+          metadata: Json | null
+          name: string
+          owner: string
+          owner_id: string
+          user_metadata: Json | null
+          version: string
+        }
+        Insert: {
+          bucket_id: string
+          id?: never
+          metadata?: Json | null
+          name: string
+          owner: string
+          owner_id: string
+          user_metadata?: Json | null
+          version: string
+        }
+        Update: {
+          bucket_id?: string
+          id?: never
+          metadata?: Json | null
+          name?: string
+          owner?: string
+          owner_id?: string
+          user_metadata?: Json | null
+          version?: string
+        }
+        Relationships: []
+      }
       transmission_types: {
         Row: {
           id: number

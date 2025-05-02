@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Car } from "@/types";
 import { CarFormValues } from "./formSchema";
 
-export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
+export const useCarFormSubmit = (car?: Car, photosToRemove: string[] = [], onSuccess?: () => void) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -61,6 +61,48 @@ export const useCarFormSubmit = (car?: Car, onSuccess?: () => void) => {
           carId = newCar.id;
         } else {
           throw new Error("Erreur lors de la création de la voiture");
+        }
+      }
+
+      // Suppression des photos à retirer
+      if (photosToRemove.length > 0 && carId) {
+        console.log(`Suppression de ${photosToRemove.length} photos pour la voiture ${carId}`);
+        
+        for (const photoUrl of photosToRemove) {
+          // Supprimer l'entrée de la base de données
+          const { error: deleteError } = await supabase
+            .from("car_photos")
+            .delete()
+            .eq("car_id", carId)
+            .eq("photo_url", photoUrl);
+            
+          if (deleteError) {
+            console.error("Erreur lors de la suppression de la photo en base de données:", deleteError);
+          }
+          
+          // Extraire le chemin du fichier depuis l'URL
+          try {
+            const url = new URL(photoUrl);
+            const pathMatch = url.pathname.match(/\/storage\/v1\/object\/public\/car_photos\/(.+)/);
+            
+            if (pathMatch && pathMatch[1]) {
+              const filePath = pathMatch[1];
+              console.log(`Tentative de suppression du fichier: ${filePath}`);
+              
+              // Supprimer le fichier du stockage
+              const { error: storageError } = await supabase.storage
+                .from("car_photos")
+                .remove([filePath]);
+                
+              if (storageError) {
+                console.error("Erreur lors de la suppression du fichier de stockage:", storageError);
+              } else {
+                console.log(`Fichier supprimé avec succès: ${filePath}`);
+              }
+            }
+          } catch (error) {
+            console.error("Erreur lors de l'extraction du chemin de fichier:", error);
+          }
         }
       }
       

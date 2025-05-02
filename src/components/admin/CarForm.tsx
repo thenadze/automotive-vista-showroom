@@ -27,10 +27,15 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
   const isEditMode = !!car;
   
   // Récupération des données du formulaire (marques, types de carburant, etc.)
-  const { loading: dataLoading, currentPhotos } = useCarFormData(car);
+  const { 
+    loading: dataLoading, 
+    currentPhotos, 
+    photosToRemove, 
+    handleRemoveExistingPhoto 
+  } = useCarFormData(car);
   
   // Gestion de la soumission du formulaire
-  const { handleSubmit, loading: submitting, setLoading } = useCarFormSubmit(car, onSuccess);
+  const { handleSubmit, loading: submitting, setLoading } = useCarFormSubmit(car, photosToRemove, onSuccess);
   
   // Initialisation du formulaire avec les valeurs par défaut
   const form = useForm<CarFormValues>({
@@ -78,6 +83,7 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
             <PhotoUploader 
               onChange={handlePhotoChange} 
               existingPhotos={currentPhotos}
+              onRemoveExisting={handleRemoveExistingPhoto}
               disabled={loading}
             />
           </div>

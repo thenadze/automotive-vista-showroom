@@ -21,18 +21,20 @@ const PhotoPreview: React.FC<PhotoPreviewProps> = ({
   isExisting = false,
 }) => {
   return (
-    <div className={isExisting ? "relative" : "relative group"}>
+    <div className="relative group">
       <img
         src={preview}
         alt={`${isExisting ? 'Photo existante' : 'Aperçu'} ${index + 1}`}
         className="h-24 w-full object-cover rounded-md"
       />
       
-      {isExisting ? (
+      {isExisting && (
         <span className="absolute top-0 left-0 bg-gray-900 bg-opacity-75 text-white px-2 py-1 text-xs rounded-br-md">
           Existante
         </span>
-      ) : !disabled && (
+      )}
+      
+      {!disabled && (
         <button
           type="button"
           onClick={() => onRemove(index)}
