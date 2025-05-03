@@ -1,5 +1,7 @@
 
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { RotateCcw } from "lucide-react";
 
 interface FilterResetButtonProps {
   onClick: () => void;
@@ -7,11 +9,13 @@ interface FilterResetButtonProps {
 
 export const FilterResetButton: React.FC<FilterResetButtonProps> = ({ onClick }) => {
   return (
-    <button 
+    <Button 
       onClick={onClick}
-      className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded transition duration-300"
+      variant="outline"
+      className="flex items-center gap-2"
     >
+      <RotateCcw className="h-4 w-4" />
       Réinitialiser
-    </button>
+    </Button>
   );
 };

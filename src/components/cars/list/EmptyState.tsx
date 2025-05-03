@@ -1,5 +1,7 @@
 
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { RotateCcw } from "lucide-react";
 
 interface EmptyStateProps {
   resetFilters: () => void;
@@ -10,12 +12,13 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ resetFilters }) => {
     <div className="bg-gray-50 p-8 rounded-lg text-center">
       <h3 className="text-xl font-medium mb-2">Aucun véhicule trouvé</h3>
       <p className="text-gray-600 mb-4">Aucun véhicule ne correspond à vos critères de recherche.</p>
-      <button 
+      <Button 
         onClick={resetFilters}
-        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300"
+        className="flex items-center gap-2"
       >
+        <RotateCcw className="h-4 w-4" />
         Réinitialiser les filtres
-      </button>
+      </Button>
     </div>
   );
 };

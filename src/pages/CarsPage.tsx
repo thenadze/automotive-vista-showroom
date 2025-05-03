@@ -3,6 +3,7 @@ import React from "react";
 import { FiltersSection } from "@/components/cars/filters/FiltersSection";
 import { CarsList } from "@/components/cars/list/CarsList";
 import { useCarsFiltering } from "@/hooks/useCarsFiltering";
+import { PageHeader } from "@/components/cars/PageHeader";
 
 const CarsPage = () => {
   const { 
@@ -13,8 +14,9 @@ const CarsPage = () => {
   } = useCarsFiltering();
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Catalogue des véhicules</h1>
+    <div className="container mx-auto px-4 py-8">
+      {/* Page Header with navigation */}
+      <PageHeader />
       
       {/* Filters */}
       <FiltersSection
