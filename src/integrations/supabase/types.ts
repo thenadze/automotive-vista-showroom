@@ -78,6 +78,7 @@ export type Database = {
         Row: {
           brand_id: string
           created_at: string | null
+          daily_price: number | null
           fuel_type_id: string
           id: string
           mileage: number | null
@@ -89,6 +90,7 @@ export type Database = {
         Insert: {
           brand_id: string
           created_at?: string | null
+          daily_price?: number | null
           fuel_type_id: string
           id?: string
           mileage?: number | null
@@ -100,6 +102,7 @@ export type Database = {
         Update: {
           brand_id?: string
           created_at?: string | null
+          daily_price?: number | null
           fuel_type_id?: string
           id?: string
           mileage?: number | null
