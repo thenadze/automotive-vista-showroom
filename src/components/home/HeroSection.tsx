@@ -1,19 +1,15 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
 interface HeroSectionProps {
   companyInfo: CompanyInfo | null;
 }
-
 const HeroSection: React.FC<HeroSectionProps> = ({
   companyInfo
 }) => {
-  return (
-    <section className="relative py-16 md:py-24 bg-gradient-to-r from-stone-700 to-stone-800">
+  return <section className="relative py-16 md:py-24 bg-gradient-to-r from-stone-700 to-stone-800">
       <div className="container mx-auto relative z-10 px-6">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Left column - Text content */}
@@ -39,17 +35,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Right column - Car image */}
           <div className="w-full md:w-1/2 mt-8 md:mt-0">
             <div className="rounded-lg overflow-hidden shadow-2xl">
-              <img 
-                src="/lovable-uploads/92058d71-ddf1-4306-86a7-1e36e4609b8c.png" 
-                alt="Voitures alignées" 
-                className="w-full h-auto object-cover rounded-lg transform transition-transform hover:scale-105 duration-500" 
-              />
+              
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
