@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           <div>
             <Link to="/" className="text-xl font-bold flex items-center mb-4">
               <span className="text-orange-500">Auto</span>
@@ -36,17 +36,6 @@ const Footer = () => {
               <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">À propos de nous</a></li>
               <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">Contact</a></li>
               <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">Témoignages</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold text-lg mb-4">Liens Utiles</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">FAQ</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">Conditions Générales</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">Politique de Confidentialité</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">Support Client</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">Plan du site</a></li>
             </ul>
           </div>
           
