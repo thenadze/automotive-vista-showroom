@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Instagram } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -15,9 +15,6 @@ const Footer = () => {
             <p className="text-gray-400 mb-4">Votre partenaire de confiance pour la location de véhicules premium en France.</p>
             
             <div className="flex space-x-4">
-              <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-                <Facebook className="w-4 h-4" />
-              </a>
               <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
