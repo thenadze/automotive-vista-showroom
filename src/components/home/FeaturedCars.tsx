@@ -42,7 +42,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                 style: 'currency', 
                 currency: 'EUR',
                 maximumFractionDigits: 0 
-              }).format(car.daily_price || 0); // Using daily_price instead of price_per_day
+              }).format(car.daily_price || 0);
               
               return (
                 <div key={car.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -75,7 +75,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                     
                     <div className="flex items-end justify-between mb-3">
                       <div>
-                        <span className="block text-stone-500 text-xs">Prix par jour</span>
+                        <span className="block text-stone-500 text-xs">Prix</span>
                         <span className="text-xl font-bold text-stone-700">{formattedPrice}</span>
                       </div>
                       

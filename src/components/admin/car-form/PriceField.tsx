@@ -17,7 +17,7 @@ const PriceField: React.FC<PriceFieldProps> = ({ form, loading }) => {
       name="daily_price"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Prix journalier (€)</FormLabel>
+          <FormLabel>Prix (€)</FormLabel>
           <FormControl>
             <Input
               type="number"

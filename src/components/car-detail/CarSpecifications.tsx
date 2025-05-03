@@ -7,6 +7,15 @@ interface CarSpecificationsProps {
 }
 
 const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
+  // Formatter le prix
+  const formattedPrice = car.daily_price 
+    ? new Intl.NumberFormat('fr-FR', { 
+        style: 'currency', 
+        currency: 'EUR',
+        maximumFractionDigits: 0 
+      }).format(car.daily_price)
+    : "Non spécifié";
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Caractéristiques</h2>
@@ -29,9 +38,13 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
             <td className="py-2 font-medium">Carburant</td>
             <td className="py-2">{car.fuel_type?.name || "Non spécifié"}</td>
           </tr>
-          <tr>
+          <tr className="border-b">
             <td className="py-2 font-medium">Transmission</td>
             <td className="py-2">{car.transmission?.name || "Non spécifiée"}</td>
+          </tr>
+          <tr>
+            <td className="py-2 font-medium">Prix</td>
+            <td className="py-2">{formattedPrice}</td>
           </tr>
         </tbody>
       </table>
