@@ -62,7 +62,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-100">
+    <nav className="bg-black border-b border-gray-800">
       <div className="container mx-auto px-4">
         {/* Logo centered above navigation links */}
         <div className="flex justify-center pt-4">
@@ -76,7 +76,7 @@ const Navbar = () => {
         <div className="flex justify-center items-center h-16 relative">
           {/* Mobile menu button - positioned absolute left */}
           <button 
-            className="lg:hidden absolute left-0 p-2 focus:outline-none" 
+            className="lg:hidden absolute left-0 p-2 focus:outline-none text-white" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -84,13 +84,13 @@ const Navbar = () => {
           
           {/* Centered Navigation Links - only visible on desktop */}
           <div className="hidden lg:flex items-center space-x-16">
-            <Link to="/" className="text-gray-800 hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
+            <Link to="/" className="text-white hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
               Accueil
             </Link>
-            <Link to="/cars" className="text-gray-800 hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
+            <Link to="/cars" className="text-white hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
               Nos Véhicules
             </Link>
-            <Link to="#contact" className="text-gray-800 hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
+            <Link to="#contact" className="text-white hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
               Contact
             </Link>
           </div>
@@ -99,20 +99,20 @@ const Navbar = () => {
           <div className="absolute right-0">
             {loading ? (
               <div className="h-8 w-8 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-gray-800"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
               </div>
             ) : isAuthenticated ? (
               <div className="flex space-x-2">
-                <Link to="/admin" className="text-sm text-gray-700 hover:text-orange-500">
+                <Link to="/admin" className="text-sm text-gray-300 hover:text-orange-500">
                   Admin
                 </Link>
-                <Separator orientation="vertical" className="h-6 mx-2" />
-                <button onClick={handleLogout} className="text-sm text-gray-700 hover:text-orange-500">
+                <Separator orientation="vertical" className="h-6 mx-2 bg-gray-600" />
+                <button onClick={handleLogout} className="text-sm text-gray-300 hover:text-orange-500">
                   Déconnexion
                 </button>
               </div>
             ) : (
-              <Button variant="ghost" size="sm" className="text-gray-700" asChild>
+              <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white" asChild>
                 <Link to="/login">
                   <LogIn className="h-4 w-4 mr-1" />
                   <span>Connexion</span>
@@ -125,25 +125,25 @@ const Navbar = () => {
       
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100">
+        <div className="lg:hidden bg-black border-t border-gray-800">
           <div className="container mx-auto px-4 py-2 space-y-1">
             <Link 
               to="/" 
-              className="block text-center py-3 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors" 
+              className="block text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors" 
               onClick={() => setMobileMenuOpen(false)}
             >
               Accueil
             </Link>
             <Link 
               to="/cars" 
-              className="block text-center py-3 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors" 
+              className="block text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors" 
               onClick={() => setMobileMenuOpen(false)}
             >
               Nos Véhicules
             </Link>
             <Link 
               to="#contact" 
-              className="block text-center py-3 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors" 
+              className="block text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors" 
               onClick={() => setMobileMenuOpen(false)}
             >
               Contact
@@ -151,10 +151,10 @@ const Navbar = () => {
             
             {isAuthenticated && (
               <>
-                <Separator className="my-2" />
+                <Separator className="my-2 bg-gray-800" />
                 <Link 
                   to="/admin" 
-                  className="block text-center py-3 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors" 
+                  className="block text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors" 
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Admin
@@ -164,7 +164,7 @@ const Navbar = () => {
                     handleLogout();
                     setMobileMenuOpen(false);
                   }} 
-                  className="w-full text-center py-3 text-gray-800 hover:bg-gray-50 hover:text-orange-500 transition-colors"
+                  className="w-full text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors"
                 >
                   Déconnexion
                 </button>
