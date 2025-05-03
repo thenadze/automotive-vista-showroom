@@ -119,7 +119,7 @@ const AdminPage = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Panneau de gestion</h1>
+      <h1 className="text-3xl font-bold mb-6">Panneau d'administration</h1>
       
       <AdminTabs
         brands={brands}
