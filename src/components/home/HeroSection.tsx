@@ -4,28 +4,22 @@ import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
 interface HeroSectionProps {
   companyInfo: CompanyInfo | null;
 }
-
 const HeroSection: React.FC<HeroSectionProps> = ({
   companyInfo
 }) => {
-  return (
-    <section 
-      className="relative bg-cover bg-center py-28 md:py-40 text-white" 
-      style={{
-        backgroundImage: "url('/lovable-uploads/be2c041f-2d00-4495-8216-e7dfd4ed148d.png')",
-        backgroundPosition: "center"
-      }}
-    >
-      <div 
-        className="absolute inset-0 bg-black/50"
-        style={{
-          backgroundBlendMode: "overlay"
-        }}
-      ></div>
+  return <section className="relative bg-cover bg-center py-28 md:py-40 text-white" style={{
+    backgroundImage: "url('https://images.unsplash.com/photo-1617814076668-801b2101fc78?q=80&w=1920&auto=format')",
+    backgroundPosition: "center"
+  }}>
+      <div className="absolute inset-0 bg-black/50" style={{
+        backgroundImage: "url('public/lovable-uploads/a56e06c3-0cca-4278-9b82-0cbce8c748b6.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "overlay"
+      }}></div>
       
       <div className="container mx-auto relative z-10 px-6">
         <div className="max-w-2xl">
@@ -47,8 +41,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
