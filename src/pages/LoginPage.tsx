@@ -21,6 +21,7 @@ const LoginPage = () => {
     
     const checkAuth = async () => {
       try {
+        console.log("LoginPage: Checking authentication status");
         const { data, error } = await supabase.auth.getSession();
         
         // Vérifier si le composant est toujours monté avant de mettre à jour l'état
@@ -33,10 +34,12 @@ const LoginPage = () => {
         }
         
         if (data.session) {
+          console.log("LoginPage: User is authenticated", data.session.user);
           setIsAuthenticated(true);
           
           try {
             // Vérifier si l'utilisateur est admin
+            console.log("LoginPage: Checking if user is admin");
             // @ts-ignore
             const { data: adminData, error: adminError } = await supabase
               .from("admins")
@@ -52,18 +55,22 @@ const LoginPage = () => {
             
             // Rediriger vers le dashboard approprié
             if (adminData) {
+              console.log("LoginPage: User is admin, redirecting to /admin");
               // Rediriger vers le dashboard d'administration si l'utilisateur est admin
-              navigate("/admin");
+              navigate("/admin", { replace: true });
             } else {
+              console.log("LoginPage: User is not admin, redirecting to /");
               // Rediriger vers l'accueil si l'utilisateur n'est pas admin
-              navigate("/");
+              navigate("/", { replace: true });
             }
           } catch (err) {
             console.error("Erreur lors de la vérification du statut d'admin:", err);
             if (isMounted) {
-              navigate("/");
+              navigate("/", { replace: true });
             }
           }
+        } else {
+          console.log("LoginPage: User is not authenticated");
         }
         
         setAuthChecking(false);
@@ -88,6 +95,8 @@ const LoginPage = () => {
     try {
       setLoading(true);
       
+      console.log("LoginPage: Attempting login with email:", email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -96,6 +105,8 @@ const LoginPage = () => {
       if (error) throw error;
       
       if (data.user) {
+        console.log("LoginPage: Login successful", data.user);
+        
         toast({
           title: "Connexion réussie",
           description: "Vous êtes maintenant connecté.",
@@ -115,18 +126,21 @@ const LoginPage = () => {
           }
           
           if (adminData) {
+            console.log("LoginPage: User is admin, redirecting to /admin");
             // Rediriger vers le dashboard d'administration si l'utilisateur est admin
-            navigate("/admin");
+            navigate("/admin", { replace: true });
           } else {
+            console.log("LoginPage: User is not admin, redirecting to /");
             // Rediriger vers l'accueil si l'utilisateur n'est pas admin
-            navigate("/");
+            navigate("/", { replace: true });
           }
         } catch (err) {
           console.error("Erreur lors de la vérification du statut d'admin:", err);
-          navigate("/");
+          navigate("/", { replace: true });
         }
       }
     } catch (error: any) {
+      console.error("Erreur de connexion:", error);
       toast({
         title: "Erreur de connexion",
         description: error.message || "Une erreur s'est produite lors de la connexion.",

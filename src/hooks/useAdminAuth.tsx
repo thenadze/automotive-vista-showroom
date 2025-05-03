@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -15,9 +15,11 @@ export const useAdminAuth = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log("useAdminAuth hook running, path:", location.pathname);
     // Flag pour éviter les redirections pendant le démontage du composant
     let isMounted = true;
 
@@ -26,6 +28,8 @@ export const useAdminAuth = () => {
       try {
         if (!isMounted) return;
 
+        console.log("Checking admin status for user:", userId);
+        
         // @ts-ignore
         const { data: adminData, error } = await supabase
           .from("admins")
@@ -40,7 +44,9 @@ export const useAdminAuth = () => {
           return false;
         }
         
-        return !!adminData;
+        const isUserAdmin = !!adminData;
+        console.log("Is user admin?", isUserAdmin);
+        return isUserAdmin;
       } catch (err) {
         if (isMounted) {
           console.error("Erreur lors de la vérification du statut d'admin:", err);
@@ -69,15 +75,17 @@ export const useAdminAuth = () => {
         if (!session) {
           // Si pas de session, rediriger vers la page de connexion, mais seulement si le composant est toujours monté
           if (isMounted) {
+            console.log("No session found, redirecting to login");
             setLoading(false);
             setIsInitialized(true);
-            navigate("/login");
+            navigate("/login", { replace: true });
           }
           return;
         }
         
         // Mettre à jour l'état de l'utilisateur
         if (isMounted) {
+          console.log("Setting user:", session.user);
           setUser(session.user);
         }
         
@@ -98,6 +106,7 @@ export const useAdminAuth = () => {
         
         // Mettre à jour les états seulement si le composant est toujours monté
         if (isMounted) {
+          console.log("User is admin, setting isAdmin to true");
           setIsAdmin(true);
           setLoading(false);
           setIsInitialized(true);
@@ -111,7 +120,7 @@ export const useAdminAuth = () => {
           description: error.message || "Une erreur s'est produite lors de la vérification de vos droits.",
           variant: "destructive",
         });
-        navigate("/login");
+        navigate("/login", { replace: true });
         
         setLoading(false);
         setIsInitialized(true);
@@ -125,11 +134,13 @@ export const useAdminAuth = () => {
       async (event, session) => {
         if (!isMounted) return;
         
+        console.log("Auth state changed:", event);
+        
         if (event === "SIGNED_OUT") {
           setUser(null);
           setIsAdmin(false);
           if (isMounted) {
-            navigate("/login");
+            navigate("/login", { replace: true });
           }
         } else if (event === "SIGNED_IN" && session) {
           setUser(session.user);
@@ -162,7 +173,7 @@ export const useAdminAuth = () => {
       isMounted = false;
       authListener.subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [navigate, toast, location.pathname]);
   
   return { user, isAdmin, loading, isInitialized };
 };
