@@ -1,7 +1,9 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Instagram, FileText } from "lucide-react";
 import { Separator } from "./ui/separator";
+
 const Footer = () => {
   return <footer className="bg-gray-900 text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
@@ -32,11 +34,11 @@ const Footer = () => {
               <li><Link to="/" className="text-gray-400 hover:text-orange-500 transition-colors">Accueil</Link></li>
               <li><Link to="/cars" className="text-gray-400 hover:text-orange-500 transition-colors">Nos Véhicules</Link></li>
               <li><Link to="/#" className="text-gray-400 hover:text-orange-500 transition-colors">À propos de nous</Link></li>
-              <li><a href="#" className="text-gray-400 hover:text-orange-500 transition-colors">Contact</a></li>
+              <li><a href="#contact" className="text-gray-400 hover:text-orange-500 transition-colors">Contact</a></li>
             </ul>
           </div>
           
-          <div>
+          <div id="contact">
             <h4 className="font-semibold text-lg mb-4">Contact</h4>
             <ul className="space-y-3 text-gray-400">
               <li className="flex items-start">
@@ -98,4 +100,5 @@ const Footer = () => {
       </div>
     </footer>;
 };
+
 export default Footer;

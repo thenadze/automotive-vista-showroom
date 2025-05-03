@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { LogIn, Menu, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 /**
  * Barre de navigation du site avec style épuré et élégant
@@ -14,6 +15,7 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [logoAnimating, setLogoAnimating] = useState(false);
+  const { scrollToElement } = useSmoothScroll();
 
   useEffect(() => {
     let isMounted = true;
@@ -67,6 +69,14 @@ const Navbar = () => {
     setTimeout(() => setLogoAnimating(false), 1000);
   };
 
+  const handleContactClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    scrollToElement('contact', { offset: 100 });
+    if (mobileMenuOpen) {
+      setMobileMenuOpen(false);
+    }
+  };
+
   return (
     <nav className="bg-black border-b border-gray-800">
       <div className="container mx-auto px-4">
@@ -98,9 +108,12 @@ const Navbar = () => {
             <Link to="/cars" className="text-white hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
               Nos Véhicules
             </Link>
-            <Link to="#contact" className="text-white hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2">
+            <button 
+              onClick={handleContactClick}
+              className="text-white hover:text-orange-500 transition-colors font-medium tracking-wide px-3 py-2"
+            >
               Contact
-            </Link>
+            </button>
           </div>
           
           {/* Auth button - positioned absolute right */}
@@ -149,13 +162,12 @@ const Navbar = () => {
             >
               Nos Véhicules
             </Link>
-            <Link 
-              to="#contact" 
-              className="block text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors" 
-              onClick={() => setMobileMenuOpen(false)}
+            <button 
+              className="w-full text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors" 
+              onClick={handleContactClick}
             >
               Contact
-            </Link>
+            </button>
             
             {isAuthenticated && (
               <>
