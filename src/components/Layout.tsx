@@ -1,8 +1,9 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Skeleton } from "./ui/skeleton";
+import PageLoader from "./Loader";
 
 // Simple error boundary component as a class
 class ErrorBoundaryComponent extends React.Component<
@@ -46,8 +47,20 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Masquer le loader après un court délai pour assurer que tout est chargé
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
+      {loading && <PageLoader />}
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-8">
         <ErrorBoundaryComponent>
