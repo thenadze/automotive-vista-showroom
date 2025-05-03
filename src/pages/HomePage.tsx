@@ -7,7 +7,6 @@ import CallToAction from "@/components/home/CallToAction";
 import LoadingState from "@/components/home/LoadingState";
 import ErrorState from "@/components/home/ErrorState";
 import { useHomepageData } from "@/hooks/useHomepageData";
-import StatsSection from "@/components/home/StatsSection";
 
 const HomePage = () => {
   const { companyInfo, featuredCars, loading, error } = useHomepageData();
@@ -23,7 +22,6 @@ const HomePage = () => {
   return (
     <div className="flex flex-col">
       <HeroSection companyInfo={companyInfo} />
-      <StatsSection />
       <FeaturedCars featuredCars={featuredCars} />
       <ServicesSection />
       <CallToAction />
