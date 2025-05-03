@@ -1,16 +1,13 @@
 
 import * as z from "zod";
 
-// Schema de validation pour le formulaire
 export const carFormSchema = z.object({
-  year: z.coerce
-    .number()
-    .min(1900, "L'année doit être supérieure à 1900")
-    .max(new Date().getFullYear() + 1, `L'année doit être au maximum ${new Date().getFullYear() + 1}`),
+  year: z.number().min(1900).max(new Date().getFullYear() + 1),
   brand_id: z.string().min(1, "La marque est requise"),
   model: z.string().min(1, "Le modèle est requis"),
   fuel_type_id: z.string().min(1, "Le type de carburant est requis"),
-  transmission_id: z.string().min(1, "La boîte de vitesse est requise"),
+  transmission_id: z.string().min(1, "Le type de transmission est requis"),
+  daily_price: z.number().min(0, "Le prix ne peut pas être négatif").nullable().default(0),
 });
 
 export type CarFormValues = z.infer<typeof carFormSchema>;

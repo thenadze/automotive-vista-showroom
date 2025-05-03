@@ -31,6 +31,7 @@ export const useCarFormSubmit = (car?: Car, photosToRemove: string[] = [], onSuc
         model: values.model,
         fuel_type_id: values.fuel_type_id,
         transmission_id: values.transmission_id,
+        daily_price: values.daily_price || 0,
         updated_at: new Date().toISOString(),
       };
       

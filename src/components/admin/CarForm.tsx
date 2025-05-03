@@ -13,6 +13,7 @@ import CarFormHeader from "./car-form/CarFormHeader";
 import FormActions from "./car-form/FormActions";
 import { useCarFormData } from "./car-form/useCarFormData";
 import { useCarFormSubmit } from "./car-form/useCarFormSubmit";
+import PriceField from "./car-form/PriceField";
 
 type CarFormProps = {
   car?: Car;
@@ -46,6 +47,7 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
       model: car?.model || "",
       fuel_type_id: car?.fuel_type_id || "",
       transmission_id: car?.transmission_id || "",
+      daily_price: car?.daily_price || 0,
     },
   });
   
@@ -76,6 +78,11 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
             form={form} 
             loading={loading} 
           />
+          
+          {/* Ajout du champ prix */}
+          <div className="mt-6">
+            <PriceField form={form} loading={loading} />
+          </div>
           
           {/* Upload de photos */}
           <div className="mt-6">
