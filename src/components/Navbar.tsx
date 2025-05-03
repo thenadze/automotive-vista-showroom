@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,6 +27,7 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   useEffect(() => {
     let isMounted = true;
     const checkAuth = async () => {
@@ -66,6 +68,7 @@ const Navbar = () => {
       authListener.subscription.unsubscribe();
     };
   }, []);
+
   const handleLogout = async () => {
     try {
       const {
@@ -94,6 +97,9 @@ const Navbar = () => {
           <a href="#" className="text-white hover:text-orange-400 transition-colors">À Propos</a>
           <a href="#" className="text-white hover:text-orange-400 transition-colors">Contact</a>
           <a href="#" className="text-white hover:text-orange-400 transition-colors">Services</a>
+          {isAuthenticated && (
+            <Link to="/admin" className="text-white hover:text-orange-400 transition-colors">Admin</Link>
+          )}
         </div>
         
         <div className="hidden lg:flex items-center gap-4">
@@ -134,6 +140,11 @@ const Navbar = () => {
             <a href="#" className="text-white py-2 hover:text-orange-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>
               Services
             </a>
+            {isAuthenticated && (
+              <Link to="/admin" className="text-white py-2 hover:text-orange-400 transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                Admin
+              </Link>
+            )}
             
             <div className="pt-4 border-t border-gray-800">
               {loading ? <div className="flex justify-center">
