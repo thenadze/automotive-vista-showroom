@@ -17,9 +17,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               Explorez la Route Devant<br />
               avec {companyInfo?.name || 'Automotive'}
             </h1>
-            <p className="text-lg mb-8 opacity-90 text-slate-50 font-normal px-0">
-              Des véhicules sélectionnés avec soin, prêts à vous accompagner partout. Achetez l'esprit libre, roulez avec confiance.
-            </p>
+            <p className="text-lg mb-8 opacity-90 text-slate-50 font-normal px-0">Fondée en 2024 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis, adaptés à tous les styles de vie et à tous les usages. Dès les premiers échanges, l’entreprise accompagne chaque client avec attention : conseils personnalisés, transparence, et préparation rigoureuse des véhicules avant la vente. 
+
+Automotive incarne une nouvelle vision de la vente automobile, fondée sur la proximité, la confiance et l’exigence de qualité.</p>
             
             <div className="flex justify-center">
               <Button asChild className="bg-stone-700 hover:bg-stone-800 text-white px-8 py-6 rounded-md text-lg font-medium" size="lg">
