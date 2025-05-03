@@ -26,7 +26,7 @@ export const useAdminAuth = () => {
     // Fonction pour vérifier le statut d'administrateur d'un utilisateur
     const checkAdminStatus = async (userId: string) => {
       try {
-        if (!isMounted) return;
+        if (!isMounted) return false;
 
         console.log("Checking admin status for user:", userId);
         
@@ -37,7 +37,7 @@ export const useAdminAuth = () => {
           .eq("id", userId)
           .single();
           
-        if (!isMounted) return;
+        if (!isMounted) return false;
         
         if (error && error.code !== 'PGRST116') {
           console.error("Erreur lors de la vérification du statut d'admin:", error);
@@ -70,17 +70,14 @@ export const useAdminAuth = () => {
           console.error("Erreur lors de la récupération de la session:", sessionError);
           setLoading(false);
           setIsInitialized(true);
-          // Rediriger vers la page de connexion si erreur
-          navigate("/login", { replace: true });
           return;
         }
         
         if (!session) {
-          // Si pas de session, rediriger vers la page de connexion
-          console.log("No session found, redirecting to login");
+          // Si pas de session, ne pas rediriger directement - on laisse le composant parent gérer la redirection
+          console.log("No session found, will let component handle redirect");
           setLoading(false);
           setIsInitialized(true);
-          navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
           return;
         }
         
@@ -96,15 +93,13 @@ export const useAdminAuth = () => {
         if (!isMounted) return;
 
         if (!adminStatus) {
-          console.log("User is not admin, redirecting to home");
-          toast({
-            title: "Accès refusé",
-            description: "Vous n'avez pas les droits d'administration nécessaires.",
-            variant: "destructive",
-          });
-          navigate("/");
-          setLoading(false);
-          setIsInitialized(true);
+          console.log("User is not admin");
+          // Ne pas rediriger directement, on laisse le composant gérer les redirections
+          if (isMounted) {
+            setIsAdmin(false);
+            setLoading(false);
+            setIsInitialized(true);
+          }
           return;
         }
         
@@ -124,7 +119,6 @@ export const useAdminAuth = () => {
           description: error.message || "Une erreur s'est produite lors de la vérification de vos droits.",
           variant: "destructive",
         });
-        navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
         
         setLoading(false);
         setIsInitialized(true);
@@ -143,9 +137,6 @@ export const useAdminAuth = () => {
         if (event === "SIGNED_OUT") {
           setUser(null);
           setIsAdmin(false);
-          if (isMounted) {
-            navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
-          }
         } else if (event === "SIGNED_IN" && session) {
           setUser(session.user);
           
@@ -166,7 +157,6 @@ export const useAdminAuth = () => {
                 description: "Vous n'avez pas les droits d'administration nécessaires.",
                 variant: "destructive",
               });
-              navigate("/");
             }
           }, 0);
         }

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +20,14 @@ const AdminPage = () => {
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [cars, setCars] = useState<Car[]>([]);
 
+  // Rediriger vers la page de connexion si l'utilisateur n'est pas administrateur
+  useEffect(() => {
+    if (isInitialized && !isAdmin && !authLoading) {
+      console.log("AdminPage: Not admin, redirecting to login with state", { redirectTo: "/admin" });
+      navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
+    }
+  }, [isAdmin, isInitialized, authLoading, navigate]);
+
   // Initialiser les données au chargement
   useEffect(() => {
     console.log("AdminPage useEffect - isAdmin:", isAdmin, "isInitialized:", isInitialized);
@@ -33,11 +40,8 @@ const AdminPage = () => {
         fetchCompanyInfo(),
         fetchCars()
       ]);
-    } else if (isInitialized && !isAdmin && !authLoading) {
-      console.log("AdminPage: User is not admin, redirecting to login");
-      navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
     }
-  }, [isAdmin, isInitialized, authLoading, navigate]);
+  }, [isAdmin, isInitialized]);
 
   // Récupérer les marques
   const fetchBrands = async () => {
@@ -132,7 +136,7 @@ const AdminPage = () => {
 
   if (!isAdmin && isInitialized) {
     console.log("AdminPage: User is not admin, rendering null");
-    return null; // Redirection gérée par useAdminAuth
+    return null; // Redirection gérée par useEffect ci-dessus
   }
 
   console.log("AdminPage: Rendering admin dashboard");

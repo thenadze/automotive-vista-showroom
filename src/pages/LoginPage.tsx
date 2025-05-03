@@ -17,12 +17,18 @@ const LoginPage = () => {
   const { authChecking, isAuthenticated } = useAuthCheck(redirectTo);
 
   const handleLoginSuccess = (isAdmin: boolean) => {
-    if (isAdmin) {
-      console.log("LoginPage: User is admin, redirecting to", redirectTo);
-      navigate(redirectTo, { replace: true });
+    if (redirectTo.startsWith('/admin')) {
+      if (isAdmin) {
+        console.log("LoginPage: User is admin, redirecting to", redirectTo);
+        navigate(redirectTo, { replace: true });
+      } else {
+        console.log("LoginPage: User is not admin, redirecting to /");
+        navigate("/", { replace: true });
+      }
     } else {
-      console.log("LoginPage: User is not admin, redirecting to /");
-      navigate("/", { replace: true });
+      // Pour les pages non-admin, rediriger vers la destination demandée
+      console.log("LoginPage: Redirecting to", redirectTo);
+      navigate(redirectTo, { replace: true });
     }
   };
 
