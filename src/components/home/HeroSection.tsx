@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 
 interface HeroSectionProps {
   companyInfo: CompanyInfo | null;
@@ -21,10 +20,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   const toggleText = () => {
     setExpanded(!expanded);
-    toast({
-      title: expanded ? "Texte réduit" : "Texte complet affiché",
-      duration: 2000
-    });
   };
 
   return <section className="relative py-16 md:py-24 bg-gradient-to-r from-stone-700 to-stone-800">
