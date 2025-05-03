@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Instagram, FileText } from "lucide-react";
@@ -82,18 +81,6 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-        </div>
-        
-        {/* Politique de confidentialité détaillée */}
-        <div className="mt-6 pt-6 border-t border-gray-800 text-xs text-gray-500">
-          <p className="mb-2">Notre politique de confidentialité est conforme aux lois suivantes :</p>
-          <ul className="space-y-1 list-disc pl-5">
-            <li>Règlement Général sur la Protection des Données (RGPD - UE 2016/679)</li>
-            <li>Loi Informatique et Libertés du 6 janvier 1978 modifiée</li>
-            <li>Directive ePrivacy (2002/58/CE) relative aux communications électroniques</li>
-            <li>Article 82 de la loi du 20 juin 2018 relative à la protection des données personnelles</li>
-          </ul>
-          <p className="mt-2">Pour plus d'informations sur la manière dont nous protégeons vos données, veuillez consulter notre <Link to="/privacy-policy" className="text-orange-500 hover:underline">politique de confidentialité complète</Link>.</p>
         </div>
       </div>
     </footer>
