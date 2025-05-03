@@ -248,6 +248,10 @@ const CarsPage = () => {
                 const firstPhoto = car.photos?.[0];
                 const photoUrl = primaryPhoto?.photo_url || firstPhoto?.photo_url || "/placeholder.svg";
                 
+                // Récupérer le type de carburant et la transmission
+                const fuelType = car.fuel_type?.name || car.fuel_type_id || "";
+                const transmission = car.transmission?.name || car.transmission_id || "";
+                
                 return (
                   <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="h-56 w-full relative">
@@ -266,8 +270,8 @@ const CarsPage = () => {
                         {car.brand_id} {car.model} ({car.year})
                       </h3>
                       <div className="flex justify-between text-sm text-gray-600 mb-4">
-                        {car.fuel_type_id && <span>{car.fuel_type_id}</span>}
-                        {car.transmission_id && <span>{car.transmission_id}</span>}
+                        {fuelType && <span>{fuelType}</span>}
+                        {transmission && <span>{transmission}</span>}
                       </div>
                       <Link
                         to={`/cars/${car.id}`}
