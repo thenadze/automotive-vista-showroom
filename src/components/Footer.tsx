@@ -1,6 +1,8 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Instagram, FileText } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 const Footer = () => {
   return (
@@ -80,6 +82,21 @@ const Footer = () => {
                 Politique de Confidentialité
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Liens légaux discrets */}
+        <div className="mt-4 pt-2 text-center">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-gray-500">
+            <Link to="/mentions-legales" className="hover:text-gray-400">Mentions légales</Link>
+            <span className="hidden sm:inline">|</span>
+            <Link to="/conditions-utilisation" className="hover:text-gray-400">Conditions d'utilisation</Link>
+            <span className="hidden sm:inline">|</span>
+            <Link to="/privacy-policy" className="hover:text-gray-400">Déclaration de confidentialité</Link>
+            <span className="hidden sm:inline">|</span>
+            <Link to="/cookies" className="hover:text-gray-400">Déclaration sur les Cookies</Link>
+            <span className="hidden sm:inline">|</span>
+            <Link to="/parametres-cookies" className="hover:text-gray-400">Paramètres des cookies</Link>
           </div>
         </div>
       </div>
