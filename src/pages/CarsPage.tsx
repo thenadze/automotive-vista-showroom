@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -265,8 +266,8 @@ const CarsPage = () => {
                         {car.brand_id} {car.model} ({car.year})
                       </h3>
                       <div className="flex justify-between text-sm text-gray-600 mb-4">
-                        <span>{car.fuel_type_id}</span>
-                        <span>{car.transmission_id}</span>
+                        {car.fuel_type_id && <span>{car.fuel_type_id}</span>}
+                        {car.transmission_id && <span>{car.transmission_id}</span>}
                       </div>
                       <Link
                         to={`/cars/${car.id}`}

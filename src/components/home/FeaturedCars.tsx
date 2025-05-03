@@ -69,8 +69,8 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                     </h3>
                     
                     <div className="flex justify-between text-sm text-stone-600 mb-4">
-                      <span>{car.fuel_type?.name || 'N/A'}</span>
-                      <span>{car.transmission?.name || 'N/A'}</span>
+                      {car.fuel_type?.name && <span>{car.fuel_type.name}</span>}
+                      {car.transmission?.name && <span>{car.transmission.name}</span>}
                     </div>
                     
                     <div className="flex items-end justify-between mb-3">
