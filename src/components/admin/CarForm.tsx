@@ -15,6 +15,8 @@ import { useCarFormData } from "./car-form/useCarFormData";
 import { useCarFormSubmit } from "./car-form/useCarFormSubmit";
 import PriceField from "./car-form/PriceField";
 import MileageField from "./car-form/MileageField";
+import { Textarea } from "@/components/ui/textarea";
+import { FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 
 type CarFormProps = {
   car?: Car;
@@ -50,6 +52,7 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
       transmission_id: car?.transmission_id || "",
       daily_price: car?.daily_price || 0,
       mileage: car?.mileage || 0,
+      description: car?.description || "",
     },
   });
   
@@ -85,6 +88,22 @@ const CarForm: React.FC<CarFormProps> = ({ car, onSuccess }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <PriceField form={form} loading={loading} />
             <MileageField form={form} loading={loading} />
+          </div>
+
+          {/* Ajout du champ description */}
+          <div className="mt-6">
+            <FormItem>
+              <FormLabel>Description du véhicule</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...form.register("description")}
+                  placeholder="Décrivez ce véhicule en détail..."
+                  className="min-h-[150px] resize-y"
+                  disabled={loading}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           </div>
           
           {/* Upload de photos */}

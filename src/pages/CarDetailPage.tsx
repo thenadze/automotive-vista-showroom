@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useCarDetails } from "@/hooks/useCarDetails";
 import CarImageGallery from "@/components/car-detail/CarImageGallery";
 import CarSpecifications from "@/components/car-detail/CarSpecifications";
-import ContactSection from "@/components/car-detail/ContactSection";
+import DescriptionSection from "@/components/car-detail/ContactSection";
 import CarDetailHeader from "@/components/car-detail/CarDetailHeader";
 import LoadingState from "@/components/car-detail/LoadingState";
 import NotFoundState from "@/components/car-detail/NotFoundState";
@@ -46,7 +46,7 @@ const CarDetailPage: React.FC = () => {
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <CarSpecifications car={car} />
-            <ContactSection />
+            <DescriptionSection car={car} />
           </div>
         </div>
       </div>

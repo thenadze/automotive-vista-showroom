@@ -79,6 +79,7 @@ export type Database = {
           brand_id: string
           created_at: string | null
           daily_price: number | null
+          description: string | null
           fuel_type_id: string
           id: string
           mileage: number | null
@@ -91,6 +92,7 @@ export type Database = {
           brand_id: string
           created_at?: string | null
           daily_price?: number | null
+          description?: string | null
           fuel_type_id: string
           id?: string
           mileage?: number | null
@@ -103,6 +105,7 @@ export type Database = {
           brand_id?: string
           created_at?: string | null
           daily_price?: number | null
+          description?: string | null
           fuel_type_id?: string
           id?: string
           mileage?: number | null

@@ -34,7 +34,8 @@ export interface Car {
   created_at: string;
   updated_at: string;
   daily_price?: number;
-  mileage?: number;  // Ajout du kilométrage
+  mileage?: number;
+  description?: string;
 }
 
 export interface CarPhoto {
