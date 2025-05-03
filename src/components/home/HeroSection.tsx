@@ -1,21 +1,28 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+
 interface HeroSectionProps {
   companyInfo: CompanyInfo | null;
 }
+
 const HeroSection: React.FC<HeroSectionProps> = ({
   companyInfo
 }) => {
-  return <section className="relative py-16 md:py-24 bg-stone-700">
-      <div style={{
-      backgroundImage: "url('public/lovable-uploads/a56e06c3-0cca-4278-9b82-0cbce8c748b6.png')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundBlendMode: "overlay"
-    }} className="absolute inset-0 bg-stone-600"></div>
+  return (
+    <section className="relative py-16 md:py-24 bg-stone-700">
+      <div 
+        style={{
+          backgroundImage: "url('public/lovable-uploads/a56e06c3-0cca-4278-9b82-0cbce8c748b6.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundBlendMode: "overlay"
+        }} 
+        className="absolute inset-0 bg-slate-900"
+      ></div>
       
       <div className="container mx-auto relative z-10 px-6">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
@@ -42,11 +49,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Right column - Car image */}
           <div className="w-full md:w-1/2 mt-8 md:mt-0">
             <div className="rounded-lg overflow-hidden shadow-2xl">
-              <img src="public/lovable-uploads/92058d71-ddf1-4306-86a7-1e36e4609b8c.png" alt="Voitures alignées" className="w-full h-auto object-cover rounded-lg transform transition-transform hover:scale-105 duration-500" />
+              <img 
+                src="public/lovable-uploads/92058d71-ddf1-4306-86a7-1e36e4609b8c.png" 
+                alt="Voitures alignées" 
+                className="w-full h-auto object-cover rounded-lg transform transition-transform hover:scale-105 duration-500" 
+              />
             </div>
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;
