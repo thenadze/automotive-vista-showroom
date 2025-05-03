@@ -13,6 +13,10 @@ import NotFound from "./pages/NotFound";
 import AdminPage from "./pages/AdminPage";
 import CarEditPage from "./pages/admin/CarEditPage";
 import MentionsLegales from "./pages/MentionsLegales";
+import ConditionsUtilisation from "./pages/ConditionsUtilisation";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CookiesPolicy from "./pages/CookiesPolicy";
+import CookiesSettings from "./pages/CookiesSettings";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +35,10 @@ const App = () => (
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/car/:id" element={<CarEditPage />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
+            <Route path="/conditions-utilisation" element={<ConditionsUtilisation />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/cookies" element={<CookiesPolicy />} />
+            <Route path="/parametres-cookies" element={<CookiesSettings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
