@@ -64,6 +64,15 @@ const Navbar = () => {
   return (
     <nav className="bg-white border-b border-gray-100">
       <div className="container mx-auto px-4">
+        {/* Logo centered above navigation links */}
+        <div className="flex justify-center pt-4">
+          <img 
+            src="/lovable-uploads/ccd3da64-df7a-456d-a0b9-d7591c1e211c.png" 
+            alt="Automotive Logo" 
+            className="h-24 w-auto"
+          />
+        </div>
+        
         <div className="flex justify-center items-center h-16 relative">
           {/* Mobile menu button - positioned absolute left */}
           <button 
