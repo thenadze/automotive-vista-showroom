@@ -7,6 +7,10 @@ import CallToAction from "@/components/home/CallToAction";
 import LoadingState from "@/components/home/LoadingState";
 import ErrorState from "@/components/home/ErrorState";
 import { useHomepageData } from "@/hooks/useHomepageData";
+import StatsSection from "@/components/home/StatsSection";
+import LocationsSection from "@/components/home/LocationsSection";
+import HowItWorksSection from "@/components/home/HowItWorksSection";
+import NewsletterSection from "@/components/home/NewsletterSection";
 
 const HomePage = () => {
   const { companyInfo, featuredCars, loading, error } = useHomepageData();
@@ -20,9 +24,13 @@ const HomePage = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col">
       <HeroSection companyInfo={companyInfo} />
+      <StatsSection />
       <FeaturedCars featuredCars={featuredCars} />
+      <LocationsSection />
+      <HowItWorksSection />
+      <NewsletterSection />
       <ServicesSection />
       <CallToAction />
     </div>
