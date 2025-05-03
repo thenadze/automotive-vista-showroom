@@ -18,7 +18,8 @@ const TiktokIcon: React.FC<TiktokIconProps> = ({ className }) => {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M9 12a4 4 0 1 0 4 4V4c5 0 5 6 8 7" />
+      <path d="M16.5 5.5v4.5a7 7 0 01-7 7v0a7 7 0 01-7-7v0a7 7 0 017-7h4.5" />
+      <path d="M16 8.5a4 4 0 004 4V5.5a4 4 0 00-4-4v7Z" />
     </svg>
   );
 };
