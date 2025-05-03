@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="text-orange-500">Auto</span>
               <span>motive</span>
             </Link>
-            <p className="text-gray-400 mb-4">Votre partenaire de confiance pour la location de véhicules premium en France.</p>
+            <p className="text-gray-400 mb-4">Votre partenaire de confiance pour la vente de véhicules légers premium en France.</p>
             
             <div className="flex space-x-4">
               <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -47,10 +46,10 @@ const ConditionsUtilisation = () => {
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-orange-500">4. Services proposés</h2>
         <p className="mb-4">
-          Le Site a pour objet de proposer aux utilisateurs la location de véhicules et la vente de prestations associées.
+          Le Site a pour objet de proposer aux utilisateurs la vente de véhicules légers et la vente de prestations associées.
         </p>
         <p className="mb-4">
-          Les caractéristiques et modalités essentielles des services proposés sont présentées et détaillées sur le Site. L'utilisateur est tenu d'en prendre connaissance avant toute réservation ou commande.
+          Les caractéristiques et modalités essentielles des services proposés sont présentées et détaillées sur le Site. L'utilisateur est tenu d'en prendre connaissance avant toute commande.
         </p>
         <p className="mb-4">
           Les offres de services sont valables tant qu'elles sont visibles sur le Site et dans la limite des stocks disponibles.
@@ -58,34 +57,34 @@ const ConditionsUtilisation = () => {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4 text-orange-500">5. Processus de réservation</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-orange-500">5. Processus d'achat</h2>
         <p className="mb-4">
-          Pour réserver un véhicule, l'utilisateur doit suivre les étapes suivantes :
+          Pour acheter un véhicule, l'utilisateur doit suivre les étapes suivantes :
         </p>
         <ol className="list-decimal pl-6 mb-4 space-y-2">
-          <li>Sélection du véhicule et des dates de location</li>
+          <li>Sélection du véhicule</li>
           <li>Vérification des disponibilités</li>
           <li>Le cas échéant, sélection d'options supplémentaires</li>
           <li>Saisie des coordonnées personnelles</li>
           <li>Vérification et validation du récapitulatif de la commande</li>
-          <li>Acceptation des CGU et des conditions de location</li>
+          <li>Acceptation des CGU et des conditions de vente</li>
           <li>Paiement d'un acompte ou de la totalité du prix selon les conditions applicables</li>
         </ol>
         <p className="mb-4">
-          La réservation n'est définitivement confirmée et n'engage AUTO MOTIVE qu'après l'envoi à l'utilisateur d'un e-mail de confirmation.
+          La commande n'est définitivement confirmée et n'engage AUTO MOTIVE qu'après l'envoi à l'utilisateur d'un e-mail de confirmation.
         </p>
       </section>
 
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-orange-500">6. Conditions financières</h2>
         <p className="mb-4">
-          Les prix des services sont indiqués sur le Site en euros toutes taxes comprises (TTC). Ils peuvent être modifiés à tout moment par AUTO MOTIVE. Les prix facturés sont ceux en vigueur au moment de la validation de la commande.
+          Les prix des véhicules et services sont indiqués sur le Site en euros toutes taxes comprises (TTC). Ils peuvent être modifiés à tout moment par AUTO MOTIVE. Les prix facturés sont ceux en vigueur au moment de la validation de la commande.
         </p>
         <p className="mb-4">
           Le paiement peut être effectué par carte bancaire, virement ou tout autre moyen proposé sur le Site. AUTO MOTIVE utilise des systèmes de paiement sécurisés qui garantissent la sécurité et la confidentialité des données transmises.
         </p>
         <p className="mb-4">
-          En cas d'annulation, les conditions de remboursement sont détaillées dans les conditions particulières de location.
+          En cas d'annulation, les conditions de remboursement sont détaillées dans les conditions particulières de vente.
         </p>
       </section>
 
@@ -95,10 +94,10 @@ const ConditionsUtilisation = () => {
           L'utilisateur s'engage à utiliser le Site de manière conforme à sa destination et à ne pas porter atteinte à l'ordre public, aux bonnes mœurs ou aux droits de tiers, à ne pas enfreindre les lois et règlements en vigueur.
         </p>
         <p className="mb-4">
-          L'utilisateur s'engage à fournir des informations exactes et complètes lors de la création de son compte et lors de toute réservation.
+          L'utilisateur s'engage à fournir des informations exactes et complètes lors de la création de son compte et lors de toute commande.
         </p>
         <p className="mb-4">
-          L'utilisateur s'engage à respecter les conditions particulières de location, notamment les conditions d'âge, d'ancienneté du permis de conduire et de présentation des documents originaux lors de la prise en charge du véhicule.
+          L'utilisateur s'engage à respecter les conditions particulières de vente, notamment les conditions d'âge, d'ancienneté du permis de conduire et de présentation des documents originaux lors de la prise en charge du véhicule.
         </p>
       </section>
 
