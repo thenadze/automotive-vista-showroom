@@ -1,19 +1,26 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+
 interface HeroSectionProps {
   companyInfo: CompanyInfo | null;
 }
+
 const HeroSection: React.FC<HeroSectionProps> = ({
   companyInfo
 }) => {
-  return <section style={{
-    backgroundImage: "url('public/lovable-uploads/9e4ac92d-dff3-47f8-9e4d-c00a2204e43f.png')",
-    backgroundPosition: "center",
-    backgroundSize: "cover"
-  }} className="relative bg-cover bg-center py-28 md:py-40 text-white bg-transparent">
+  return (
+    <section 
+      className="relative bg-cover bg-center py-28 md:py-40 text-white"
+      style={{
+        backgroundImage: "url('/lovable-uploads/a0e3f70a-cff6-4679-be7b-19cbbf79cd38.png')"
+      }}
+    >
+      {/* Overlay sombre pour améliorer la lisibilité du texte */}
+      <div className="absolute inset-0 bg-black opacity-40"></div>
       
       <div className="container mx-auto relative z-10 px-6">
         <div className="max-w-2xl">
@@ -35,6 +42,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;
