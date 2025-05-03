@@ -33,6 +33,7 @@ export interface Car {
   transmission_id: string;
   created_at: string;
   updated_at: string;
+  daily_price?: number;  // Added daily_price property
 }
 
 export interface CarPhoto {
