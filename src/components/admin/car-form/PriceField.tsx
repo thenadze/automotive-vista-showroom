@@ -25,10 +25,10 @@ const PriceField: React.FC<PriceFieldProps> = ({ form, loading }) => {
               disabled={loading}
               {...field}
               onChange={(e) => {
-                const value = e.target.value === "" ? 0 : parseFloat(e.target.value);
+                const value = e.target.value !== "" ? parseFloat(e.target.value) : 0;
                 field.onChange(value);
               }}
-              value={field.value || ""}
+              value={field.value === 0 ? "" : field.value}
             />
           </FormControl>
           <FormMessage />
