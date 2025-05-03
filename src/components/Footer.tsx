@@ -1,12 +1,9 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Instagram, FileText } from "lucide-react";
 import { Separator } from "./ui/separator";
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white pt-12 pb-6">
+  return <footer className="bg-gray-900 text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           <div>
@@ -14,18 +11,13 @@ const Footer = () => {
               <span className="text-orange-500">Auto</span>
               <span>motive</span>
             </Link>
-            <p className="text-gray-400 mb-4">Votre partenaire de confiance pour la vente de véhicules légers premium en France.</p>
+            <p className="text-gray-400 mb-4">Votre partenaire de confiance pour la vente ade véhicules légers en France.</p>
             
             <div className="flex space-x-4">
               <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a 
-                href="https://www.tiktok.com/@automotive321" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-              >
+              <a href="https://www.tiktok.com/@automotive321" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
                 {/* TikTok custom SVG icon since it's not available in lucide-react */}
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                   <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" fill="currentColor" />
@@ -104,8 +96,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
