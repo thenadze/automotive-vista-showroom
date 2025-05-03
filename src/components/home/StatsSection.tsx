@@ -10,7 +10,7 @@ const StatsSection = () => {
   ];
 
   return (
-    <section className="py-8 bg-orange-50">
+    <section className="py-8 bg-stone-100">
       <div className="container mx-auto">
         <div className="flex flex-wrap justify-center gap-4 md:gap-8 lg:gap-16">
           {stats.map((stat, index) => (
@@ -18,8 +18,8 @@ const StatsSection = () => {
               key={index} 
               className="flex flex-col items-center p-4 text-center"
             >
-              <span className="text-3xl font-bold text-orange-500 mb-2">{stat.number}</span>
-              <span className="text-sm text-gray-700">{stat.label}</span>
+              <span className="text-3xl font-bold text-stone-700 mb-2">{stat.number}</span>
+              <span className="text-sm text-stone-600">{stat.label}</span>
             </div>
           ))}
         </div>

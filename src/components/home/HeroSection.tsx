@@ -18,7 +18,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ companyInfo }) => {
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-70"></div>
       
       <div className="container mx-auto relative z-10 px-6">
         <div className="max-w-2xl">
@@ -33,7 +33,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ companyInfo }) => {
           <div className="flex flex-wrap gap-4">
             <Button
               asChild
-              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 rounded-md text-lg font-medium"
+              className="bg-stone-700 hover:bg-stone-800 text-white px-8 py-6 rounded-md text-lg font-medium"
               size="lg"
             >
               <Link to="/cars" className="flex items-center gap-2">

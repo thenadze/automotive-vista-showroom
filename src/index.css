@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 24 100% 50%; /* Orange color */
+    --primary: 25 40% 25%; /* Brown color */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96.1%;
@@ -31,7 +31,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 24 100% 50%; /* Orange color */
+    --ring: 25 40% 25%; /* Brown color */
 
     --radius: 0.5rem;
 
@@ -62,7 +62,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 24 100% 50%; /* Orange color */
+    --primary: 25 40% 25%; /* Brown color */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -103,8 +103,8 @@
 
 /* Custom classes */
 @layer components {
-  .orange-gradient {
-    @apply bg-gradient-to-r from-orange-500 to-orange-600;
+  .brown-gradient {
+    @apply bg-gradient-to-r from-stone-700 to-stone-900;
   }
   
   .card-hover {

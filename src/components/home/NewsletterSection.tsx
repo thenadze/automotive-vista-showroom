@@ -29,11 +29,11 @@ const NewsletterSection = () => {
   };
 
   return (
-    <section className="py-12 bg-gray-900 text-white">
+    <section className="py-12 bg-stone-900 text-white">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4">Inscrivez-vous à notre newsletter</h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-stone-300 mb-6">
             Recevez nos dernières offres et promotions directement dans votre boîte mail
           </p>
           
@@ -43,10 +43,10 @@ const NewsletterSection = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Votre adresse email"
-              className="flex-grow px-4 py-2 rounded-md text-gray-900 focus:outline-none"
+              className="flex-grow px-4 py-2 rounded-md text-stone-900 focus:outline-none"
               required
             />
-            <Button type="submit" className="bg-orange-500 hover:bg-orange-600">
+            <Button type="submit" className="bg-stone-700 hover:bg-stone-800 text-white">
               S'inscrire
             </Button>
           </form>

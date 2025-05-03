@@ -14,13 +14,13 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
   console.log("FeaturedCars received:", featuredCars);
   
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-stone-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Véhicules à la une</h2>
+          <h2 className="text-3xl font-bold text-stone-800">Véhicules à la une</h2>
           <Link 
             to="/cars" 
-            className="text-orange-500 hover:text-orange-600 flex items-center gap-1 font-medium"
+            className="text-stone-700 hover:text-stone-900 flex items-center gap-1 font-medium"
           >
             Voir tout
           </Link>
@@ -42,7 +42,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                 style: 'currency', 
                 currency: 'EUR',
                 maximumFractionDigits: 0 
-              }).format(car.price_per_day);
+              }).format(car.price_per_day || 0); // Use default value of 0 if price_per_day is undefined
               
               return (
                 <div key={car.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -59,30 +59,30 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                     </AspectRatio>
                     
                     <div className="absolute top-3 right-3">
-                      <Badge className="bg-orange-500">{car.year}</Badge>
+                      <Badge className="bg-stone-700">{car.year}</Badge>
                     </div>
                   </div>
                   
                   <div className="p-4">
-                    <h3 className="text-xl font-bold mb-2">
+                    <h3 className="text-xl font-bold mb-2 text-stone-800">
                       {car.brand?.name || 'Marque'} {car.model}
                     </h3>
                     
-                    <div className="flex justify-between text-sm text-gray-600 mb-4">
+                    <div className="flex justify-between text-sm text-stone-600 mb-4">
                       <span>{car.fuel_type?.name || 'N/A'}</span>
                       <span>{car.transmission?.name || 'N/A'}</span>
                     </div>
                     
                     <div className="flex items-end justify-between mb-3">
                       <div>
-                        <span className="block text-gray-500 text-xs">Prix par jour</span>
-                        <span className="text-xl font-bold text-orange-500">{formattedPrice}</span>
+                        <span className="block text-stone-500 text-xs">Prix par jour</span>
+                        <span className="text-xl font-bold text-stone-700">{formattedPrice}</span>
                       </div>
                       
                       <Button
                         asChild
                         variant="outline"
-                        className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white"
+                        className="border-stone-700 text-stone-700 hover:bg-stone-700 hover:text-white"
                       >
                         <Link to={`/cars/${car.id}`}>
                           Détails
@@ -90,7 +90,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                       </Button>
                     </div>
                     
-                    <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+                    <div className="flex flex-wrap gap-2 text-xs text-stone-500">
                       <span className="flex items-center">
                         <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -113,7 +113,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
           </div>
         ) : (
           <div className="text-center py-10 bg-white rounded-lg shadow">
-            <p className="text-gray-500">Aucun véhicule disponible pour le moment.</p>
+            <p className="text-stone-500">Aucun véhicule disponible pour le moment.</p>
           </div>
         )}
       </div>
