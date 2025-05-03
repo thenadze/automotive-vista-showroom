@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Instagram } from "lucide-react";
-import TiktokIcon from "./icons/TiktokIcon";
 
 const Footer = () => {
   return (
@@ -21,9 +20,6 @@ const Footer = () => {
               </a>
               <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
                 <Instagram className="w-4 h-4" />
-              </a>
-              <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-                <TiktokIcon className="w-4 h-4" />
               </a>
             </div>
           </div>
