@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import AdminPage from "./pages/AdminPage";
 import CarEditPage from "./pages/admin/CarEditPage";
+import MentionsLegales from "./pages/MentionsLegales";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/car/:id" element={<CarEditPage />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
