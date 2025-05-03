@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Masquer le loader après un court délai pour assurer que tout est chargé
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 2000); // Augmenté à 2 secondes pour mieux voir le logo
 
     return () => clearTimeout(timer);
   }, []);

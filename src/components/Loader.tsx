@@ -30,17 +30,18 @@ const PageLoader: React.FC = () => {
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-gray-900 transition-opacity duration-500 ${
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-black transition-opacity duration-500 ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
-      <div className="w-32 h-32 mb-4 relative flex items-center justify-center">
-        <div className="text-2xl font-bold flex items-center">
-          <span className="text-orange-500">Auto</span>
-          <span className="text-gray-800 dark:text-white">motive</span>
-        </div>
+      <div className="w-80 h-80 mb-4 relative flex items-center justify-center">
+        <img 
+          src="/lovable-uploads/5dbaca68-920a-49c1-b45d-d3cce4600038.png" 
+          alt="Automotive Logo" 
+          className="max-w-full max-h-full animate-pulse"
+        />
       </div>
-      <div className="relative">
+      <div className="relative mt-4">
         <Loader className="w-10 h-10 text-orange-500 animate-spin" />
       </div>
     </div>
