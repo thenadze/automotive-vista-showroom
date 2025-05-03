@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,13 @@ const LoginPage = () => {
   const [authChecking, setAuthChecking] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+
+  // Récupérer l'URL de redirection depuis l'état de location
+  const redirectTo = location.state?.redirectTo || "/";
+  
+  console.log("LoginPage: redirectTo =", redirectTo);
 
   useEffect(() => {
     let isMounted = true;
@@ -55,9 +61,9 @@ const LoginPage = () => {
             
             // Rediriger vers le dashboard approprié
             if (adminData) {
-              console.log("LoginPage: User is admin, redirecting to /admin");
+              console.log("LoginPage: User is admin, redirecting to", redirectTo);
               // Rediriger vers le dashboard d'administration si l'utilisateur est admin
-              navigate("/admin", { replace: true });
+              navigate(redirectTo, { replace: true });
             } else {
               console.log("LoginPage: User is not admin, redirecting to /");
               // Rediriger vers l'accueil si l'utilisateur n'est pas admin
@@ -87,7 +93,7 @@ const LoginPage = () => {
     return () => {
       isMounted = false;
     };
-  }, [navigate]);
+  }, [navigate, redirectTo]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,9 +132,9 @@ const LoginPage = () => {
           }
           
           if (adminData) {
-            console.log("LoginPage: User is admin, redirecting to /admin");
+            console.log("LoginPage: User is admin, redirecting to", redirectTo);
             // Rediriger vers le dashboard d'administration si l'utilisateur est admin
-            navigate("/admin", { replace: true });
+            navigate(redirectTo, { replace: true });
           } else {
             console.log("LoginPage: User is not admin, redirecting to /");
             // Rediriger vers l'accueil si l'utilisateur n'est pas admin

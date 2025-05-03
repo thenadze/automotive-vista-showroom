@@ -5,12 +5,14 @@ import { useToast } from "@/hooks/use-toast";
 import { CarBrand, FuelType, TransmissionType, Car, CompanyInfo } from "@/types";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { AdminTabs } from "@/components/admin/dashboard";
+import { useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
   console.log("AdminPage component rendering");
   const { isAdmin, loading: authLoading, isInitialized } = useAdminAuth();
   console.log("AdminPage auth status:", { isAdmin, authLoading, isInitialized });
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const [loading, setLoading] = useState(false);
   const [brands, setBrands] = useState<CarBrand[]>([]);
@@ -31,8 +33,11 @@ const AdminPage = () => {
         fetchCompanyInfo(),
         fetchCars()
       ]);
+    } else if (isInitialized && !isAdmin && !authLoading) {
+      console.log("AdminPage: User is not admin, redirecting to login");
+      navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
     }
-  }, [isAdmin, isInitialized]);
+  }, [isAdmin, isInitialized, authLoading, navigate]);
 
   // Récupérer les marques
   const fetchBrands = async () => {

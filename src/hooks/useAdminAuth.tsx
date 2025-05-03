@@ -60,6 +60,7 @@ export const useAdminAuth = () => {
       try {
         if (!isMounted) return;
         
+        console.log("useAdminAuth: Checking session");
         // Récupération de la session
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
@@ -69,17 +70,17 @@ export const useAdminAuth = () => {
           console.error("Erreur lors de la récupération de la session:", sessionError);
           setLoading(false);
           setIsInitialized(true);
+          // Rediriger vers la page de connexion si erreur
+          navigate("/login", { replace: true });
           return;
         }
         
         if (!session) {
-          // Si pas de session, rediriger vers la page de connexion, mais seulement si le composant est toujours monté
-          if (isMounted) {
-            console.log("No session found, redirecting to login");
-            setLoading(false);
-            setIsInitialized(true);
-            navigate("/login", { replace: true });
-          }
+          // Si pas de session, rediriger vers la page de connexion
+          console.log("No session found, redirecting to login");
+          setLoading(false);
+          setIsInitialized(true);
+          navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
           return;
         }
         
@@ -93,14 +94,17 @@ export const useAdminAuth = () => {
         const adminStatus = await checkAdminStatus(session.user.id);
         
         if (!isMounted) return;
-        
+
         if (!adminStatus) {
+          console.log("User is not admin, redirecting to home");
           toast({
             title: "Accès refusé",
             description: "Vous n'avez pas les droits d'administration nécessaires.",
             variant: "destructive",
           });
           navigate("/");
+          setLoading(false);
+          setIsInitialized(true);
           return;
         }
         
@@ -120,7 +124,7 @@ export const useAdminAuth = () => {
           description: error.message || "Une erreur s'est produite lors de la vérification de vos droits.",
           variant: "destructive",
         });
-        navigate("/login", { replace: true });
+        navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
         
         setLoading(false);
         setIsInitialized(true);
@@ -140,7 +144,7 @@ export const useAdminAuth = () => {
           setUser(null);
           setIsAdmin(false);
           if (isMounted) {
-            navigate("/login", { replace: true });
+            navigate("/login", { state: { redirectTo: "/admin" }, replace: true });
           }
         } else if (event === "SIGNED_IN" && session) {
           setUser(session.user);
