@@ -1,7 +1,6 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Tiktok } from "lucide-react";
+import { Facebook, Instagram, Youtube } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -23,7 +22,7 @@ const Footer = () => {
                 <Instagram className="w-4 h-4" />
               </a>
               <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-                <Tiktok className="w-4 h-4" />
+                <Youtube className="w-4 h-4" />
               </a>
             </div>
           </div>
