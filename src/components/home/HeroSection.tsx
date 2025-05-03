@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
@@ -18,7 +17,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               Explorez la Route Devant<br />
               avec {companyInfo?.name || 'Automotive'}
             </h1>
-            <p className="text-lg mb-8 text-white opacity-90">
+            <p className="text-lg mb-8 opacity-90 text-slate-50 font-normal px-0">
               Des véhicules sélectionnés avec soin, prêts à vous accompagner partout. Achetez l'esprit libre, roulez avec confiance.
             </p>
             
