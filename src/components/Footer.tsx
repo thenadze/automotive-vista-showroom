@@ -4,6 +4,13 @@ import { Instagram } from "lucide-react";
 import TiktokIcon from "./icons/TiktokIcon";
 
 const Footer = () => {
+  // Fonction qui gère l'ouverture de TikTok de manière plus fiable
+  const handleTiktokClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Ouvrir dans un nouvel onglet pour éviter les problèmes de redirection
+    window.open("https://www.tiktok.com/@automotive321", "_blank", "noopener,noreferrer");
+  };
+
   return (
     <footer className="bg-gray-900 text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
@@ -19,9 +26,13 @@ const Footer = () => {
               <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="https://www.tiktok.com/@automotive321" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+              <button 
+                onClick={handleTiktokClick} 
+                className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                aria-label="Visitez notre TikTok"
+              >
                 <TiktokIcon className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
           
