@@ -5,6 +5,7 @@ import { CarWithDetails } from "@/types";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface FeaturedCarsProps {
   featuredCars: CarWithDetails[];
@@ -27,7 +28,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
         </div>
         
         {featuredCars.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredCars.map(car => {
               // Trouver la photo principale ou prendre la première ou utiliser placeholder
               let photoUrl = "/placeholder.svg";
@@ -57,38 +58,42 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
               const carTitle = `${brandName} ${modelName}`.trim();
               
               return (
-                <div key={car.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-                  <div className="relative">
-                    <AspectRatio ratio={16/9}>
-                      <img
-                        src={photoUrl}
-                        alt={carTitle || 'Véhicule'}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/placeholder.svg";
-                        }}
-                      />
-                    </AspectRatio>
-                    
-                    <div className="absolute top-3 right-3">
-                      <Badge className="bg-stone-700">{car.year}</Badge>
+                <Card key={car.id} className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-full">
+                    <div className="relative">
+                      <div className="w-full" style={{ width: "515px", height: "506px", maxWidth: "100%" }}>
+                        <img
+                          src={photoUrl}
+                          alt={carTitle || 'Véhicule'}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "/placeholder.svg";
+                          }}
+                        />
+                      </div>
+                      
+                      <div className="absolute top-3 right-3">
+                        <Badge className="bg-stone-700">{car.year}</Badge>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="p-4">
+                  <CardContent className="p-4">
                     <h3 className="text-xl font-bold mb-2 text-stone-800">
                       {carTitle || 'Véhicule'}
                     </h3>
                     
                     <div className="flex justify-between text-sm text-stone-600 mb-4">
-                      <span>{car.fuel_type_id || 'Carburant non spécifié'}</span>
+                      <span>{car.fuel_type_id || 'Essence'}</span>
                       <span>{formattedMileage}</span>
                     </div>
                     
                     <div className="flex items-end justify-between mb-3">
                       <div>
                         <span className="block text-stone-500 text-xs">Prix</span>
-                        <span className="text-xl font-bold text-stone-700">{formattedPrice}</span>
+                        <span className="text-xl font-bold text-stone-700">
+                          {car.daily_price ? formattedPrice : "Prix sur demande"}
+                        </span>
                       </div>
                       
                       <Button
@@ -118,8 +123,8 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                         Réponse rapide
                       </span>
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
