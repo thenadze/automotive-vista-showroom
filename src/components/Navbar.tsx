@@ -9,7 +9,6 @@ import { LogIn, LogOut, Menu, X } from "lucide-react";
  * Barre de navigation du site avec gestion de l'authentification
  */
 const Navbar = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,37 +47,11 @@ const Navbar = () => {
           return;
         }
         
-        if (data.session) {
-          setIsAuthenticated(true);
-          
-          // Vérifier si l'utilisateur est admin
-          try {
-            // @ts-ignore
-            const { data: adminData, error: adminError } = await supabase
-              .from("admins")
-              .select("*")
-              .eq("id", data.session.user.id)
-              .single();
-              
-            if (!isMounted) return;
-            
-            if (adminError && adminError.code !== 'PGRST116') {
-              console.error("Erreur lors de la vérification du statut d'admin:", adminError);
-            }
-            
-            setIsAdmin(!!adminData);
-          } catch (err) {
-            console.error("Erreur lors de la vérification du statut d'admin:", err);
-            if (isMounted) {
-              setIsAdmin(false);
-            }
-          }
-        }
+        setIsAuthenticated(!!data.session);
       } catch (error) {
         console.error("Erreur d'authentification:", error);
         if (isMounted) {
           setIsAuthenticated(false);
-          setIsAdmin(false);
         }
       } finally {
         if (isMounted) {
@@ -92,39 +65,7 @@ const Navbar = () => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!isMounted) return;
-        
         setIsAuthenticated(!!session);
-        
-        if (session) {
-          // Différer la vérification admin pour éviter des problèmes de récursivité
-          setTimeout(async () => {
-            if (!isMounted) return;
-            
-            try {
-              // @ts-ignore
-              const { data: adminData, error } = await supabase
-                .from("admins")
-                .select("*")
-                .eq("id", session.user.id)
-                .single();
-                
-              if (!isMounted) return;
-              
-              if (error && error.code !== 'PGRST116') {
-                console.error("Erreur lors de la vérification du statut d'admin:", error);
-              }
-              
-              setIsAdmin(!!adminData);
-            } catch (err) {
-              console.error("Erreur lors de la vérification du statut d'admin:", err);
-              if (isMounted) {
-                setIsAdmin(false);
-              }
-            }
-          }, 0);
-        } else {
-          setIsAdmin(false);
-        }
       }
     );
 
@@ -166,11 +107,6 @@ const Navbar = () => {
           <a href="#" className="text-white hover:text-orange-400 transition-colors">À Propos</a>
           <a href="#" className="text-white hover:text-orange-400 transition-colors">Contact</a>
           <a href="#" className="text-white hover:text-orange-400 transition-colors">Services</a>
-          {isAdmin && (
-            <Link to="/admin" className="text-white hover:text-orange-400 transition-colors">
-              Administration
-            </Link>
-          )}
         </div>
         
         <div className="hidden lg:flex items-center gap-4">
@@ -252,15 +188,6 @@ const Navbar = () => {
             >
               Services
             </a>
-            {isAdmin && (
-              <Link 
-                to="/admin" 
-                className="text-white py-2 hover:text-orange-400 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Administration
-              </Link>
-            )}
             
             <div className="pt-4 border-t border-gray-800">
               {loading ? (
