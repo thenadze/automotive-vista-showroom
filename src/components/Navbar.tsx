@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoAnimating, setLogoAnimating] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -61,16 +62,23 @@ const Navbar = () => {
     }
   };
 
+  const handleLogoClick = () => {
+    setLogoAnimating(true);
+    setTimeout(() => setLogoAnimating(false), 1000);
+  };
+
   return (
     <nav className="bg-black border-b border-gray-800">
       <div className="container mx-auto px-4">
         {/* Logo centered above navigation links */}
         <div className="flex justify-center pt-4">
-          <img 
-            src="/lovable-uploads/ccd3da64-df7a-456d-a0b9-d7591c1e211c.png" 
-            alt="Automotive Logo" 
-            className="h-24 w-auto"
-          />
+          <Link to="/" onClick={handleLogoClick}>
+            <img 
+              src="/lovable-uploads/ccd3da64-df7a-456d-a0b9-d7591c1e211c.png" 
+              alt="Automotive Logo" 
+              className={`h-24 w-auto transition-all duration-700 ${logoAnimating ? 'scale-110 rotate-6' : ''}`}
+            />
+          </Link>
         </div>
         
         <div className="flex justify-center items-center h-16 relative">
