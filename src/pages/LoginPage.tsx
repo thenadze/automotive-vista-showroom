@@ -153,9 +153,9 @@ const LoginPage = () => {
     <div className="flex justify-center items-center min-h-[70vh]">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Connexion à l'administration</h1>
+          <h1 className="text-2xl font-bold">Connexion</h1>
           <p className="mt-2 text-gray-600">
-            Connectez-vous pour accéder au tableau de bord d'administration
+            Veuillez vous connecter pour continuer
           </p>
         </div>
         
