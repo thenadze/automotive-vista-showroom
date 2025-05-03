@@ -14,7 +14,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* Left column - Text content */}
           <div className="w-full md:w-1/2">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+            <h1 className="text-4xl font-bold mb-4 text-white px-0 md:text-5xl">
               Explorez la Route Devant<br />
               avec {companyInfo?.name || 'Automotive'}
             </h1>
