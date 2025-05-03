@@ -1,24 +1,19 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
 interface HeroSectionProps {
   companyInfo: CompanyInfo | null;
 }
-
-const HeroSection: React.FC<HeroSectionProps> = ({ companyInfo }) => {
-  return (
-    <section 
-      className="relative bg-cover bg-center py-28 md:py-40 text-white"
-      style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1617814076668-801b2101fc78?q=80&w=1920&auto=format')",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className="absolute inset-0 bg-black bg-opacity-70"></div>
+const HeroSection: React.FC<HeroSectionProps> = ({
+  companyInfo
+}) => {
+  return <section className="relative bg-cover bg-center py-28 md:py-40 text-white" style={{
+    backgroundImage: "url('https://images.unsplash.com/photo-1617814076668-801b2101fc78?q=80&w=1920&auto=format')",
+    backgroundPosition: "center"
+  }}>
+      <div className="absolute inset-0 bg-opacity-70 bg-black/0"></div>
       
       <div className="container mx-auto relative z-10 px-6">
         <div className="max-w-2xl">
@@ -31,11 +26,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ companyInfo }) => {
           </p>
           
           <div className="flex flex-wrap gap-4">
-            <Button
-              asChild
-              className="bg-stone-700 hover:bg-stone-800 text-white px-8 py-6 rounded-md text-lg font-medium"
-              size="lg"
-            >
+            <Button asChild className="bg-stone-700 hover:bg-stone-800 text-white px-8 py-6 rounded-md text-lg font-medium" size="lg">
               <Link to="/cars" className="flex items-center gap-2">
                 Voir nos véhicules
                 <ArrowRight className="w-5 h-5" />
@@ -44,8 +35,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ companyInfo }) => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
