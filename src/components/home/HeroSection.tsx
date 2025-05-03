@@ -14,7 +14,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ companyInfo }) => {
     <section 
       className="relative bg-cover bg-center py-28 md:py-40 text-white"
       style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1617814076668-801b2101fc78?q=80&w=1920&auto=format')",
+        backgroundImage: "url('/lovable-uploads/a96a3654-991e-4b06-8faf-a04cdc864545.png')",
         backgroundPosition: "center",
       }}
     >
