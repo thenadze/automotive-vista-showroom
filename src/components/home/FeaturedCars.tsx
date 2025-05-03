@@ -43,10 +43,6 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                 currency: 'EUR',
                 maximumFractionDigits: 0 
               }).format(car.daily_price || 0);
-
-              // Récupérer le type de carburant et la transmission
-              const fuelType = car.fuel_type?.name || car.fuel_type_id || "";
-              const transmission = car.transmission?.name || car.transmission_id || "";
               
               return (
                 <div key={car.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -73,8 +69,8 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                     </h3>
                     
                     <div className="flex justify-between text-sm text-stone-600 mb-4">
-                      {fuelType && <span>{fuelType}</span>}
-                      {transmission && <span>{transmission}</span>}
+                      <span>{car.fuel_type?.name || 'N/A'}</span>
+                      <span>{car.transmission?.name || 'N/A'}</span>
                     </div>
                     
                     <div className="flex items-end justify-between mb-3">

@@ -1,13 +1,16 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { LogIn, LogOut, Menu, X } from "lucide-react";
 
 /**
- * Barre de navigation du site sans gestion de l'authentification
+ * Barre de navigation du site avec gestion de l'authentification
  */
 const Navbar = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -25,6 +28,63 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    
+    const checkAuth = async () => {
+      try {
+        if (!isMounted) return;
+        
+        setLoading(true);
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (!isMounted) return;
+        
+        if (error) {
+          console.error("Erreur lors de la vérification de l'authentification:", error);
+          setLoading(false);
+          return;
+        }
+        
+        setIsAuthenticated(!!data.session);
+      } catch (error) {
+        console.error("Erreur d'authentification:", error);
+        if (isMounted) {
+          setIsAuthenticated(false);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    checkAuth();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (!isMounted) return;
+        setIsAuthenticated(!!session);
+      }
+    );
+
+    return () => {
+      isMounted = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("Erreur lors de la déconnexion:", error);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+    }
+  };
 
   // Classe CSS conditionnelle pour la visibilité de la navbar
   const navbarVisibilityClass = isVisible 
@@ -47,6 +107,33 @@ const Navbar = () => {
           <a href="#" className="text-white hover:text-orange-400 transition-colors">À Propos</a>
           <a href="#" className="text-white hover:text-orange-400 transition-colors">Contact</a>
           <a href="#" className="text-white hover:text-orange-400 transition-colors">Services</a>
+        </div>
+        
+        <div className="hidden lg:flex items-center gap-4">
+          {loading ? (
+            <div className="h-8 w-8 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+            </div>
+          ) : isAuthenticated ? (
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
+              className="border-orange-500 text-white hover:bg-orange-500"
+            >
+              <LogOut className="h-5 w-5 mr-2" />
+              <span>Déconnexion</span>
+            </Button>
+          ) : (
+            <Button 
+              className="bg-orange-500 hover:bg-orange-600 text-white" 
+              asChild
+            >
+              <Link to="/login">
+                <LogIn className="h-5 w-5 mr-2" />
+                <span>Connexion</span>
+              </Link>
+            </Button>
+          )}
         </div>
         
         {/* Mobile menu button */}
@@ -101,6 +188,39 @@ const Navbar = () => {
             >
               Services
             </a>
+            
+            <div className="pt-4 border-t border-gray-800">
+              {loading ? (
+                <div className="flex justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                </div>
+              ) : isAuthenticated ? (
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    handleLogout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full border-orange-500 text-white hover:bg-orange-500"
+                >
+                  <LogOut className="h-5 w-5 mr-2" />
+                  <span>Déconnexion</span>
+                </Button>
+              ) : (
+                <Button 
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white" 
+                  asChild
+                >
+                  <Link 
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <LogIn className="h-5 w-5 mr-2" />
+                    <span>Connexion</span>
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       )}

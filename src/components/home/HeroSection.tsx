@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
@@ -9,32 +10,34 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({
   companyInfo
 }) => {
-  return <section className="relative py-28 md:py-40 bg-gray-100">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center">
-          {/* Contenu textuel à gauche */}
-          <div className="md:w-1/2 md:pr-8 mb-10 md:mb-0">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800">
-              Explorez la Route Devant<br />
-              avec {companyInfo?.name || 'Automotive'}
-            </h1>
-            <p className="text-lg max-w-xl mb-8 text-gray-600">
-              Des véhicules sélectionnés avec soin, prêts à vous accompagner partout. Achetez l'esprit libre, roulez avec confiance.
-            </p>
-            
-            <div className="flex flex-wrap gap-4">
-              <Button asChild className="bg-stone-700 hover:bg-stone-800 text-white px-8 py-6 rounded-md text-lg font-medium" size="lg">
-                <Link to="/cars" className="flex items-center gap-2">
-                  Voir nos véhicules
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </Button>
-            </div>
-          </div>
+  return <section className="relative bg-cover bg-center py-28 md:py-40 text-white" style={{
+    backgroundImage: "url('https://images.unsplash.com/photo-1617814076668-801b2101fc78?q=80&w=1920&auto=format')",
+    backgroundPosition: "center"
+  }}>
+      <div className="absolute inset-0 bg-black/50" style={{
+        backgroundImage: "url('public/lovable-uploads/a56e06c3-0cca-4278-9b82-0cbce8c748b6.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "overlay"
+      }}></div>
+      
+      <div className="container mx-auto relative z-10 px-6">
+        <div className="max-w-2xl">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Explorez la Route Devant<br />
+            avec {companyInfo?.name || 'Automotive'}
+          </h1>
+          <p className="text-lg max-w-xl mb-8 opacity-90">
+            Des véhicules sélectionnés avec soin, prêts à vous accompagner partout. Achetez l'esprit libre, roulez avec confiance.
+          </p>
           
-          {/* Image à droite */}
-          <div className="md:w-1/2">
-            <img alt="Automotive showcase" className="w-full h-auto rounded-lg shadow-lg" src="/lovable-uploads/0e166b97-3812-40b1-b37e-092151987eb4.jpg" />
+          <div className="flex flex-wrap gap-4">
+            <Button asChild className="bg-stone-700 hover:bg-stone-800 text-white px-8 py-6 rounded-md text-lg font-medium" size="lg">
+              <Link to="/cars" className="flex items-center gap-2">
+                Voir nos véhicules
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

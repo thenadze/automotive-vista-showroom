@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -15,71 +15,76 @@ export const useAdminAuth = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const navigate = useNavigate();
-  const location = useLocation();
   const { toast } = useToast();
 
-  // Vérifier le statut d'administrateur d'un utilisateur
-  const checkAdminStatus = async (userId: string) => {
-    try {
-      console.log("Checking admin status for user:", userId);
-      
-      // @ts-ignore
-      const { data: adminData, error } = await supabase
-        .from("admins")
-        .select("*")
-        .eq("id", userId)
-        .single();
+  useEffect(() => {
+    // Flag pour éviter les redirections pendant le démontage du composant
+    let isMounted = true;
+
+    // Fonction pour vérifier le statut d'administrateur d'un utilisateur
+    const checkAdminStatus = async (userId: string) => {
+      try {
+        if (!isMounted) return;
+
+        // @ts-ignore
+        const { data: adminData, error } = await supabase
+          .from("admins")
+          .select("*")
+          .eq("id", userId)
+          .single();
+          
+        if (!isMounted) return;
         
-      if (error && error.code !== 'PGRST116') {
-        console.error("Erreur lors de la vérification du statut d'admin:", error);
+        if (error && error.code !== 'PGRST116') {
+          console.error("Erreur lors de la vérification du statut d'admin:", error);
+          return false;
+        }
+        
+        return !!adminData;
+      } catch (err) {
+        if (isMounted) {
+          console.error("Erreur lors de la vérification du statut d'admin:", err);
+        }
         return false;
       }
-      
-      const isUserAdmin = !!adminData;
-      console.log("Is user admin?", isUserAdmin);
-      return isUserAdmin;
-    } catch (err) {
-      console.error("Erreur lors de la vérification du statut d'admin:", err);
-      return false;
-    }
-  };
-  
-  // Gérer les erreurs d'authentification
-  const handleAuthError = (error: any) => {
-    console.error("Erreur d'authentification:", error);
-    toast({
-      title: "Erreur d'authentification",
-      description: error.message || "Une erreur s'est produite lors de la vérification de vos droits.",
-      variant: "destructive",
-    });
+    };
     
-    setLoading(false);
-    setIsInitialized(true);
-  };
-  
-  // Mettre à jour l'état de l'utilisateur
-  const updateUserState = (isUserAdmin: boolean) => {
-    setIsAdmin(isUserAdmin);
-    setLoading(false);
-    setIsInitialized(true);
-  };
-  
-  // Gérer les changements d'état d'authentification
-  const handleAuthStateChange = (event: string, session: any) => {
-    console.log("Auth state changed:", event);
-    
-    if (event === "SIGNED_OUT") {
-      setUser(null);
-      setIsAdmin(false);
-    } else if (event === "SIGNED_IN" && session) {
-      setUser(session.user);
-      
-      // Différer la vérification admin pour éviter des problèmes de récursivité
-      setTimeout(async () => {
-        // Vérifier si le nouvel utilisateur est un administrateur
+    // Fonction pour vérifier le statut d'authentification
+    const checkAuth = async () => {
+      try {
+        if (!isMounted) return;
+        
+        // Récupération de la session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (!isMounted) return;
+        
+        if (sessionError) {
+          console.error("Erreur lors de la récupération de la session:", sessionError);
+          setLoading(false);
+          setIsInitialized(true);
+          return;
+        }
+        
+        if (!session) {
+          // Si pas de session, rediriger vers la page de connexion, mais seulement si le composant est toujours monté
+          if (isMounted) {
+            setLoading(false);
+            setIsInitialized(true);
+            navigate("/login");
+          }
+          return;
+        }
+        
+        // Mettre à jour l'état de l'utilisateur
+        if (isMounted) {
+          setUser(session.user);
+        }
+        
+        // Vérifier si l'utilisateur est un administrateur
         const adminStatus = await checkAdminStatus(session.user.id);
         
-        setIsAdmin(!!adminStatus);
+        if (!isMounted) return;
         
         if (!adminStatus) {
           toast({
@@ -87,80 +92,77 @@ export const useAdminAuth = () => {
             description: "Vous n'avez pas les droits d'administration nécessaires.",
             variant: "destructive",
           });
+          navigate("/");
+          return;
         }
-      }, 0);
-    }
-  };
-
-  // Vérifier le statut d'authentification
-  const checkAuthentication = async () => {
-    try {
-      console.log("useAdminAuth: Checking session");
-      // Récupération de la session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) {
-        console.error("Erreur lors de la récupération de la session:", sessionError);
+        
+        // Mettre à jour les états seulement si le composant est toujours monté
+        if (isMounted) {
+          setIsAdmin(true);
+          setLoading(false);
+          setIsInitialized(true);
+        }
+      } catch (error: any) {
+        if (!isMounted) return;
+        
+        console.error("Erreur d'authentification:", error);
+        toast({
+          title: "Erreur d'authentification",
+          description: error.message || "Une erreur s'est produite lors de la vérification de vos droits.",
+          variant: "destructive",
+        });
+        navigate("/login");
+        
         setLoading(false);
         setIsInitialized(true);
-        return;
       }
-      
-      if (!session) {
-        // Si pas de session, ne pas rediriger directement - on laisse le composant parent gérer la redirection
-        console.log("No session found, will let component handle redirect");
-        setLoading(false);
-        setIsInitialized(true);
-        return;
-      }
-      
-      // Mettre à jour l'état de l'utilisateur
-      console.log("Setting user:", session.user);
-      setUser(session.user);
-      
-      // Vérifier si l'utilisateur est un administrateur
-      const adminStatus = await checkAdminStatus(session.user.id);
-
-      if (!adminStatus) {
-        console.log("User is not admin");
-        // Ne pas rediriger directement, on laisse le composant gérer les redirections
-        updateUserState(false);
-        return;
-      }
-      
-      console.log("User is admin, setting isAdmin to true");
-      updateUserState(true);
-    } catch (error: any) {
-      handleAuthError(error);
-    }
-  };
-
-  useEffect(() => {
-    console.log("useAdminAuth hook running, path:", location.pathname);
-    // Flag pour éviter les redirections pendant le démontage du composant
-    let isMounted = true;
-    
-    const setupAuthListeners = () => {
-      checkAuthentication();
-      
-      // Surveiller les changements d'état d'authentification
-      const { data: authListener } = supabase.auth.onAuthStateChange(
-        async (event, session) => {
-          if (!isMounted) return;
-          handleAuthStateChange(event, session);
-        }
-      );
-      
-      return authListener.subscription;
     };
     
-    const subscription = setupAuthListeners();
+    checkAuth();
+    
+    // Surveiller les changements d'état d'authentification
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (!isMounted) return;
+        
+        if (event === "SIGNED_OUT") {
+          setUser(null);
+          setIsAdmin(false);
+          if (isMounted) {
+            navigate("/login");
+          }
+        } else if (event === "SIGNED_IN" && session) {
+          setUser(session.user);
+          
+          // Différer la vérification admin pour éviter des problèmes de récursivité
+          setTimeout(async () => {
+            if (!isMounted) return;
+            
+            // Vérifier si le nouvel utilisateur est un administrateur
+            const adminStatus = await checkAdminStatus(session.user.id);
+            
+            if (!isMounted) return;
+            
+            setIsAdmin(!!adminStatus);
+            
+            if (!adminStatus) {
+              toast({
+                title: "Accès refusé",
+                description: "Vous n'avez pas les droits d'administration nécessaires.",
+                variant: "destructive",
+              });
+              navigate("/");
+            }
+          }, 0);
+        }
+      }
+    );
     
     return () => {
       isMounted = false;
-      subscription.unsubscribe();
+      authListener.subscription.unsubscribe();
     };
-  }, [navigate, toast, location.pathname]);
+  }, [navigate, toast]);
   
   return { user, isAdmin, loading, isInitialized };
 };
