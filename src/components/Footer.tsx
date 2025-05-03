@@ -82,9 +82,8 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 pt-6 mt-6 text-center md:text-left md:flex md:justify-between">
+        <div className="border-t border-gray-800 pt-6 mt-6 text-center md:text-left">
           <p className="text-gray-500">&copy; {new Date().getFullYear()} Automotive. Tous droits réservés.</p>
-          <p className="text-gray-500 mt-2 md:mt-0">Conçu avec ❤️ par Automotive</p>
         </div>
       </div>
     </footer>
