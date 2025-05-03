@@ -27,7 +27,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ companyInfo }) => {
             avec {companyInfo?.name || 'Automotive'}
           </h1>
           <p className="text-lg max-w-xl mb-8 opacity-90">
-            {companyInfo?.description || 'Louez le véhicule parfait pour votre prochaine aventure. Notre flotte diversifiée répond à tous vos besoins.'}
+            Des véhicules sélectionnés avec soin, prêts à vous accompagner partout. Achetez l'esprit libre, roulez avec confiance.
           </p>
           
           <div className="flex flex-wrap gap-4">
