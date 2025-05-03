@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Instagram } from "lucide-react";
+import { Instagram, FileText } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -72,7 +72,28 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-800 pt-6 mt-6 text-center md:text-left">
-          <p className="text-gray-500">&copy; {new Date().getFullYear()} Automotive. Tous droits réservés.</p>
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-500">&copy; {new Date().getFullYear()} Automotive. Tous droits réservés.</p>
+            
+            <div className="mt-4 md:mt-0">
+              <Link to="/privacy-policy" className="flex items-center text-sm text-gray-400 hover:text-orange-500 transition-colors">
+                <FileText className="w-4 h-4 mr-1" />
+                Politique de Confidentialité
+              </Link>
+            </div>
+          </div>
+        </div>
+        
+        {/* Politique de confidentialité détaillée */}
+        <div className="mt-6 pt-6 border-t border-gray-800 text-xs text-gray-500">
+          <p className="mb-2">Notre politique de confidentialité est conforme aux lois suivantes :</p>
+          <ul className="space-y-1 list-disc pl-5">
+            <li>Règlement Général sur la Protection des Données (RGPD - UE 2016/679)</li>
+            <li>Loi Informatique et Libertés du 6 janvier 1978 modifiée</li>
+            <li>Directive ePrivacy (2002/58/CE) relative aux communications électroniques</li>
+            <li>Article 82 de la loi du 20 juin 2018 relative à la protection des données personnelles</li>
+          </ul>
+          <p className="mt-2">Pour plus d'informations sur la manière dont nous protégeons vos données, veuillez consulter notre <Link to="/privacy-policy" className="text-orange-500 hover:underline">politique de confidentialité complète</Link>.</p>
         </div>
       </div>
     </footer>
