@@ -38,11 +38,18 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
               }
               
               // Préparer le prix avec format français
-              const formattedPrice = new Intl.NumberFormat('fr-FR', { 
-                style: 'currency', 
-                currency: 'EUR',
-                maximumFractionDigits: 0 
-              }).format(car.daily_price || 0);
+              const formattedPrice = car.daily_price 
+                ? new Intl.NumberFormat('fr-FR', { 
+                    style: 'currency', 
+                    currency: 'EUR',
+                    maximumFractionDigits: 0 
+                  }).format(car.daily_price)
+                : "Prix sur demande";
+
+              // Préparer le kilométrage avec format français
+              const formattedMileage = car.mileage !== undefined && car.mileage !== null
+                ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
+                : "N/A";
               
               return (
                 <div key={car.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -70,7 +77,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                     
                     <div className="flex justify-between text-sm text-stone-600 mb-4">
                       <span>{car.fuel_type?.name || 'N/A'}</span>
-                      <span>{car.transmission?.name || 'N/A'}</span>
+                      <span>{formattedMileage}</span>
                     </div>
                     
                     <div className="flex items-end justify-between mb-3">
