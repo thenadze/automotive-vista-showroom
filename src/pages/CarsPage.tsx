@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { CarWithDetails } from "@/types";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const CarsPage = () => {
   const [cars, setCars] = useState<CarWithDetails[]>([]);
@@ -153,146 +155,186 @@ const CarsPage = () => {
     <div>
       <h1 className="text-3xl font-bold mb-6">Catalogue des véhicules</h1>
       
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-        <h2 className="text-xl font-semibold mb-4">Filtres</h2>
+      <Tabs defaultValue="all" className="w-full mb-6">
+        <TabsList className="w-full justify-start mb-4 bg-gray-100 p-1">
+          <TabsTrigger value="all">Tous les véhicules</TabsTrigger>
+          <TabsTrigger value="new">Nouveautés</TabsTrigger>
+          <TabsTrigger value="popular">Populaires</TabsTrigger>
+          <TabsTrigger value="sale">Promotions</TabsTrigger>
+          <TabsTrigger value="electric">Électriques</TabsTrigger>
+        </TabsList>
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label className="block mb-1 text-sm font-medium">Marque</label>
-            <select 
-              className="w-full p-2 border rounded-md"
-              value={selectedBrand || ""}
-              onChange={handleBrandChange}
-            >
-              <option value="">Toutes les marques</option>
-              {brands.map(brand => (
-                <option key={brand} value={brand}>{brand}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block mb-1 text-sm font-medium">Carburant</label>
-            <select 
-              className="w-full p-2 border rounded-md"
-              value={selectedFuel || ""}
-              onChange={handleFuelChange}
-            >
-              <option value="">Tous les carburants</option>
-              {fuelTypes.map(fuel => (
-                <option key={fuel} value={fuel}>{fuel}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block mb-1 text-sm font-medium">Transmission</label>
-            <select 
-              className="w-full p-2 border rounded-md"
-              value={selectedTransmission || ""}
-              onChange={handleTransmissionChange}
-            >
-              <option value="">Toutes les transmissions</option>
-              {transmissions.map(trans => (
-                <option key={trans} value={trans}>{trans}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div>
-            <label className="block mb-1 text-sm font-medium">Année</label>
-            <div className="flex gap-2">
-              <input 
-                type="number" 
-                placeholder="Min"
-                className="w-full p-2 border rounded-md"
-                value={yearRange[0] === 0 ? "" : yearRange[0]}
-                onChange={handleYearMinChange}
-              />
-              <span className="self-center">-</span>
-              <input 
-                type="number" 
-                placeholder="Max"
-                className="w-full p-2 border rounded-md"
-                value={yearRange[1] === 3000 ? "" : yearRange[1]}
-                onChange={handleYearMaxChange}
-              />
+        <TabsContent value="all">
+          {/* Filters */}
+          <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+            <h2 className="text-xl font-semibold mb-4">Filtres</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block mb-1 text-sm font-medium">Marque</label>
+                <select 
+                  className="w-full p-2 border rounded-md"
+                  value={selectedBrand || ""}
+                  onChange={handleBrandChange}
+                >
+                  <option value="">Toutes les marques</option>
+                  {brands.map(brand => (
+                    <option key={brand} value={brand}>{brand}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block mb-1 text-sm font-medium">Carburant</label>
+                <select 
+                  className="w-full p-2 border rounded-md"
+                  value={selectedFuel || ""}
+                  onChange={handleFuelChange}
+                >
+                  <option value="">Tous les carburants</option>
+                  {fuelTypes.map(fuel => (
+                    <option key={fuel} value={fuel}>{fuel}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block mb-1 text-sm font-medium">Transmission</label>
+                <select 
+                  className="w-full p-2 border rounded-md"
+                  value={selectedTransmission || ""}
+                  onChange={handleTransmissionChange}
+                >
+                  <option value="">Toutes les transmissions</option>
+                  {transmissions.map(trans => (
+                    <option key={trans} value={trans}>{trans}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block mb-1 text-sm font-medium">Année</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="number" 
+                    placeholder="Min"
+                    className="w-full p-2 border rounded-md"
+                    value={yearRange[0] === 0 ? "" : yearRange[0]}
+                    onChange={handleYearMinChange}
+                  />
+                  <span className="self-center">-</span>
+                  <input 
+                    type="number" 
+                    placeholder="Max"
+                    className="w-full p-2 border rounded-md"
+                    value={yearRange[1] === 3000 ? "" : yearRange[1]}
+                    onChange={handleYearMaxChange}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        
-        <div className="mt-4 text-right">
-          <button 
-            onClick={resetFilters}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded transition duration-300"
-          >
-            Réinitialiser
-          </button>
-        </div>
-      </div>
-      
-      {/* Car Listings */}
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-        </div>
-      ) : (
-        <>
-          {cars.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {cars.map(car => {
-                console.log("Car photos:", car.photos);
-                const primaryPhoto = car.photos?.find(p => p.is_primary);
-                const firstPhoto = car.photos?.[0];
-                const photoUrl = primaryPhoto?.photo_url || firstPhoto?.photo_url || "/placeholder.svg";
-                
-                return (
-                  <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div className="h-56 w-full relative">
-                      <img 
-                        src={photoUrl} 
-                        alt={`${car.brand_id} ${car.model}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          console.log("Image error:", e);
-                          (e.target as HTMLImageElement).src = "/placeholder.svg";
-                        }}
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-xl font-semibold mb-2">
-                        {car.brand_id} {car.model} ({car.year})
-                      </h3>
-                      <div className="flex justify-between text-sm text-gray-600 mb-4">
-                        <span>{car.fuel_type_id}</span>
-                        <span>{car.transmission_id}</span>
-                      </div>
-                      <Link
-                        to={`/cars/${car.id}`}
-                        className="block text-center bg-gray-800 hover:bg-gray-900 text-white py-2 rounded transition duration-300"
-                      >
-                        Voir les détails
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="bg-gray-50 p-8 rounded-lg text-center">
-              <h3 className="text-xl font-medium mb-2">Aucun véhicule trouvé</h3>
-              <p className="text-gray-600 mb-4">Aucun véhicule ne correspond à vos critères de recherche.</p>
+            
+            <div className="mt-4 text-right">
               <button 
                 onClick={resetFilters}
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded transition duration-300"
               >
-                Réinitialiser les filtres
+                Réinitialiser
               </button>
             </div>
+          </div>
+          
+          {/* Car Listings */}
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+            </div>
+          ) : (
+            <>
+              {cars.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {cars.map(car => {
+                    console.log("Car photos:", car.photos);
+                    const primaryPhoto = car.photos?.find(p => p.is_primary);
+                    const firstPhoto = car.photos?.[0];
+                    const photoUrl = primaryPhoto?.photo_url || firstPhoto?.photo_url || "/placeholder.svg";
+                    
+                    return (
+                      <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div className="h-56 w-full relative">
+                          <img 
+                            src={photoUrl} 
+                            alt={`${car.brand_id} ${car.model}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              console.log("Image error:", e);
+                              (e.target as HTMLImageElement).src = "/placeholder.svg";
+                            }}
+                          />
+                        </div>
+                        <div className="p-4">
+                          <h3 className="text-xl font-semibold mb-2">
+                            {car.brand_id} {car.model} ({car.year})
+                          </h3>
+                          <div className="flex justify-between text-sm text-gray-600 mb-4">
+                            <span>{car.fuel_type_id}</span>
+                            <span>{car.transmission_id}</span>
+                          </div>
+                          <Link
+                            to={`/cars/${car.id}`}
+                            className="block text-center bg-gray-800 hover:bg-gray-900 text-white py-2 rounded transition duration-300"
+                          >
+                            Voir les détails
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="bg-gray-50 p-8 rounded-lg text-center">
+                  <h3 className="text-xl font-medium mb-2">Aucun véhicule trouvé</h3>
+                  <p className="text-gray-600 mb-4">Aucun véhicule ne correspond à vos critères de recherche.</p>
+                  <button 
+                    onClick={resetFilters}
+                    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300"
+                  >
+                    Réinitialiser les filtres
+                  </button>
+                </div>
+              )}
+            </>
           )}
-        </>
-      )}
+        </TabsContent>
+
+        <TabsContent value="new">
+          <div className="bg-gray-50 p-8 rounded-lg text-center">
+            <h3 className="text-xl font-medium mb-2">Nouveautés à venir</h3>
+            <p className="text-gray-600">Nos derniers modèles arriveront prochainement. Restez à l'affût !</p>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="popular">
+          <div className="bg-gray-50 p-8 rounded-lg text-center">
+            <h3 className="text-xl font-medium mb-2">Nos modèles populaires</h3>
+            <p className="text-gray-600">Découvrez bientôt nos modèles les plus appréciés par nos clients.</p>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="sale">
+          <div className="bg-gray-50 p-8 rounded-lg text-center">
+            <h3 className="text-xl font-medium mb-2">Promotions spéciales</h3>
+            <p className="text-gray-600">Nos offres promotionnelles seront bientôt disponibles.</p>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="electric">
+          <div className="bg-gray-50 p-8 rounded-lg text-center">
+            <h3 className="text-xl font-medium mb-2">Véhicules électriques</h3>
+            <p className="text-gray-600">Notre sélection de véhicules électriques sera bientôt disponible.</p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
