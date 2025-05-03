@@ -29,11 +29,12 @@ export interface Car {
   year: number;
   brand_id: string;
   model: string;
-  fuel_type_id: string;  // Maintenant une chaîne de caractères
+  fuel_type_id: string;  
   transmission_id: string;
   created_at: string;
   updated_at: string;
-  daily_price?: number;  // Added daily_price property
+  daily_price?: number;
+  mileage?: number;  // Ajout du kilométrage
 }
 
 export interface CarPhoto {

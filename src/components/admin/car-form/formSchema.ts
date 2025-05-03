@@ -8,6 +8,7 @@ export const carFormSchema = z.object({
   fuel_type_id: z.string().min(1, "Le type de carburant est requis"),
   transmission_id: z.string().min(1, "Le type de transmission est requis"),
   daily_price: z.number().min(0, "Le prix ne peut pas être négatif").nullable().default(0),
+  mileage: z.number().min(0, "Le kilométrage ne peut pas être négatif").default(0),
 });
 
 export type CarFormValues = z.infer<typeof carFormSchema>;

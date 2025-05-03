@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -32,6 +31,7 @@ export const useCarFormSubmit = (car?: Car, photosToRemove: string[] = [], onSuc
         fuel_type_id: values.fuel_type_id,
         transmission_id: values.transmission_id,
         daily_price: values.daily_price || 0,
+        mileage: values.mileage || 0, // Ajout du kilométrage
         updated_at: new Date().toISOString(),
       };
       

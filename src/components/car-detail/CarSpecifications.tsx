@@ -16,6 +16,11 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
       }).format(car.daily_price)
     : "Non spécifié";
 
+  // Formatter le kilométrage
+  const formattedMileage = car.mileage !== undefined && car.mileage !== null
+    ? `${new Intl.NumberFormat('fr-FR').format(car.mileage)} km`
+    : "Non spécifié";
+
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Caractéristiques</h2>
@@ -33,6 +38,10 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
           <tr className="border-b">
             <td className="py-2 font-medium">Année</td>
             <td className="py-2">{car.year}</td>
+          </tr>
+          <tr className="border-b">
+            <td className="py-2 font-medium">Kilométrage</td>
+            <td className="py-2">{formattedMileage}</td>
           </tr>
           <tr className="border-b">
             <td className="py-2 font-medium">Carburant</td>

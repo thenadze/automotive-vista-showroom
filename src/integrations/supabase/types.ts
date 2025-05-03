@@ -80,6 +80,7 @@ export type Database = {
           created_at: string | null
           fuel_type_id: string
           id: string
+          mileage: number | null
           model: string
           transmission_id: string
           updated_at: string | null
@@ -90,6 +91,7 @@ export type Database = {
           created_at?: string | null
           fuel_type_id: string
           id?: string
+          mileage?: number | null
           model: string
           transmission_id: string
           updated_at?: string | null
@@ -100,6 +102,7 @@ export type Database = {
           created_at?: string | null
           fuel_type_id?: string
           id?: string
+          mileage?: number | null
           model?: string
           transmission_id?: string
           updated_at?: string | null
