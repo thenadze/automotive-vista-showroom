@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useCarDetails } from "@/hooks/useCarDetails";
 import CarImageGallery from "@/components/car-detail/CarImageGallery";
 import CarSpecifications from "@/components/car-detail/CarSpecifications";
-import DescriptionSection from "@/components/car-detail/ContactSection";
+import DescriptionSection from "@/components/car-detail/DescriptionSection";
 import CarDetailHeader from "@/components/car-detail/CarDetailHeader";
 import LoadingState from "@/components/car-detail/LoadingState";
 import NotFoundState from "@/components/car-detail/NotFoundState";
@@ -29,26 +29,24 @@ const CarDetailPage: React.FC = () => {
   const brandName = car.brand?.name || car.brand_id;
 
   return (
-    <div>
+    <div className="max-w-5xl mx-auto pb-10">
       <CarDetailHeader 
         brandName={brandName}
         model={car.model} 
         year={car.year} 
       />
       
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
         <CarImageGallery 
           photos={car.photos} 
           brandName={brandName}
           model={car.model}
         />
-        
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <CarSpecifications car={car} />
-            <DescriptionSection car={car} />
-          </div>
-        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <CarSpecifications car={car} />
+        <DescriptionSection car={car} />
       </div>
     </div>
   );

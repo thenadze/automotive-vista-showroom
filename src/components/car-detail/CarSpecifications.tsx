@@ -21,40 +21,28 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
     ? `${new Intl.NumberFormat('fr-FR').format(car.mileage)} km`
     : "Non spécifié";
 
+  const specifications = [
+    { label: "Marque", value: car.brand?.name || "Non spécifiée" },
+    { label: "Modèle", value: car.model },
+    { label: "Année", value: car.year.toString() },
+    { label: "Kilométrage", value: formattedMileage },
+    { label: "Carburant", value: car.fuel_type?.name || "Non spécifié" },
+    { label: "Transmission", value: car.transmission?.name || "Non spécifiée" },
+    { label: "Prix", value: formattedPrice }
+  ];
+
   return (
-    <div>
+    <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">Caractéristiques</h2>
       
-      <table className="w-full mb-6">
+      <table className="w-full">
         <tbody>
-          <tr className="border-b">
-            <td className="py-2 font-medium">Marque</td>
-            <td className="py-2">{car.brand?.name || "Non spécifiée"}</td>
-          </tr>
-          <tr className="border-b">
-            <td className="py-2 font-medium">Modèle</td>
-            <td className="py-2">{car.model}</td>
-          </tr>
-          <tr className="border-b">
-            <td className="py-2 font-medium">Année</td>
-            <td className="py-2">{car.year}</td>
-          </tr>
-          <tr className="border-b">
-            <td className="py-2 font-medium">Kilométrage</td>
-            <td className="py-2">{formattedMileage}</td>
-          </tr>
-          <tr className="border-b">
-            <td className="py-2 font-medium">Carburant</td>
-            <td className="py-2">{car.fuel_type?.name || "Non spécifié"}</td>
-          </tr>
-          <tr className="border-b">
-            <td className="py-2 font-medium">Transmission</td>
-            <td className="py-2">{car.transmission?.name || "Non spécifiée"}</td>
-          </tr>
-          <tr>
-            <td className="py-2 font-medium">Prix</td>
-            <td className="py-2">{formattedPrice}</td>
-          </tr>
+          {specifications.map((spec, index) => (
+            <tr key={spec.label} className={index < specifications.length - 1 ? "border-b" : ""}>
+              <td className="py-3 font-medium text-gray-700">{spec.label}</td>
+              <td className="py-3 text-right">{spec.value}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
