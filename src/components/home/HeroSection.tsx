@@ -18,7 +18,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   const fullText = "Fondée en 2024 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis, adaptés à tous les styles de vie et à tous les usages. Dès les premiers échanges, l'entreprise accompagne chaque client avec attention : conseils personnalisés, transparence, et préparation rigoureuse des véhicules avant la vente. \n\nAutomotive incarne une nouvelle vision de la vente automobile, fondée sur la proximité, la confiance et l'exigence de qualité.";
   
-  const shortenedText = fullText.split('\n\n')[0];
+  // Version plus courte pour mobile
+  const mobileShortenedText = "Fondée en 2024 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis, adaptés à tous les styles de vie et à tous les usages.";
+  
+  // Version pour desktop
+  const desktopShortenedText = fullText.split('\n\n')[0];
+  
+  // Sélectionne la version appropriée selon le dispositif
+  const shortenedText = isMobile ? mobileShortenedText : desktopShortenedText;
 
   const toggleText = () => {
     setExpanded(!expanded);
