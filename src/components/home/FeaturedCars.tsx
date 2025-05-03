@@ -42,7 +42,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                 style: 'currency', 
                 currency: 'EUR',
                 maximumFractionDigits: 0 
-              }).format(car.price_per_day || 0); // Use default value of 0 if price_per_day is undefined
+              }).format(car.daily_price || 0); // Using daily_price instead of price_per_day
               
               return (
                 <div key={car.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
