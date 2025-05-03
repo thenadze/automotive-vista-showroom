@@ -1,22 +1,19 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
 interface HeroSectionProps {
   companyInfo: CompanyInfo | null;
 }
-
 const HeroSection: React.FC<HeroSectionProps> = ({
   companyInfo
 }) => {
-  return <section className="relative bg-cover bg-center py-28 md:py-40 text-white" style={{
+  return <section style={{
     backgroundImage: "url('public/lovable-uploads/9e4ac92d-dff3-47f8-9e4d-c00a2204e43f.png')",
     backgroundPosition: "center",
     backgroundSize: "cover"
-  }}>
+  }} className="relative bg-cover bg-center py-28 md:py-40 text-white bg-transparent">
       
       <div className="container mx-auto relative z-10 px-6">
         <div className="max-w-2xl">
@@ -40,5 +37,4 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
     </section>;
 };
-
 export default HeroSection;
