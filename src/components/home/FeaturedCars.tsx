@@ -49,7 +49,12 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
               // Préparer le kilométrage avec format français
               const formattedMileage = car.mileage !== undefined && car.mileage !== null
                 ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
-                : "N/A";
+                : "0 km";
+              
+              // Préparation du titre avec marque et modèle
+              const brandName = car.brand_id || "";
+              const modelName = car.model || "";
+              const carTitle = `${brandName} ${modelName}`.trim();
               
               return (
                 <div key={car.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -57,7 +62,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                     <AspectRatio ratio={16/9}>
                       <img
                         src={photoUrl}
-                        alt={`${car.brand?.name || 'Marque'} ${car.model}`}
+                        alt={carTitle || 'Véhicule'}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = "/placeholder.svg";
@@ -72,11 +77,11 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
                   
                   <div className="p-4">
                     <h3 className="text-xl font-bold mb-2 text-stone-800">
-                      {car.brand?.name || 'Marque'} {car.model}
+                      {carTitle || 'Véhicule'}
                     </h3>
                     
                     <div className="flex justify-between text-sm text-stone-600 mb-4">
-                      <span>{car.fuel_type?.name || 'N/A'}</span>
+                      <span>{car.fuel_type_id || 'Carburant non spécifié'}</span>
                       <span>{formattedMileage}</span>
                     </div>
                     

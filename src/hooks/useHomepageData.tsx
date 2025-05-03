@@ -19,12 +19,9 @@ export const useHomepageData = () => {
         setError(null);
         
         // Fetch all data in parallel for better performance
-        const [companyResult, carsResult, brandsResult, fuelTypesResult, transmissionsResult] = await Promise.all([
+        const [companyResult, carsResult] = await Promise.all([
           supabase.from("company_info").select("*").single(),
-          supabase.from("cars").select("*").limit(3),
-          supabase.from("car_brands").select("*"),
-          supabase.from("fuel_types").select("*"),
-          supabase.from("transmission_types").select("*")
+          supabase.from("cars").select("*").limit(3)
         ]);
 
         // Handle company info
@@ -66,18 +63,8 @@ export const useHomepageData = () => {
             })
           );
           
-          // Enrichir les voitures avec les détails (marque, type de carburant, transmission)
-          const carsWithDetails = carsWithPhotos.map((car: any) => {
-            return {
-              ...car,
-              brand: brandsResult.data?.find(b => b.id === car.brand_id) || null,
-              fuel_type: fuelTypesResult.data?.find(f => f.id === car.fuel_type_id) || null,
-              transmission: transmissionsResult.data?.find(t => t.id === car.transmission_id) || null
-            };
-          });
-          
-          console.log("Cars with details:", carsWithDetails);
-          setFeaturedCars(carsWithDetails);
+          console.log("Cars with details:", carsWithPhotos);
+          setFeaturedCars(carsWithPhotos);
         }
       } catch (err: any) {
         console.error("HomePage error:", err);
