@@ -66,7 +66,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
         />
         
         <div className="absolute top-3 right-3 z-10">
-          <Badge className="bg-stone-700">{car.year}</Badge>
+          {car.year && <Badge className="bg-stone-700">{car.year}</Badge>}
         </div>
       </div>
       
@@ -84,7 +84,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
           <div className="mr-2">
             <span className="block text-stone-500 text-xs">Prix</span>
             <span className="text-lg md:text-xl font-bold text-stone-700 whitespace-nowrap">
-              {car.daily_price ? formattedPrice : "Prix sur demande"}
+              {formattedPrice}
             </span>
           </div>
           

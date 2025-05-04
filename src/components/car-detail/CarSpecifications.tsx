@@ -24,7 +24,7 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
   const specifications = [
     { label: "Marque", value: car.brand?.name || "Non spécifiée" },
     { label: "Modèle", value: car.model },
-    { label: "Année", value: car.year.toString() },
+    { label: "Année", value: car.year ? car.year.toString() : "Non spécifiée" },
     { label: "Kilométrage", value: formattedMileage },
     { label: "Carburant", value: car.fuel_type?.name || "Non spécifié" },
     { label: "Transmission", value: car.transmission?.name || "Non spécifiée" },

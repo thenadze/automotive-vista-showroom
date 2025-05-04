@@ -69,7 +69,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           <div className="mr-2">
             <span className="block text-stone-500 text-xs">Prix</span>
             <span className="text-lg md:text-xl font-bold text-stone-700 whitespace-nowrap">
-              {car.daily_price ? formattedPrice : "Prix sur demande"}
+              {formattedPrice}
             </span>
           </div>
           
