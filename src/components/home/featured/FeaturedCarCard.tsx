@@ -30,20 +30,25 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
     ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
     : "0 km";
   
-  // Obtenir le nom de la marque
+  // Obtenir le nom de la marque de manière plus robuste
   const getBrandName = () => {
     // Si on a l'objet brand complet avec le nom
-    if (car.brand && car.brand.name) {
+    if (car.brand && typeof car.brand === 'object' && car.brand.name) {
       return car.brand.name;
     }
     
-    // Essayer de récupérer d'autres sources (dans le cas où on n'a que l'ID)
-    return "Marque inconnue";
+    // Si brand_id est défini mais qu'il n'y a pas d'objet brand
+    if (car.brand_id && car.brand_id !== "undefined" && car.brand_id !== "null") {
+      return car.brand_id;
+    }
+    
+    // Si aucune information n'est disponible
+    return "-";
   };
   
   // Préparation du titre avec marque et modèle
   const brandName = getBrandName();
-  const modelName = car.model || "";
+  const modelName = car.model || "-";
   const carTitle = `${brandName} ${modelName}`.trim();
   
   return (
@@ -67,7 +72,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
       
       <CardContent className="p-3 md:p-4">
         <h3 className="text-lg md:text-xl font-bold mb-2 text-stone-800 truncate">
-          {carTitle || 'Véhicule'}
+          {carTitle !== " " ? carTitle : "-"}
         </h3>
         
         <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-3 md:mb-4">

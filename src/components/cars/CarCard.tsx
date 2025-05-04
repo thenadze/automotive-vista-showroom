@@ -28,15 +28,25 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
     : "0 km";
   
-  // Obtenir le nom de la marque
+  // Obtenir le nom de la marque de manière plus robuste
   const getBrandName = () => {
-    if (car.brand && car.brand.name) {
+    // Si on a l'objet brand complet avec le nom
+    if (car.brand && typeof car.brand === 'object' && car.brand.name) {
       return car.brand.name;
     }
     
-    // Tenter d'obtenir le nom réel de la marque si on a seulement l'ID
-    return car.brand_id || "Marque inconnue";
+    // Si brand_id est défini mais qu'il n'y a pas d'objet brand
+    if (car.brand_id && car.brand_id !== "undefined" && car.brand_id !== "null") {
+      return car.brand_id;
+    }
+    
+    // Si aucune information n'est disponible
+    return "-";
   };
+
+  const brandName = getBrandName();
+  const modelName = car.model || "-";
+  const carTitle = `${brandName} ${modelName}${car.year ? ` (${car.year})` : ''}`.trim();
 
   return (
     <Card className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
@@ -49,7 +59,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
       </div>
       <CardContent className="p-3 md:p-4">
         <h3 className="text-lg md:text-xl font-semibold mb-2 truncate">
-          {getBrandName()} {car.model} ({car.year})
+          {carTitle !== " " ? carTitle : "-"}
         </h3>
         <div className="flex justify-between text-xs md:text-sm text-gray-600 mb-3">
           <span>{car.fuel_type?.name || car.fuel_type_id || 'Essence'}</span>
