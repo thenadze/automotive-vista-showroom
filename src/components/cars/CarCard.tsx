@@ -14,6 +14,7 @@ interface CarCardProps {
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const isMobile = useIsMobile();
   
+  // Formatter le prix avec format français
   const formattedPrice = car.daily_price 
     ? new Intl.NumberFormat('fr-FR', { 
         style: 'currency', 
@@ -22,9 +23,20 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
       }).format(car.daily_price)
     : "Prix sur demande";
   
+  // Formatter le kilométrage avec format français
   const formattedMileage = car.mileage !== undefined && car.mileage !== null
     ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
     : "0 km";
+  
+  // Obtenir le nom de la marque
+  const getBrandName = () => {
+    if (car.brand && car.brand.name) {
+      return car.brand.name;
+    }
+    
+    // Tenter d'obtenir le nom réel de la marque si on a seulement l'ID
+    return car.brand_id || "Marque inconnue";
+  };
 
   return (
     <Card className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
@@ -37,10 +49,10 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
       </div>
       <CardContent className="p-3 md:p-4">
         <h3 className="text-lg md:text-xl font-semibold mb-2 truncate">
-          {car.brand_id} {car.model} ({car.year})
+          {getBrandName()} {car.model} ({car.year})
         </h3>
         <div className="flex justify-between text-xs md:text-sm text-gray-600 mb-3">
-          <span>{car.fuel_type_id || 'Essence'}</span>
+          <span>{car.fuel_type?.name || car.fuel_type_id || 'Essence'}</span>
           <span>{formattedMileage}</span>
         </div>
         <div className="flex items-center justify-between mb-3">

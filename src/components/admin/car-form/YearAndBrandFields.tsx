@@ -45,6 +45,11 @@ const YearAndBrandFields: React.FC<YearAndBrandFieldsProps> = ({ form, loading }
     fetchBrands();
   }, []);
 
+  // Pour obtenir le nom de la marque actuelle si nécessaire
+  const currentBrandName = form.watch("brand_id") 
+    ? brands.find(brand => String(brand.id) === form.watch("brand_id"))?.name 
+    : null;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Année */}
@@ -60,9 +65,7 @@ const YearAndBrandFields: React.FC<YearAndBrandFieldsProps> = ({ form, loading }
                 placeholder="2023"
                 {...field}
                 disabled={loading}
-                // Convertir la valeur en nombre lors du changement
                 onChange={(e) => field.onChange(Number(e.target.value))}
-                // S'assurer que la valeur est toujours un nombre
                 value={field.value}
               />
             </FormControl>
@@ -71,7 +74,7 @@ const YearAndBrandFields: React.FC<YearAndBrandFieldsProps> = ({ form, loading }
         )}
       />
       
-      {/* Marque (maintenant un Select) */}
+      {/* Marque (Select) */}
       <FormField
         control={form.control}
         name="brand_id"
@@ -82,7 +85,10 @@ const YearAndBrandFields: React.FC<YearAndBrandFieldsProps> = ({ form, loading }
               <Select 
                 disabled={loading || brandsLoading} 
                 value={field.value} 
-                onValueChange={field.onChange}
+                onValueChange={(value) => {
+                  // Stocker l'ID dans le formulaire
+                  field.onChange(value);
+                }}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Sélectionnez une marque" />

@@ -31,21 +31,21 @@ export const useCarDetails = (id: string | undefined) => {
         
         // Fetch related data separately
         const [brandResult, fuelTypeResult, transmissionResult, photosResult] = await Promise.all([
-          // Get brand - Try to fetch by name first since we're storing names in the ID field
+          // Get brand info using brand_id
           supabase
             .from("car_brands")
             .select("*")
-            .eq("name", carData.brand_id)
+            .eq("id", carData.brand_id)
             .maybeSingle(),
           
-          // Get fuel type - Try to fetch by name first
+          // Get fuel type info
           supabase
             .from("fuel_types")
             .select("*")
-            .eq("name", carData.fuel_type_id)
+            .eq("id", carData.fuel_type_id)
             .maybeSingle(),
             
-          // Get transmission - Try to fetch by name first
+          // Get transmission info
           supabase
             .from("transmission_types")
             .select("*")
@@ -64,12 +64,28 @@ export const useCarDetails = (id: string | undefined) => {
         if (!brandResult.error && brandResult.data) {
           brand = brandResult.data;
         } else {
-          console.error("Error fetching brand:", brandResult.error);
+          console.error("Error fetching brand or brand not found:", brandResult.error);
           // Create fallback brand object with proper typing
           brand = { 
-            id: 0, 
-            name: carData.brand_id 
+            id: Number(carData.brand_id) || 0, 
+            name: "Marque inconnue" 
           };
+          
+          // Try to get brand name by direct lookup if needed
+          try {
+            const { data: allBrands } = await supabase
+              .from("car_brands")
+              .select("*");
+              
+            if (allBrands && allBrands.length > 0) {
+              const foundBrand = allBrands.find(b => String(b.id) === carData.brand_id);
+              if (foundBrand) {
+                brand = foundBrand;
+              }
+            }
+          } catch (e) {
+            console.error("Failed to fetch all brands as fallback:", e);
+          }
         }
         
         let fuelType: FuelType | null = null;
@@ -78,8 +94,8 @@ export const useCarDetails = (id: string | undefined) => {
         } else {
           console.error("Error fetching fuel type:", fuelTypeResult.error);
           fuelType = { 
-            id: 0,
-            name: carData.fuel_type_id 
+            id: Number(carData.fuel_type_id) || 0,
+            name: carData.fuel_type_id || "Type de carburant inconnu" 
           };
         }
         
@@ -90,7 +106,7 @@ export const useCarDetails = (id: string | undefined) => {
           console.error("Error fetching transmission:", transmissionResult.error);
           transmission = { 
             id: 0,
-            name: carData.transmission_id 
+            name: carData.transmission_id || "Transmission inconnue" 
           };
         }
         

@@ -131,8 +131,19 @@ const CarCard: React.FC<{ car: CarWithDetails; index: number }> = ({ car, index 
     ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
     : "0 km";
   
+  // Obtenir le nom de la marque
+  const getBrandName = () => {
+    // Si on a l'objet brand complet avec le nom
+    if (car.brand && car.brand.name) {
+      return car.brand.name;
+    }
+    
+    // Essayer de récupérer d'autres sources (dans le cas où on n'a que l'ID)
+    return "Marque inconnue";
+  };
+  
   // Préparation du titre avec marque et modèle
-  const brandName = car.brand_id || "";
+  const brandName = getBrandName();
   const modelName = car.model || "";
   const carTitle = `${brandName} ${modelName}`.trim();
   
@@ -161,7 +172,7 @@ const CarCard: React.FC<{ car: CarWithDetails; index: number }> = ({ car, index 
         </h3>
         
         <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-3 md:mb-4">
-          <span>{car.fuel_type_id || 'Essence'}</span>
+          <span>{car.fuel_type?.name || car.fuel_type_id || 'Essence'}</span>
           <span>{formattedMileage}</span>
         </div>
         
