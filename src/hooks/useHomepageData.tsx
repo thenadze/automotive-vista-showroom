@@ -21,7 +21,10 @@ export const useHomepageData = () => {
         // Fetch all data in parallel for better performance
         const [companyResult, carsResult] = await Promise.all([
           supabase.from("company_info").select("*").single(),
-          supabase.from("cars").select("*").limit(6)  // Augmentation du nombre de voitures à afficher
+          supabase.from("cars")
+            .select("*")
+            .order('display_order', { ascending: true, nullsLast: true })
+            .limit(6)
         ]);
 
         // Handle company info

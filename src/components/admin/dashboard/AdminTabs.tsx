@@ -3,6 +3,7 @@ import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import BrandsTab from "./BrandsTab";
 import CarsTab from "./CarsTab";
+import FeaturedTab from "./FeaturedTab";
 import { CarBrand, FuelType, TransmissionType, Car } from "@/types";
 
 interface AdminTabsProps {
@@ -28,6 +29,7 @@ const AdminTabs: React.FC<AdminTabsProps> = ({
     <Tabs defaultValue="cars" className="space-y-4">
       <TabsList>
         <TabsTrigger value="cars">Voitures</TabsTrigger>
+        <TabsTrigger value="featured">À la une</TabsTrigger>
         <TabsTrigger value="brands">Marques</TabsTrigger>
       </TabsList>
       
@@ -38,6 +40,14 @@ const AdminTabs: React.FC<AdminTabsProps> = ({
           brands={brands}
           fuelTypes={fuelTypes}
           transmissions={transmissions}
+          onCarsChange={onCarsChange}
+        />
+      </TabsContent>
+      
+      {/* Onglet À la une */}
+      <TabsContent value="featured">
+        <FeaturedTab 
+          cars={cars}
           onCarsChange={onCarsChange}
         />
       </TabsContent>
