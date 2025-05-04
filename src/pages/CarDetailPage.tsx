@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCarDetails } from "@/hooks/useCarDetails";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import CarImageGallery from "@/components/car-detail/CarImageGallery";
 import CarSpecifications from "@/components/car-detail/CarSpecifications";
 import DescriptionSection from "@/components/car-detail/DescriptionSection";

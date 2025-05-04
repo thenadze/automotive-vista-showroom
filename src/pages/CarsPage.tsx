@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useCarFilters } from "@/hooks/useCarFilters";
 import CarsFilters from "@/components/cars/CarsFilters";
 import CarsGrid from "@/components/cars/CarsGrid";
