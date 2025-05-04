@@ -76,6 +76,26 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
     { label: "Prix", value: formattedPrice }
   ];
 
+  // Ajouter des attributs schema.org pour le SEO
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "Vehicle",
+    "brand": car.brand?.name,
+    "model": car.model,
+    "modelDate": car.year,
+    "vehicleConfiguration": fuelTypeName,
+    "mileageFromOdometer": {
+      "@type": "QuantitativeValue",
+      "value": car.mileage,
+      "unitCode": "KMT"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": car.daily_price,
+      "priceCurrency": "EUR"
+    }
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">Caractéristiques</h2>
@@ -90,6 +110,9 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
           ))}
         </tbody>
       </table>
+      
+      {/* Schema.org data pour SEO */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
     </div>
   );
 };
