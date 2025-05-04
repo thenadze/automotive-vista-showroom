@@ -134,4 +134,43 @@
       box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
     }
   }
+  
+  /* Animations pour les cartes de service */
+  .service-card {
+    @apply transition-all duration-500 ease-out hover:shadow-xl hover:translate-y-[-5px];
+  }
+  
+  .service-icon {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  @keyframes service-icon-pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1) rotate(5deg);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .animate-service-icon {
+    animation: service-icon-pulse 0.5s ease-in-out;
+  }
 }

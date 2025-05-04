@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import HeroSection from "@/components/home/HeroSection";
 import FeaturedCars from "@/components/home/FeaturedCars";
 import ServicesSection from "@/components/home/ServicesSection";
@@ -7,9 +7,15 @@ import CallToAction from "@/components/home/CallToAction";
 import LoadingState from "@/components/home/LoadingState";
 import ErrorState from "@/components/home/ErrorState";
 import { useHomepageData } from "@/hooks/useHomepageData";
+import AOS from "aos";
 
 const HomePage = () => {
   const { companyInfo, featuredCars, loading, error } = useHomepageData();
+
+  useEffect(() => {
+    // Réinitialiser AOS lors du montage du composant HomePage
+    AOS.refresh();
+  }, [loading]);
 
   if (loading) {
     return <LoadingState />;
