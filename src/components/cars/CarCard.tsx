@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import CarGallery from "@/components/home/CarGallery";
+import { predefinedFuelTypes } from "@/components/admin/car-form/fuelTypes";
 
 interface CarCardProps {
   car: CarWithDetails;
@@ -44,9 +45,37 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     return "-";
   };
 
+  // Obtenir le nom du type de carburant
+  const getFuelTypeName = () => {
+    // Si l'objet fuel_type est disponible avec le nom
+    if (car.fuel_type && car.fuel_type.name) {
+      return car.fuel_type.name;
+    }
+    
+    // Si fuel_type_id est défini, essayer de le mapper
+    if (car.fuel_type_id) {
+      // Rechercher dans les types prédéfinis
+      const foundType = predefinedFuelTypes.find(ft => String(ft.id) === car.fuel_type_id);
+      if (foundType) {
+        return foundType.name;
+      }
+      
+      // Si c'est un nombre, il s'agit probablement d'un ID
+      if (!isNaN(Number(car.fuel_type_id))) {
+        return "Carburant";  // Valeur par défaut
+      }
+      
+      // Sinon, utiliser la valeur telle quelle
+      return car.fuel_type_id;
+    }
+    
+    return "Essence";  // Valeur par défaut
+  };
+
   const brandName = getBrandName();
   const modelName = car.model || "-";
   const carTitle = `${brandName} ${modelName}${car.year ? ` (${car.year})` : ''}`.trim();
+  const fuelTypeName = getFuelTypeName();
 
   return (
     <Card className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
@@ -62,7 +91,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           {carTitle !== " " ? carTitle : "-"}
         </h3>
         <div className="flex justify-between text-xs md:text-sm text-gray-600 mb-3">
-          <span>{car.fuel_type?.name || car.fuel_type_id || 'Essence'}</span>
+          <span>{fuelTypeName}</span>
           <span>{formattedMileage}</span>
         </div>
         <div className="flex items-center justify-between mb-3">

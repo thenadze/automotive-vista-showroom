@@ -21,12 +21,16 @@ const CarSpecifications: React.FC<CarSpecificationsProps> = ({ car }) => {
     ? `${new Intl.NumberFormat('fr-FR').format(car.mileage)} km`
     : "Non spécifié";
 
+  // S'assurer que le type de carburant est correctement affiché
+  const fuelTypeName = car.fuel_type?.name || "Non spécifié";
+  console.log("Fuel type displayed:", fuelTypeName);
+
   const specifications = [
     { label: "Marque", value: car.brand?.name || "Non spécifiée" },
     { label: "Modèle", value: car.model },
     { label: "Année", value: car.year ? car.year.toString() : "Non spécifiée" },
     { label: "Kilométrage", value: formattedMileage },
-    { label: "Carburant", value: car.fuel_type?.name || "Non spécifié" },
+    { label: "Carburant", value: fuelTypeName },
     { label: "Transmission", value: car.transmission?.name || "Non spécifiée" },
     { label: "Prix", value: formattedPrice }
   ];

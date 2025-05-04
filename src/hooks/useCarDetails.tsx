@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarWithDetails, CarPhoto, CarBrand, FuelType, TransmissionType } from "@/types";
+import { predefinedFuelTypes } from "@/components/admin/car-form/fuelTypes";
 
 export const useCarDetails = (id: string | undefined) => {
   const [car, setCar] = useState<CarWithDetails | null>(null);
@@ -109,15 +110,44 @@ export const useCarDetails = (id: string | undefined) => {
           }
         }
         
+        // Amélioration majeure du traitement du type de carburant
         let fuelType: FuelType | null = null;
         if (!fuelTypeResult.error && fuelTypeResult.data) {
+          // Si nous avons trouvé le type de carburant dans la base de données
           fuelType = fuelTypeResult.data;
+          console.log("Fuel type found in database:", fuelType);
         } else {
-          console.error("Error fetching fuel type:", fuelTypeResult.error);
-          fuelType = { 
-            id: fuelTypeId || 0,
-            name: carData.fuel_type_id || "-" 
-          };
+          console.log("Fuel type not found in database, using predefined types...");
+          
+          // Si l'ID du carburant est une chaîne, essayer de trouver le type prédéfini correspondant
+          if (carData.fuel_type_id && typeof carData.fuel_type_id === 'string') {
+            // Chercher dans les types de carburant prédéfinis
+            const predefinedFuelType = predefinedFuelTypes.find(
+              ft => String(ft.id) === carData.fuel_type_id
+            );
+            
+            if (predefinedFuelType) {
+              fuelType = {
+                id: parseInt(predefinedFuelType.id),
+                name: predefinedFuelType.name
+              };
+              console.log("Using predefined fuel type:", fuelType);
+            } else {
+              // Si aucun type prédéfini ne correspond, utiliser l'ID comme nom par défaut
+              fuelType = { 
+                id: fuelTypeId || 0,
+                name: carData.fuel_type_id || "Non spécifié" 
+              };
+              console.log("Using fuel_type_id as name:", fuelType);
+            }
+          } else {
+            // Valeur par défaut si aucune donnée n'est disponible
+            fuelType = { 
+              id: 0,
+              name: "Non spécifié" 
+            };
+            console.log("Using default fuel type name");
+          }
         }
         
         let transmission: TransmissionType | null = null;
