@@ -5,6 +5,7 @@ import { CarWithDetails } from "@/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
+import CarGallery from "@/components/home/CarGallery";
 
 interface CarCardProps {
   car: CarWithDetails;
@@ -12,9 +13,6 @@ interface CarCardProps {
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const isMobile = useIsMobile();
-  const primaryPhoto = car.photos?.find(p => p.is_primary);
-  const firstPhoto = car.photos?.[0];
-  const photoUrl = primaryPhoto?.photo_url || firstPhoto?.photo_url || "/placeholder.svg";
   
   const formattedPrice = car.daily_price 
     ? new Intl.NumberFormat('fr-FR', { 
@@ -31,20 +29,11 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
   return (
     <Card className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
       <div className="relative w-full">
-        <div className="w-full" style={{ 
-          height: isMobile ? "200px" : "300px",
-          maxWidth: "100%"
-        }}>
-          <img 
-            src={photoUrl} 
-            alt={`${car.brand_id} ${car.model}`}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              console.log("Image error:", e);
-              (e.target as HTMLImageElement).src = "/placeholder.svg";
-            }}
-          />
-        </div>
+        <CarGallery 
+          photos={car.photos || []} 
+          className="w-full" 
+          style={{ height: isMobile ? "200px" : "300px" }}
+        />
       </div>
       <CardContent className="p-3 md:p-4">
         <h3 className="text-lg md:text-xl font-semibold mb-2 truncate">

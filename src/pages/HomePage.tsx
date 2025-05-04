@@ -13,8 +13,18 @@ const HomePage = () => {
   const { companyInfo, featuredCars, loading, error } = useHomepageData();
 
   useEffect(() => {
-    // Réinitialiser AOS lors du montage du composant HomePage
-    AOS.refresh();
+    // Initialiser AOS
+    AOS.init({
+      duration: 800,  // durée des animations en ms
+      easing: 'ease-out-cubic',  // type d'easing
+      once: true,  // animations seulement une fois
+      offset: 50,  // offset (en px) depuis le déclenchement original
+    });
+    
+    // Réinitialiser AOS lors du chargement des données
+    if (!loading) {
+      AOS.refresh();
+    }
   }, [loading]);
 
   if (loading) {

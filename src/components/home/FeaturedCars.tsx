@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
+import CarGallery from "./CarGallery";
 
 interface FeaturedCarsProps {
   featuredCars: CarWithDetails[];
@@ -19,10 +20,18 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
     <section className="py-10 md:py-16 bg-stone-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-stone-800">Véhicules à la une</h2>
+          <h2 
+            className="text-2xl md:text-3xl font-bold text-stone-800"
+            data-aos="fade-right" 
+            data-aos-once="true"
+          >
+            Véhicules à la une
+          </h2>
           <Link 
             to="/cars" 
             className="text-sm md:text-base text-stone-700 hover:text-stone-900 flex items-center gap-1 font-medium whitespace-nowrap"
+            data-aos="fade-left"
+            data-aos-once="true"
           >
             Voir tout
           </Link>
@@ -30,15 +39,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
         
         {featuredCars.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {featuredCars.map(car => {
-              // Trouver la photo principale ou prendre la première ou utiliser placeholder
-              let photoUrl = "/placeholder.svg";
-              
-              if (car.photos && car.photos.length > 0) {
-                const primaryPhoto = car.photos.find(p => p.is_primary);
-                photoUrl = (primaryPhoto || car.photos[0])?.photo_url || "/placeholder.svg";
-              }
-              
+            {featuredCars.map((car, index) => {
               // Préparer le prix avec format français
               const formattedPrice = car.daily_price 
                 ? new Intl.NumberFormat('fr-FR', { 
@@ -59,24 +60,22 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
               const carTitle = `${brandName} ${modelName}`.trim();
               
               return (
-                <Card key={car.id} className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
+                <Card 
+                  key={car.id} 
+                  className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300"
+                  data-aos="fade-up" 
+                  data-aos-delay={index * 100}
+                  data-aos-once="true"
+                >
                   <div className="relative w-full">
-                    {/* Optimized image container with better aspect ratio for mobile */}
-                    <div className="w-full" style={{ 
-                      height: isMobile ? "200px" : "300px",
-                      maxWidth: "100%"
-                    }}>
-                      <img
-                        src={photoUrl}
-                        alt={carTitle || 'Véhicule'}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/placeholder.svg";
-                        }}
-                      />
-                    </div>
+                    {/* Nouveau composant de galerie */}
+                    <CarGallery 
+                      photos={car.photos || []} 
+                      className="w-full"
+                      style={{ height: isMobile ? "200px" : "300px" }}
+                    />
                     
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-3 right-3 z-10">
                       <Badge className="bg-stone-700">{car.year}</Badge>
                     </div>
                   </div>
