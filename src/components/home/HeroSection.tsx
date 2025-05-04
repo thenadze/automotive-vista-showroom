@@ -31,7 +31,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     setExpanded(!expanded);
   };
 
-  return <section className="relative py-12 md:py-24 bg-gradient-to-r from-stone-700 to-stone-800">
+  return <section className="relative py-12 md:py-24 bg-black">
       <div className="container mx-auto relative z-10 px-4 sm:px-6">
         <div className="flex flex-col items-center text-center">
           <div className={`${isMobile ? 'w-full' : 'max-w-5xl'}`}>
