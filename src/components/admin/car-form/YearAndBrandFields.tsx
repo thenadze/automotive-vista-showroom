@@ -26,6 +26,10 @@ const YearAndBrandFields: React.FC<YearAndBrandFieldsProps> = ({ form, loading }
                 placeholder="2023"
                 {...field}
                 disabled={loading}
+                // Convertir la valeur en nombre lors du changement
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                // S'assurer que la valeur est toujours un nombre
+                value={field.value}
               />
             </FormControl>
             <FormMessage />
