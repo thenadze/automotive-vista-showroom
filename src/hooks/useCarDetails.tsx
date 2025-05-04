@@ -31,18 +31,18 @@ export const useCarDetails = (id: string | undefined) => {
         
         // Fetch related data separately
         const [brandResult, fuelTypeResult, transmissionResult, photosResult] = await Promise.all([
-          // Get brand info using brand_id
+          // Get brand info using brand_id - parse as number for query
           supabase
             .from("car_brands")
             .select("*")
-            .eq("id", carData.brand_id)
+            .eq("id", parseInt(carData.brand_id) || 0)
             .maybeSingle(),
           
-          // Get fuel type info
+          // Get fuel type info - parse as number for query
           supabase
             .from("fuel_types")
             .select("*")
-            .eq("id", carData.fuel_type_id)
+            .eq("id", parseInt(carData.fuel_type_id) || 0)
             .maybeSingle(),
             
           // Get transmission info
