@@ -9,7 +9,7 @@ Disallow: /admin
 Disallow: /login
 
 # Pages importantes
-Sitemap: https://automotive-vista-showroom.lovable.dev/sitemap.xml
+Sitemap: https://automotive-vista-showroom.lovable.dev/api/generate-sitemap
 
 # Bots spécifiques
 User-agent: Googlebot
