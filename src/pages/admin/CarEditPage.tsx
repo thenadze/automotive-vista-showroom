@@ -48,6 +48,9 @@ const CarEditPage = () => {
               model: data.model,
               fuel_type_id: data.fuel_type_id,
               transmission_id: data.transmission_id,
+              daily_price: data.daily_price || 0,
+              mileage: data.mileage || 0,
+              description: data.description || "",
               created_at: data.created_at,
               updated_at: data.updated_at
             };
