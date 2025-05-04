@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CarGallery from "@/components/home/CarGallery";
+import { predefinedFuelTypes } from "@/components/admin/car-form/fuelTypes";
 
 interface FeaturedCarCardProps {
   car: CarWithDetails;
@@ -46,10 +47,45 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
     return "-";
   };
   
+  // Obtenir le nom du type de carburant de façon plus robuste
+  const getFuelTypeName = () => {
+    // Si l'objet fuel_type est disponible avec le nom
+    if (car.fuel_type && car.fuel_type.name) {
+      return car.fuel_type.name;
+    }
+    
+    // Si fuel_type_id est défini, essayer de le mapper aux types prédéfinis
+    if (car.fuel_type_id) {
+      // Vérifier si c'est un nombre sous forme de string
+      const fuelTypeIdNum = parseInt(car.fuel_type_id);
+      if (!isNaN(fuelTypeIdNum)) {
+        // Rechercher dans les types prédéfinis par ID numérique
+        const foundType = predefinedFuelTypes.find(ft => ft.id === String(fuelTypeIdNum));
+        if (foundType) {
+          return foundType.name;
+        }
+      }
+      
+      // Essayer de trouver par correspondance exacte de string
+      const foundTypeByString = predefinedFuelTypes.find(ft => ft.id === car.fuel_type_id);
+      if (foundTypeByString) {
+        return foundTypeByString.name;
+      }
+      
+      // Si ce n'est pas un ID numérique reconnu mais que c'est une chaîne, l'utiliser telle quelle
+      if (isNaN(Number(car.fuel_type_id))) {
+        return car.fuel_type_id;
+      }
+    }
+    
+    return "Essence";  // Valeur par défaut
+  };
+  
   // Préparation du titre avec marque et modèle
   const brandName = getBrandName();
   const modelName = car.model || "-";
   const carTitle = `${brandName} ${modelName}`.trim();
+  const fuelTypeName = getFuelTypeName();
   
   return (
     <Card 
@@ -76,7 +112,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
         </h3>
         
         <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-3 md:mb-4">
-          <span>{car.fuel_type?.name || car.fuel_type_id || 'Essence'}</span>
+          <span>{fuelTypeName}</span>
           <span>{formattedMileage}</span>
         </div>
         

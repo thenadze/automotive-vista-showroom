@@ -45,28 +45,42 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     return "-";
   };
 
-  // Obtenir le nom du type de carburant
+  // Obtenir le nom du type de carburant de façon plus robuste
   const getFuelTypeName = () => {
     // Si l'objet fuel_type est disponible avec le nom
     if (car.fuel_type && car.fuel_type.name) {
+      console.log("Fuel type from object:", car.fuel_type.name);
       return car.fuel_type.name;
     }
     
-    // Si fuel_type_id est défini, essayer de le mapper
+    // Si fuel_type_id est défini, essayer de le mapper aux types prédéfinis
     if (car.fuel_type_id) {
-      // Rechercher dans les types prédéfinis
-      const foundType = predefinedFuelTypes.find(ft => String(ft.id) === car.fuel_type_id);
-      if (foundType) {
-        return foundType.name;
+      console.log("Looking up fuel type ID:", car.fuel_type_id);
+      
+      // Vérifier si c'est un nombre sous forme de string
+      const fuelTypeIdNum = parseInt(car.fuel_type_id);
+      if (!isNaN(fuelTypeIdNum)) {
+        // Rechercher dans les types prédéfinis par ID numérique
+        const foundType = predefinedFuelTypes.find(ft => ft.id === String(fuelTypeIdNum));
+        if (foundType) {
+          console.log("Found predefined fuel type by numeric ID:", foundType.name);
+          return foundType.name;
+        }
       }
       
-      // Si c'est un nombre, il s'agit probablement d'un ID
-      if (!isNaN(Number(car.fuel_type_id))) {
-        return "Carburant";  // Valeur par défaut
+      // Essayer de trouver par correspondance exacte de string
+      const foundTypeByString = predefinedFuelTypes.find(ft => ft.id === car.fuel_type_id);
+      if (foundTypeByString) {
+        console.log("Found predefined fuel type by string ID:", foundTypeByString.name);
+        return foundTypeByString.name;
       }
       
-      // Sinon, utiliser la valeur telle quelle
-      return car.fuel_type_id;
+      // Si ce n'est pas un ID numérique reconnu mais que c'est une chaîne, l'utiliser telle quelle
+      // car ce pourrait être directement le nom du type de carburant
+      if (isNaN(Number(car.fuel_type_id))) {
+        console.log("Using fuel_type_id as name:", car.fuel_type_id);
+        return car.fuel_type_id;
+      }
     }
     
     return "Essence";  // Valeur par défaut
@@ -76,6 +90,12 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const modelName = car.model || "-";
   const carTitle = `${brandName} ${modelName}${car.year ? ` (${car.year})` : ''}`.trim();
   const fuelTypeName = getFuelTypeName();
+
+  console.log("Car details for card:", {
+    id: car.id,
+    fuel_type_id: car.fuel_type_id,
+    resolved_fuel_type: fuelTypeName
+  });
 
   return (
     <Card className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
