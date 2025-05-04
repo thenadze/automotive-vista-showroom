@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { CarBrand, FuelType, TransmissionType, Car, CompanyInfo } from "@/types";
+import { CarBrand, FuelType, TransmissionType, Car } from "@/types";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { AdminTabs } from "@/components/admin/dashboard";
 
@@ -14,7 +14,6 @@ const AdminPage = () => {
   const [brands, setBrands] = useState<CarBrand[]>([]);
   const [fuelTypes, setFuelTypes] = useState<FuelType[]>([]);
   const [transmissions, setTransmissions] = useState<TransmissionType[]>([]);
-  const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [cars, setCars] = useState<Car[]>([]);
 
   // Initialiser les données au chargement
@@ -24,7 +23,6 @@ const AdminPage = () => {
         fetchBrands(),
         fetchFuelTypes(),
         fetchTransmissionTypes(),
-        fetchCompanyInfo(),
         fetchCars()
       ]);
     }
@@ -74,19 +72,6 @@ const AdminPage = () => {
     }
   };
   
-  // Récupérer les informations de l'entreprise
-  const fetchCompanyInfo = async () => {
-    try {
-      // @ts-ignore
-      const { data, error } = await supabase.from("company_info").select("*").single();
-      if (error && error.code !== 'PGRST116') throw error; // Ignorer l'erreur si aucun résultat
-      setCompanyInfo(data || null);
-      return data;
-    } catch (error) {
-      console.error("Erreur lors du chargement des informations de l'entreprise:", error);
-    }
-  };
-  
   // Récupérer les voitures
   const fetchCars = async () => {
     try {
@@ -126,10 +111,8 @@ const AdminPage = () => {
         fuelTypes={fuelTypes}
         transmissions={transmissions}
         cars={cars}
-        companyInfo={companyInfo}
         loading={loading}
         onBrandsChange={fetchBrands}
-        onCompanyInfoChange={fetchCompanyInfo}
         onCarsChange={fetchCars}
       />
     </div>
