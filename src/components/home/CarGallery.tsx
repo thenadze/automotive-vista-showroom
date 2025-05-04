@@ -14,13 +14,17 @@ import { cn } from "@/lib/utils";
 interface CarGalleryProps {
   photos: CarPhoto[];
   className?: string;
+  style?: React.CSSProperties; // Added style prop to the interface
 }
 
-const CarGallery: React.FC<CarGalleryProps> = ({ photos, className }) => {
+const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => {
   // Si pas de photos, afficher un placeholder
   if (!photos || photos.length === 0) {
     return (
-      <div className={cn("w-full h-full bg-stone-100", className)}>
+      <div 
+        className={cn("w-full h-full bg-stone-100", className)}
+        style={style} // Apply style prop
+      >
         <img 
           src="/placeholder.svg" 
           alt="Aucune photo"
@@ -36,6 +40,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className }) => {
     return (
       <div 
         className={cn("w-full h-full relative overflow-hidden rounded-t-lg", className)}
+        style={style} // Apply style prop
         data-aos="fade-up"
         data-aos-once="true"
       >
@@ -55,6 +60,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className }) => {
   return (
     <Carousel 
       className={cn("w-full", className)}
+      style={style} // Apply style prop
       data-aos="fade-up"
       data-aos-once="true"
     >
