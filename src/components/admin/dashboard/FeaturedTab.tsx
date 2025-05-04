@@ -111,6 +111,7 @@ const FeaturedTab: React.FC<FeaturedTabProps> = ({ cars, onCarsChange }) => {
       <div className="bg-white rounded-lg shadow p-4">
         <p className="text-sm text-gray-500 mb-4">
           Faites glisser les véhicules pour changer leur ordre d'affichage sur la page d'accueil.
+          Les six premiers véhicules seront affichés dans la section "Véhicules à la une".
         </p>
         
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -127,7 +128,7 @@ const FeaturedTab: React.FC<FeaturedTabProps> = ({ cars, onCarsChange }) => {
                       <Card
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        className="border border-gray-200"
+                        className={`border ${index < 6 ? 'border-green-300 bg-green-50' : 'border-gray-200'}`}
                       >
                         <CardContent className="p-3 flex items-center">
                           <div 
@@ -141,6 +142,11 @@ const FeaturedTab: React.FC<FeaturedTabProps> = ({ cars, onCarsChange }) => {
                             <span className="font-medium">
                               {car.brand_id} {car.model} ({car.year})
                             </span>
+                            {index < 6 && (
+                              <span className="ml-2 text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                                Visible sur l'accueil
+                              </span>
+                            )}
                           </div>
                         </CardContent>
                       </Card>
