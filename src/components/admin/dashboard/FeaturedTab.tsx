@@ -14,9 +14,26 @@ interface FeaturedTabProps {
 }
 
 const FeaturedTab: React.FC<FeaturedTabProps> = ({ cars, onCarsChange }) => {
+  // Sort cars by display_order, handling undefined values
   const [orderedCars, setOrderedCars] = useState<Car[]>(
-    [...cars].sort((a, b) => (a.display_order || 999) - (b.display_order || 999))
+    [...cars].sort((a, b) => {
+      // If both have display_order, compare them
+      if (a.display_order !== undefined && b.display_order !== undefined) {
+        return a.display_order - b.display_order;
+      }
+      // If only a has display_order, it comes first
+      if (a.display_order !== undefined) {
+        return -1;
+      }
+      // If only b has display_order, it comes first
+      if (b.display_order !== undefined) {
+        return 1;
+      }
+      // If neither has display_order, sort by created_at (newest first)
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    })
   );
+  
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const { toast } = useToast();
 

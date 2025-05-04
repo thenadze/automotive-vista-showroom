@@ -36,6 +36,7 @@ export interface Car {
   daily_price?: number;
   mileage?: number;
   description?: string;
+  display_order?: number;
 }
 
 export interface CarPhoto {

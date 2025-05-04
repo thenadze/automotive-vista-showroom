@@ -23,7 +23,7 @@ export const useHomepageData = () => {
           supabase.from("company_info").select("*").single(),
           supabase.from("cars")
             .select("*")
-            .order('display_order', { ascending: true, nullsLast: true })
+            .order('display_order', { ascending: true })
             .limit(6)
         ]);
 
