@@ -1,0 +1,119 @@
+
+import React from "react";
+import { Link } from "react-router-dom";
+import { CarWithDetails } from "@/types";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
+import CarGallery from "@/components/home/CarGallery";
+
+interface FeaturedCarCardProps {
+  car: CarWithDetails;
+  index: number;
+}
+
+const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
+  const isMobile = useIsMobile();
+  
+  // Préparer le prix avec format français
+  const formattedPrice = car.daily_price 
+    ? new Intl.NumberFormat('fr-FR', { 
+        style: 'currency', 
+        currency: 'EUR',
+        maximumFractionDigits: 0 
+      }).format(car.daily_price)
+    : "Prix sur demande";
+
+  // Préparer le kilométrage avec format français
+  const formattedMileage = car.mileage !== undefined && car.mileage !== null
+    ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
+    : "0 km";
+  
+  // Obtenir le nom de la marque
+  const getBrandName = () => {
+    // Si on a l'objet brand complet avec le nom
+    if (car.brand && car.brand.name) {
+      return car.brand.name;
+    }
+    
+    // Essayer de récupérer d'autres sources (dans le cas où on n'a que l'ID)
+    return "Marque inconnue";
+  };
+  
+  // Préparation du titre avec marque et modèle
+  const brandName = getBrandName();
+  const modelName = car.model || "";
+  const carTitle = `${brandName} ${modelName}`.trim();
+  
+  return (
+    <Card 
+      className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300"
+      data-aos="fade-up" 
+      data-aos-delay={(index % 3) * 100}
+      data-aos-once="true"
+    >
+      <div className="relative w-full">
+        <CarGallery 
+          photos={car.photos || []} 
+          className="w-full"
+          style={{ height: isMobile ? "200px" : "300px" }}
+        />
+        
+        <div className="absolute top-3 right-3 z-10">
+          <Badge className="bg-stone-700">{car.year}</Badge>
+        </div>
+      </div>
+      
+      <CardContent className="p-3 md:p-4">
+        <h3 className="text-lg md:text-xl font-bold mb-2 text-stone-800 truncate">
+          {carTitle || 'Véhicule'}
+        </h3>
+        
+        <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-3 md:mb-4">
+          <span>{car.fuel_type?.name || car.fuel_type_id || 'Essence'}</span>
+          <span>{formattedMileage}</span>
+        </div>
+        
+        <div className="flex items-center justify-between mb-3">
+          <div className="mr-2">
+            <span className="block text-stone-500 text-xs">Prix</span>
+            <span className="text-lg md:text-xl font-bold text-stone-700 whitespace-nowrap">
+              {car.daily_price ? formattedPrice : "Prix sur demande"}
+            </span>
+          </div>
+          
+          <Button
+            asChild
+            variant="outline"
+            size={isMobile ? "sm" : "default"}
+            className="border-stone-700 text-stone-700 hover:bg-stone-700 hover:text-white whitespace-nowrap"
+          >
+            <Link to={`/cars/${car.id}`}>
+              Détails
+            </Link>
+          </Button>
+        </div>
+        
+        <div className="flex flex-wrap gap-2 text-xs text-stone-500">
+          <span className="flex items-center">
+            <svg className="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+            </svg>
+            Disponible maintenant
+          </span>
+          <span className="flex items-center ml-auto">
+            <svg className="w-3 h-3 md:w-4 md:h-4 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+            </svg>
+            Réponse rapide
+          </span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default FeaturedCarCard;
