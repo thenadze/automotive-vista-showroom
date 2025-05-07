@@ -9,6 +9,7 @@ import ErrorState from "@/components/home/ErrorState";
 import { useHomepageData } from "@/hooks/useHomepageData";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { motion } from "framer-motion";
 
 const HomePage = () => {
   const { companyInfo, featuredCars, loading, error } = useHomepageData();
@@ -38,13 +39,59 @@ const HomePage = () => {
     return <ErrorState error={error} />;
   }
 
+  // Variantes d'animation pour le conteneur principal
+  const pageVariants = {
+    initial: { opacity: 0 },
+    animate: { 
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const sectionVariants = {
+    initial: { opacity: 0, y: 30 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
   return (
-    <div className="flex flex-col">
-      <HeroSection companyInfo={companyInfo} />
-      <FeaturedCars featuredCars={featuredCars} />
-      <ServicesSection />
-      <CallToAction />
-    </div>
+    <motion.div 
+      className="flex flex-col"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+    >
+      <motion.div variants={sectionVariants}>
+        <HeroSection companyInfo={companyInfo} />
+      </motion.div>
+      
+      <motion.div 
+        variants={sectionVariants}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <FeaturedCars featuredCars={featuredCars} />
+      </motion.div>
+      
+      <motion.div 
+        variants={sectionVariants}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <ServicesSection />
+      </motion.div>
+      
+      <motion.div 
+        variants={sectionVariants}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <CallToAction />
+      </motion.div>
+    </motion.div>
   );
 };
 
