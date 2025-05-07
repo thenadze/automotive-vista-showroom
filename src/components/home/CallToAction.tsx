@@ -6,18 +6,58 @@ import { motion } from "framer-motion";
 const CallToAction: React.FC = () => {
   return (
     <section className="text-white py-16 rounded-lg bg-neutral-950 overflow-hidden relative">
-      {/* Motifs décoratifs */}
+      {/* Motifs décoratifs enrichis */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Cercles décoratifs animés */}
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-stone-700 rounded-full opacity-20 animate-pulse" style={{animationDuration: '6s'}}></div>
-        <div className="absolute top-40 -right-20 w-80 h-80 bg-stone-600 rounded-full opacity-10 animate-pulse" style={{animationDuration: '8s'}}></div>
-        <div className="absolute -bottom-40 -left-10 w-72 h-72 bg-stone-800 rounded-full opacity-15 animate-pulse" style={{animationDuration: '7s'}}></div>
+        <motion.div 
+          className="absolute -top-20 -left-20 w-64 h-64 bg-stone-700 rounded-full opacity-20"
+          animate={{ 
+            y: [0, 10, 0], 
+            x: [0, 5, 0], 
+            scale: [1, 1.03, 1]
+          }}
+          transition={{ 
+            duration: 6, 
+            ease: "easeInOut", 
+            repeat: Infinity 
+          }}
+        />
+        <motion.div 
+          className="absolute top-40 -right-20 w-80 h-80 bg-stone-600 rounded-full opacity-10"
+          animate={{ 
+            y: [0, -15, 0], 
+            x: [0, -10, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ 
+            duration: 8, 
+            ease: "easeInOut", 
+            repeat: Infinity 
+          }}
+        />
+        <motion.div 
+          className="absolute -bottom-40 -left-10 w-72 h-72 bg-stone-800 rounded-full opacity-15"
+          animate={{ 
+            y: [0, -10, 0], 
+            scale: [1, 0.98, 1]
+          }}
+          transition={{ 
+            duration: 7, 
+            ease: "easeInOut", 
+            repeat: Infinity 
+          }}
+        />
         
-        {/* Motifs géométriques supplémentaires */}
+        {/* Motifs géométriques */}
         <div className="absolute inset-0" style={{
           backgroundImage: "linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
           backgroundSize: "25px 25px"
         }}></div>
+        
+        {/* Motif en grille hexagonale */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
+        }} />
         
         {/* Lignes diagonales décoratives */}
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10" style={{
@@ -27,6 +67,16 @@ const CallToAction: React.FC = () => {
         <div className="absolute bottom-0 left-0 w-1/3 h-2/3 opacity-5" style={{
           backgroundImage: "repeating-linear-gradient(-45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 1px, transparent 1px, transparent 15px)"
         }}></div>
+        
+        {/* Points lumineux dispersés */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/5 w-1 h-1 bg-white rounded-full opacity-30" />
+          <div className="absolute top-3/4 left-2/5 w-1.5 h-1.5 bg-white rounded-full opacity-40" />
+          <div className="absolute top-1/3 left-4/5 w-1 h-1 bg-white rounded-full opacity-20" />
+          <div className="absolute top-2/3 left-1/5 w-1 h-1 bg-white rounded-full opacity-30" />
+          <div className="absolute top-1/2 left-3/5 w-2 h-2 bg-white rounded-full opacity-25" />
+          <div className="absolute top-1/5 left-1/2 w-1 h-1 bg-white rounded-full opacity-30" />
+        </div>
         
         {/* Formes abstraites */}
         <motion.div 
