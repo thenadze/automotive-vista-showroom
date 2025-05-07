@@ -12,36 +12,56 @@ export const useCarFilters = () => {
   const [selectedFuel, setSelectedFuel] = useState<string | null>(null);
   const [selectedTransmission, setSelectedTransmission] = useState<string | null>(null);
   const [yearRange, setYearRange] = useState<[number, number]>([0, 3000]);
-  const [brands, setBrands] = useState<string[]>([]);
-  const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+  const [brands, setBrands] = useState<{id: string, name: string}[]>([]);
+  const [fuelTypes, setFuelTypes] = useState<{id: string, name: string}[]>([]);
   const [transmissions, setTransmissions] = useState<string[]>([]);
 
   useEffect(() => {
-    // Load filter options from existing cars
+    // Load filter options from cars table and related tables
     const fetchFilterOptions = async () => {
       try {
-        // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
-        const { data, error } = await supabase
+        // Fetch brands from car_brands table
+        const { data: brandsData, error: brandsError } = await supabase
+          .from('car_brands')
+          .select('id, name');
+        
+        if (brandsError) throw brandsError;
+        
+        if (brandsData) {
+          // Map brands to format { id, name }
+          const formattedBrands = brandsData.map(brand => ({
+            id: brand.id.toString(),
+            name: brand.name
+          }));
+          setBrands(formattedBrands);
+        }
+
+        // Fetch fuel types from fuel_types table
+        const { data: fuelTypesData, error: fuelTypesError } = await supabase
+          .from('fuel_types')
+          .select('id, name');
+        
+        if (fuelTypesError) throw fuelTypesError;
+        
+        if (fuelTypesData) {
+          // Map fuel types to format { id, name }
+          const formattedFuelTypes = fuelTypesData.map(fuel => ({
+            id: fuel.id.toString(),
+            name: fuel.name
+          }));
+          setFuelTypes(formattedFuelTypes);
+        }
+        
+        // Fetch unique transmissions from cars
+        const { data: carsData, error: carsError } = await supabase
           .from("cars")
-          .select(`
-            brand_id,
-            fuel_type_id,
-            transmission_id
-          `);
+          .select("transmission_id");
         
-        if (error) throw error;
+        if (carsError) throw carsError;
         
-        if (data) {
-          // Extract unique brands
-          const uniqueBrands = Array.from(new Set(data.map(car => car.brand_id)));
-          setBrands(uniqueBrands);
-          
-          // Extract unique fuel types
-          const uniqueFuelTypes = Array.from(new Set(data.map(car => car.fuel_type_id)));
-          setFuelTypes(uniqueFuelTypes);
-          
+        if (carsData) {
           // Extract unique transmissions
-          const uniqueTransmissions = Array.from(new Set(data.map(car => car.transmission_id)));
+          const uniqueTransmissions = Array.from(new Set(carsData.map(car => car.transmission_id)));
           setTransmissions(uniqueTransmissions);
         }
       } catch (error) {
