@@ -99,6 +99,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Animation douce de changement de page */
+  html {
+    scroll-behavior: smooth;
+    height: 100%;
+  }
 }
 
 /* Custom classes */
@@ -115,9 +121,9 @@
     @apply after:content-[''] after:absolute after:inset-0 after:bg-black after:bg-opacity-50;
   }
 
-  /* Animation pour la section contact */
+  /* Animation pour la section contact - améliorée */
   .highlight-section {
-    animation: highlight-pulse 1s ease-in-out;
+    animation: highlight-pulse 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   @keyframes highlight-pulse {
@@ -126,8 +132,8 @@
       box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
     }
     50% {
-      transform: scale(1.02);
-      box-shadow: 0 0 10px 5px rgba(234, 88, 12, 0.5);
+      transform: scale(1.03);
+      box-shadow: 0 0 15px 8px rgba(234, 88, 12, 0.5);
     }
     100% {
       transform: scale(1);
@@ -135,7 +141,7 @@
     }
   }
   
-  /* Animations pour les cartes de service */
+  /* Animations pour les cartes de service - améliorées */
   .service-card {
     @apply transition-all duration-500 ease-out hover:shadow-xl hover:translate-y-[-5px];
   }
@@ -149,11 +155,68 @@
       transform: scale(1);
     }
     50% {
-      transform: scale(1.1) rotate(5deg);
+      transform: scale(1.15) rotate(8deg);
     }
     100% {
       transform: scale(1);
     }
+  }
+  
+  /* Animation de défilement fluide */
+  .slide-in-bottom {
+    animation: slide-in-bottom 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+  
+  @keyframes slide-in-bottom {
+    0% {
+      transform: translateY(60px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Animation de fondu */
+  .fade-in {
+    animation: fade-in 0.8s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Animation pour les boutons au hover */
+  .pulse-on-hover {
+    @apply transition-all duration-300;
+  }
+  
+  .pulse-on-hover:hover {
+    animation: button-pulse 0.8s infinite alternate;
+  }
+  
+  @keyframes button-pulse {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.05);
+    }
+  }
+  
+  /* Animation de rotation douce */
+  .rotate-on-hover {
+    @apply transition-transform duration-300;
+  }
+  
+  .rotate-on-hover:hover {
+    transform: rotate(5deg);
   }
 }
 
@@ -162,7 +225,7 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
   }
   100% {
     transform: translateY(0);
@@ -171,6 +234,32 @@
 
 @layer utilities {
   .animate-service-icon {
-    animation: service-icon-pulse 0.5s ease-in-out;
+    animation: service-icon-pulse 0.7s ease-in-out;
+  }
+  
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  /* Transition de page */
+  .page-transition-enter {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  
+  .page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms, transform 400ms;
+  }
+  
+  .page-transition-exit {
+    opacity: 1;
+  }
+  
+  .page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 300ms, transform 300ms;
   }
 }

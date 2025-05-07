@@ -8,17 +8,20 @@ import LoadingState from "@/components/home/LoadingState";
 import ErrorState from "@/components/home/ErrorState";
 import { useHomepageData } from "@/hooks/useHomepageData";
 import AOS from "aos";
+import "aos/dist/aos.css";
 
 const HomePage = () => {
   const { companyInfo, featuredCars, loading, error } = useHomepageData();
 
   useEffect(() => {
-    // Initialiser AOS
+    // Initialiser AOS avec plus d'options pour améliorer les animations
     AOS.init({
-      duration: 800,  // durée des animations en ms
-      easing: 'ease-out-cubic',  // type d'easing
-      once: true,  // animations seulement une fois
-      offset: 50,  // offset (en px) depuis le déclenchement original
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: false,  // Modifier pour que les animations se répètent lors du scroll
+      offset: 50,
+      delay: 100,
+      anchorPlacement: 'top-bottom',
     });
     
     // Réinitialiser AOS lors du chargement des données
