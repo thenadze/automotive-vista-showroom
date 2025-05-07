@@ -17,52 +17,66 @@ export const useCarFilters = () => {
   const [transmissions, setTransmissions] = useState<string[]>([]);
 
   useEffect(() => {
-    // Load filter options from cars table and related tables
+    // Charge uniquement les marques et types de carburant utilisés dans les véhicules existants
     const fetchFilterOptions = async () => {
       try {
-        // Fetch brands from car_brands table
-        const { data: brandsData, error: brandsError } = await supabase
-          .from('car_brands')
-          .select('id, name');
-        
-        if (brandsError) throw brandsError;
-        
-        if (brandsData) {
-          // Map brands to format { id, name }
-          const formattedBrands = brandsData.map(brand => ({
-            id: brand.id.toString(),
-            name: brand.name
-          }));
-          setBrands(formattedBrands);
-        }
-
-        // Fetch fuel types from fuel_types table
-        const { data: fuelTypesData, error: fuelTypesError } = await supabase
-          .from('fuel_types')
-          .select('id, name');
-        
-        if (fuelTypesError) throw fuelTypesError;
-        
-        if (fuelTypesData) {
-          // Map fuel types to format { id, name }
-          const formattedFuelTypes = fuelTypesData.map(fuel => ({
-            id: fuel.id.toString(),
-            name: fuel.name
-          }));
-          setFuelTypes(formattedFuelTypes);
-        }
-        
-        // Fetch unique transmissions from cars
+        // Récupérer toutes les voitures pour analyser leurs attributs
         const { data: carsData, error: carsError } = await supabase
           .from("cars")
-          .select("transmission_id");
+          .select("brand_id, fuel_type_id, transmission_id");
         
         if (carsError) throw carsError;
         
         if (carsData) {
-          // Extract unique transmissions
+          // Extraire les IDs uniques de marques utilisées
+          const uniqueBrandIds = Array.from(new Set(carsData.map(car => car.brand_id)));
+          
+          // Récupérer seulement les marques qui sont utilisées dans des voitures
+          const { data: brandsData, error: brandsError } = await supabase
+            .from('car_brands')
+            .select('id, name')
+            .in('id', uniqueBrandIds);
+          
+          if (brandsError) throw brandsError;
+          
+          if (brandsData) {
+            // Trier les marques par ordre alphabétique
+            const formattedBrands = brandsData
+              .map(brand => ({
+                id: brand.id.toString(),
+                name: brand.name
+              }))
+              .sort((a, b) => a.name.localeCompare(b.name));
+              
+            setBrands(formattedBrands);
+          }
+          
+          // Extraire les IDs uniques de types de carburant utilisés
+          const uniqueFuelIds = Array.from(new Set(carsData.map(car => car.fuel_type_id)));
+          
+          // Récupérer seulement les types de carburant qui sont utilisés dans des voitures
+          const { data: fuelTypesData, error: fuelTypesError } = await supabase
+            .from('fuel_types')
+            .select('id, name')
+            .in('id', uniqueFuelIds);
+          
+          if (fuelTypesError) throw fuelTypesError;
+          
+          if (fuelTypesData) {
+            // Trier les types de carburant par ordre alphabétique
+            const formattedFuelTypes = fuelTypesData
+              .map(fuel => ({
+                id: fuel.id.toString(),
+                name: fuel.name
+              }))
+              .sort((a, b) => a.name.localeCompare(b.name));
+              
+            setFuelTypes(formattedFuelTypes);
+          }
+          
+          // Extraire les transmissions uniques
           const uniqueTransmissions = Array.from(new Set(carsData.map(car => car.transmission_id)));
-          setTransmissions(uniqueTransmissions);
+          setTransmissions(uniqueTransmissions.sort());
         }
       } catch (error) {
         console.error("Error fetching filter data:", error);
