@@ -4,7 +4,7 @@ import React from "react";
 interface CarsFiltersProps {
   brands: { id: string, name: string }[];
   fuelTypes: { id: string, name: string }[];
-  transmissions: string[];
+  transmissions: { id: string, name: string }[];
   selectedBrand: string | null;
   selectedFuel: string | null;
   selectedTransmission: string | null;
@@ -74,7 +74,7 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
           >
             <option value="">Toutes les transmissions</option>
             {transmissions.map(trans => (
-              <option key={trans} value={trans}>{trans}</option>
+              <option key={trans.id} value={trans.id}>{trans.name}</option>
             ))}
           </select>
         </div>

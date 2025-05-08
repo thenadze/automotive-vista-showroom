@@ -11,7 +11,7 @@ export interface FilterOption {
 export const useFilterOptions = () => {
   const [brands, setBrands] = useState<FilterOption[]>([]);
   const [fuelTypes, setFuelTypes] = useState<FilterOption[]>([]);
-  const [transmissions, setTransmissions] = useState<string[]>([]);
+  const [transmissions, setTransmissions] = useState<FilterOption[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,9 +72,28 @@ export const useFilterOptions = () => {
             setFuelTypes(formattedFuelTypes);
           }
           
-          // Extraire les transmissions uniques
-          const uniqueTransmissions = Array.from(new Set(carsData.map(car => car.transmission_id)));
-          setTransmissions(uniqueTransmissions.sort());
+          // Extraire les IDs uniques de transmission utilisées
+          const uniqueTransmissionIds = Array.from(new Set(carsData.map(car => car.transmission_id)));
+          
+          // Récupérer seulement les transmissions qui sont utilisées dans des voitures
+          const { data: transmissionsData, error: transmissionsError } = await supabase
+            .from('transmission_types')
+            .select('id, name')
+            .in('id', toNumberArray(uniqueTransmissionIds));
+          
+          if (transmissionsError) throw transmissionsError;
+          
+          if (transmissionsData) {
+            // Trier les transmissions par ordre alphabétique
+            const formattedTransmissions = transmissionsData
+              .map(transmission => ({
+                id: transmission.id.toString(),
+                name: transmission.name
+              }))
+              .sort((a, b) => a.name.localeCompare(b.name));
+              
+            setTransmissions(formattedTransmissions);
+          }
         }
       } catch (error) {
         console.error("Error fetching filter data:", error);
