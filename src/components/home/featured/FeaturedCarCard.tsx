@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -104,7 +103,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
   const modelName = car.model || "-";
   const carTitle = `${brandName} ${modelName}`.trim();
   const fuelTypeName = getFuelTypeName();
-  const transmissionName = getTransmissionName(); // Nouveau
+  const transmissionName = getTransmissionName();
   
   return (
     <Card 
@@ -120,9 +119,11 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
           style={{ height: isMobile ? "200px" : "300px" }}
         />
         
-        <div className="absolute top-3 right-3 z-10">
-          {car.year && <Badge className="bg-stone-700">{car.year}</Badge>}
-        </div>
+        {car.year && (
+          <div className="absolute top-3 right-3 z-10">
+            <Badge className="bg-stone-700 text-white">{car.year}</Badge>
+          </div>
+        )}
       </div>
       
       <CardContent className="p-3 md:p-4">

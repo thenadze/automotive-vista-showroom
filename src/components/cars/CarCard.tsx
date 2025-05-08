@@ -7,6 +7,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import CarGallery from "@/components/home/CarGallery";
 import { predefinedFuelTypes } from "@/components/admin/car-form/fuelTypes";
+import { Badge } from "@/components/ui/badge";
 
 interface CarCardProps {
   car: CarWithDetails;
@@ -106,9 +107,9 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
 
   const brandName = getBrandName();
   const modelName = car.model || "-";
-  const carTitle = `${brandName} ${modelName}${car.year ? ` (${car.year})` : ''}`.trim();
+  const carTitle = `${brandName} ${modelName}`.trim();
   const fuelTypeName = getFuelTypeName();
-  const transmissionName = getTransmissionName(); // Nouveau
+  const transmissionName = getTransmissionName();
 
   console.log("Car details for card:", {
     id: car.id,
@@ -126,6 +127,12 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           className="w-full" 
           style={{ height: isMobile ? "200px" : "300px" }}
         />
+        
+        {car.year && (
+          <div className="absolute top-3 right-3 z-10">
+            <Badge className="bg-stone-700 text-white">{car.year}</Badge>
+          </div>
+        )}
       </div>
       <CardContent className="p-3 md:p-4">
         <h3 className="text-lg md:text-xl font-semibold mb-2 truncate">
