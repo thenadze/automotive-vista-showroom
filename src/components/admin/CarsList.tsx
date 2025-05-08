@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -38,14 +39,20 @@ const CarsList: React.FC<CarsListProps> = ({
   
   const getFuelTypeName = (fuelTypeId: string) => {
     if (!fuelTypeId) return "Non spécifié";
-    const fuelType = fuelTypes.find(f => f.id.toString() === fuelTypeId);
+    // Amélioré pour rechercher par ID numérique ou par nom
+    const fuelType = fuelTypes.find(f => 
+      f.id.toString() === fuelTypeId || 
+      f.name === fuelTypeId
+    );
     return fuelType ? fuelType.name : "Non spécifié";
   };
   
   const getTransmissionName = (transmissionId: string) => {
     if (!transmissionId) return "Non spécifié";
+    // Amélioré pour rechercher par ID numérique ou par nom
     const transmission = transmissions.find(t => 
-      t.id.toString() === transmissionId || t.name === transmissionId
+      t.id.toString() === transmissionId || 
+      t.name === transmissionId
     );
     return transmission ? transmission.name : "Non spécifié";
   };

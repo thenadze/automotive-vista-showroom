@@ -18,7 +18,7 @@ export const useFilterOptions = () => {
     // Récupérer toutes les options de marque, carburant et transmission disponibles
     const fetchFilterOptions = async () => {
       try {
-        // Récupérer toutes les marques disponibles
+        // Récupérer toutes les marques disponibles (inchangé)
         const { data: brandsData, error: brandsError } = await supabase
           .from('car_brands')
           .select('id, name');
@@ -37,7 +37,7 @@ export const useFilterOptions = () => {
           setBrands(formattedBrands);
         }
         
-        // Récupérer tous les types de carburant disponibles
+        // Récupérer tous les types de carburant de la table fuel_types
         const { data: fuelTypesData, error: fuelTypesError } = await supabase
           .from('fuel_types')
           .select('id, name');
@@ -56,7 +56,7 @@ export const useFilterOptions = () => {
           setFuelTypes(formattedFuelTypes);
         }
         
-        // Récupérer toutes les transmissions disponibles
+        // Récupérer toutes les transmissions de la table transmission_types
         const { data: transmissionsData, error: transmissionsError } = await supabase
           .from('transmission_types')
           .select('id, name');
