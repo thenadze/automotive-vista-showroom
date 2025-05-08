@@ -16,6 +16,11 @@ export const useCarFilters = () => {
   const [fuelTypes, setFuelTypes] = useState<{id: string, name: string}[]>([]);
   const [transmissions, setTransmissions] = useState<string[]>([]);
 
+  // Utility function to convert string arrays to number arrays
+  const toNumberArray = (values: string[]): number[] => {
+    return values.map(value => Number(value));
+  };
+
   useEffect(() => {
     // Charge uniquement les marques et types de carburant utilisés dans les véhicules existants
     const fetchFilterOptions = async () => {
@@ -35,7 +40,7 @@ export const useCarFilters = () => {
           const { data: brandsData, error: brandsError } = await supabase
             .from('car_brands')
             .select('id, name')
-            .in('id', uniqueBrandIds);
+            .in('id', toNumberArray(uniqueBrandIds)); // Convert string[] to number[]
           
           if (brandsError) throw brandsError;
           
@@ -58,7 +63,7 @@ export const useCarFilters = () => {
           const { data: fuelTypesData, error: fuelTypesError } = await supabase
             .from('fuel_types')
             .select('id, name')
-            .in('id', uniqueFuelIds);
+            .in('id', toNumberArray(uniqueFuelIds)); // Convert string[] to number[]
           
           if (fuelTypesError) throw fuelTypesError;
           
