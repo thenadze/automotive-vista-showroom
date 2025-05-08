@@ -21,5 +21,6 @@ export const toNumberArray = (values: string[]): number[] => {
  * Checks if a string can be converted to a number
  */
 export const isNumeric = (value: string): boolean => {
+  if (!value) return false;
   return !isNaN(Number(value));
 };

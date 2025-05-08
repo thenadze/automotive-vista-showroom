@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarWithDetails } from "@/types";
+import { isNumeric } from "@/utils/arrayUtils";
 
 interface CarsFilterParams {
   selectedBrand: string | null;
@@ -18,6 +19,7 @@ export const useCarsData = (filterParams: CarsFilterParams) => {
   useEffect(() => {
     const fetchCars = async () => {
       setLoading(true);
+      console.log("Fetching cars with filters:", { selectedBrand, selectedFuel, selectedTransmission, yearRange });
       
       try {
         // @ts-ignore - Ignorer l'erreur de typage pour le nom de table
@@ -39,7 +41,13 @@ export const useCarsData = (filterParams: CarsFilterParams) => {
         
         if (selectedTransmission !== null) {
           console.log("Filtering by transmission:", selectedTransmission);
-          query = query.eq('transmission_id', selectedTransmission);
+          // Si c'est un nombre (ID), utiliser directement, sinon rechercher par nom
+          if (isNumeric(selectedTransmission)) {
+            query = query.eq('transmission_id', selectedTransmission);
+          } else {
+            // Pour les cas où la valeur est déjà le nom plutôt que l'ID
+            query = query.eq('transmission_id', selectedTransmission);
+          }
         }
         
         if (yearRange[0] > 0) {
@@ -59,7 +67,8 @@ export const useCarsData = (filterParams: CarsFilterParams) => {
         }
         
         if (carsData) {
-          console.log("Cars data:", carsData);
+          console.log("Cars data fetched:", carsData.length, "results");
+          console.log("First car data:", carsData[0]);
           
           // Convert data to match CarWithDetails interface
           const carsWithDetails: CarWithDetails[] = carsData.map(car => {

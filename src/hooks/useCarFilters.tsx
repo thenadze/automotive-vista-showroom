@@ -23,14 +23,17 @@ export const useCarFilters = () => {
   });
 
   const handleBrandChange = (value: string) => {
+    console.log("Brand changed to:", value);
     setSelectedBrand(value === "all" ? null : value);
   };
   
   const handleFuelChange = (value: string) => {
+    console.log("Fuel changed to:", value);
     setSelectedFuel(value === "all" ? null : value);
   };
   
   const handleTransmissionChange = (value: string) => {
+    console.log("Transmission changed to:", value);
     setSelectedTransmission(value === "all" ? null : value);
   };
   
@@ -45,6 +48,7 @@ export const useCarFilters = () => {
   };
   
   const resetFilters = () => {
+    console.log("Resetting all filters");
     setSelectedBrand(null);
     setSelectedFuel(null);
     setSelectedTransmission(null);

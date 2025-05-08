@@ -18,7 +18,7 @@ export const useFilterOptions = () => {
     // Récupérer toutes les options de marque, carburant et transmission disponibles
     const fetchFilterOptions = async () => {
       try {
-        // Récupérer toutes les marques disponibles (inchangé)
+        // Récupérer toutes les marques disponibles
         const { data: brandsData, error: brandsError } = await supabase
           .from('car_brands')
           .select('id, name');
@@ -35,6 +35,7 @@ export const useFilterOptions = () => {
             .sort((a, b) => a.name.localeCompare(b.name));
             
           setBrands(formattedBrands);
+          console.log("Loaded brands:", formattedBrands);
         }
         
         // Récupérer tous les types de carburant de la table fuel_types
@@ -54,6 +55,7 @@ export const useFilterOptions = () => {
             .sort((a, b) => a.name.localeCompare(b.name));
             
           setFuelTypes(formattedFuelTypes);
+          console.log("Loaded fuel types:", formattedFuelTypes);
         }
         
         // Récupérer toutes les transmissions de la table transmission_types
@@ -73,6 +75,7 @@ export const useFilterOptions = () => {
             .sort((a, b) => a.name.localeCompare(b.name));
             
           setTransmissions(formattedTransmissions);
+          console.log("Loaded transmissions:", formattedTransmissions);
         }
       } catch (error) {
         console.error("Error fetching filter data:", error);

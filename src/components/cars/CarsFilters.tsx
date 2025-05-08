@@ -39,6 +39,15 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
   handleYearMaxChange,
   resetFilters,
 }) => {
+  console.log("Rendering CarsFilters with:", { 
+    brands: brands.length, 
+    fuelTypes: fuelTypes.length, 
+    transmissions: transmissions.length,
+    selectedBrand,
+    selectedFuel,
+    selectedTransmission
+  });
+  
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mb-6">
       <h2 className="text-xl font-semibold mb-4">Filtres</h2>
