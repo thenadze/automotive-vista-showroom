@@ -69,8 +69,8 @@ export const useFilterOptions = () => {
           // Trier les transmissions par ordre alphabétique
           const formattedTransmissions = transmissionsData
             .map(transmission => ({
-              // Ensure ID is stored as string to match how it's used in filters
-              id: transmission.id.toString(),
+              // Correction importante: Utiliser le nom comme ID pour correspondre aux valeurs en base
+              id: transmission.name,
               name: transmission.name
             }))
             .sort((a, b) => a.name.localeCompare(b.name));

@@ -41,8 +41,7 @@ export const useCarsData = (filterParams: CarsFilterParams) => {
         
         if (selectedTransmission !== null) {
           console.log("Filtering by transmission:", selectedTransmission);
-          // Important fix: The transmission_id in our database is stored as text
-          // We need to make sure we're matching it correctly
+          // Utiliser directement la valeur du nom de transmission
           query = query.eq('transmission_id', selectedTransmission);
         }
         
