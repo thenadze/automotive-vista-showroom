@@ -30,6 +30,22 @@ const CarsList: React.FC<CarsListProps> = ({
   const navigate = useNavigate();
   const { toast } = useToast();
   
+  // Helper functions to get display names from IDs
+  const getBrandName = (brandId: string) => {
+    const brand = brands.find(b => b.id.toString() === brandId);
+    return brand ? brand.name : brandId;
+  };
+  
+  const getFuelTypeName = (fuelTypeId: string) => {
+    const fuelType = fuelTypes.find(f => f.id.toString() === fuelTypeId);
+    return fuelType ? fuelType.name : fuelTypeId;
+  };
+  
+  const getTransmissionName = (transmissionId: string) => {
+    const transmission = transmissions.find(t => t.id.toString() === transmissionId || t.name === transmissionId);
+    return transmission ? transmission.name : transmissionId;
+  };
+  
   // Gérer la suppression d'une voiture
   const handleDelete = async (carId: string) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette voiture ? Cette action est irréversible.')) {
@@ -107,10 +123,10 @@ const CarsList: React.FC<CarsListProps> = ({
               cars.map((car) => (
                 <TableRow key={car.id}>
                   <TableCell>{car.year}</TableCell>
-                  <TableCell>{car.brand_id}</TableCell>
+                  <TableCell>{getBrandName(car.brand_id)}</TableCell>
                   <TableCell>{car.model}</TableCell>
-                  <TableCell>{car.fuel_type_id}</TableCell>
-                  <TableCell>{car.transmission_id}</TableCell>
+                  <TableCell>{getFuelTypeName(car.fuel_type_id)}</TableCell>
+                  <TableCell>{getTransmissionName(car.transmission_id)}</TableCell>
                   <TableCell className="text-right space-x-2">
                     <Button
                       variant="outline"
