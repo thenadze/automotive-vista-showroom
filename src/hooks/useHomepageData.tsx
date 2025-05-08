@@ -23,7 +23,7 @@ export const useHomepageData = () => {
           supabase.from("company_info").select("*").single(),
           supabase.from("cars")
             .select("*")
-            .order('display_order', { ascending: true })
+            .order('display_order', { ascending: true, nullsLast: true })
             .limit(6),
           supabase.from("car_brands").select("*")
         ]);
@@ -89,7 +89,7 @@ export const useHomepageData = () => {
                 }
               } else {
                 brand = { id: 0, name: "-" };
-                console.log(`No brand_id for car ${car.id}, using default`);
+                console.log(`No brand_id for car ${car.id}`, "using default");
               }
               
               console.log(`Photos for car ${car.id}:`, photoData);

@@ -16,7 +16,7 @@ const FeaturedCars: React.FC<FeaturedCarsProps> = ({ featuredCars }) => {
   console.log("FeaturedCars received:", featuredCars);
   const isMobile = useIsMobile();
   
-  // Limiter à 6 véhicules maximum
+  // Limiter à 6 véhicules maximum, l'ordre est déjà défini par la requête
   const limitedCars = featuredCars.slice(0, 6);
   
   // Séparer les deux groupes pour mobile
