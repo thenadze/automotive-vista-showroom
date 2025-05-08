@@ -69,6 +69,7 @@ export const useFilterOptions = () => {
           // Trier les transmissions par ordre alphabétique
           const formattedTransmissions = transmissionsData
             .map(transmission => ({
+              // Ensure ID is stored as string to match how it's used in filters
               id: transmission.id.toString(),
               name: transmission.name
             }))

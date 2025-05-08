@@ -41,13 +41,9 @@ export const useCarsData = (filterParams: CarsFilterParams) => {
         
         if (selectedTransmission !== null) {
           console.log("Filtering by transmission:", selectedTransmission);
-          // Si c'est un nombre (ID), utiliser directement, sinon rechercher par nom
-          if (isNumeric(selectedTransmission)) {
-            query = query.eq('transmission_id', selectedTransmission);
-          } else {
-            // Pour les cas où la valeur est déjà le nom plutôt que l'ID
-            query = query.eq('transmission_id', selectedTransmission);
-          }
+          // Important fix: The transmission_id in our database is stored as text
+          // We need to make sure we're matching it correctly
+          query = query.eq('transmission_id', selectedTransmission);
         }
         
         if (yearRange[0] > 0) {
@@ -66,10 +62,9 @@ export const useCarsData = (filterParams: CarsFilterParams) => {
           return;
         }
         
+        console.log("Cars data:", carsData);
+        
         if (carsData) {
-          console.log("Cars data fetched:", carsData.length, "results");
-          console.log("First car data:", carsData[0]);
-          
           // Convert data to match CarWithDetails interface
           const carsWithDetails: CarWithDetails[] = carsData.map(car => {
             return {
