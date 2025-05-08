@@ -16,9 +16,9 @@ interface CarsFiltersProps {
   selectedFuel: string | null;
   selectedTransmission: string | null;
   yearRange: [number, number];
-  handleBrandChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleFuelChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleTransmissionChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleBrandChange: (value: string) => void;
+  handleFuelChange: (value: string) => void;
+  handleTransmissionChange: (value: string) => void;
   handleYearMinChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleYearMaxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetFilters: () => void;
@@ -46,44 +46,56 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div>
           <label className="block mb-1 text-sm font-medium">Marque</label>
-          <select 
-            className="w-full p-2 border rounded-md"
-            value={selectedBrand || ""}
-            onChange={handleBrandChange}
+          <Select 
+            value={selectedBrand || ""} 
+            onValueChange={handleBrandChange}
           >
-            <option value="">Toutes les marques</option>
-            {brands.map(brand => (
-              <option key={brand.id} value={brand.id}>{brand.name}</option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Toutes les marques" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Toutes les marques</SelectItem>
+              {brands.map(brand => (
+                <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
           <label className="block mb-1 text-sm font-medium">Carburant</label>
-          <select 
-            className="w-full p-2 border rounded-md"
-            value={selectedFuel || ""}
-            onChange={handleFuelChange}
+          <Select 
+            value={selectedFuel || ""} 
+            onValueChange={handleFuelChange}
           >
-            <option value="">Tous les carburants</option>
-            {fuelTypes.map(fuel => (
-              <option key={fuel.id} value={fuel.id}>{fuel.name}</option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Tous les carburants" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Tous les carburants</SelectItem>
+              {fuelTypes.map(fuel => (
+                <SelectItem key={fuel.id} value={fuel.id}>{fuel.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
           <label className="block mb-1 text-sm font-medium">Transmission</label>
-          <select 
-            className="w-full p-2 border rounded-md"
-            value={selectedTransmission || ""}
-            onChange={handleTransmissionChange}
+          <Select 
+            value={selectedTransmission || ""} 
+            onValueChange={handleTransmissionChange}
           >
-            <option value="">Toutes les transmissions</option>
-            {transmissions.map(trans => (
-              <option key={trans.id} value={trans.id}>{trans.name}</option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="Toutes les transmissions" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Toutes les transmissions</SelectItem>
+              {transmissions.map(trans => (
+                <SelectItem key={trans.id} value={trans.id}>{trans.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         
         <div>

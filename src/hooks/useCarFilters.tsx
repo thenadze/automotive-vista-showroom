@@ -22,19 +22,16 @@ export const useCarFilters = () => {
     yearRange
   });
 
-  const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value === "" ? null : e.target.value;
-    setSelectedBrand(value);
+  const handleBrandChange = (value: string) => {
+    setSelectedBrand(value === "" ? null : value);
   };
   
-  const handleFuelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value === "" ? null : e.target.value;
-    setSelectedFuel(value);
+  const handleFuelChange = (value: string) => {
+    setSelectedFuel(value === "" ? null : value);
   };
   
-  const handleTransmissionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value === "" ? null : e.target.value;
-    setSelectedTransmission(value);
+  const handleTransmissionChange = (value: string) => {
+    setSelectedTransmission(value === "" ? null : value);
   };
   
   const handleYearMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
