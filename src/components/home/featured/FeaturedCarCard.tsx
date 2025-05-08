@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -39,11 +40,15 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
     
     // Si brand_id est défini mais qu'il n'y a pas d'objet brand
     if (car.brand_id && car.brand_id !== "undefined" && car.brand_id !== "null") {
+      // Ne pas retourner l'ID numérique si c'est juste un nombre
+      if (!isNaN(Number(car.brand_id))) {
+        return "";  // Retourner une chaîne vide au lieu de l'ID
+      }
       return car.brand_id;
     }
     
     // Si aucune information n'est disponible
-    return "-";
+    return "";
   };
   
   // Obtenir le nom du type de carburant de façon plus robuste
@@ -100,8 +105,9 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
   
   // Préparation du titre avec marque et modèle
   const brandName = getBrandName();
-  const modelName = car.model || "-";
-  const carTitle = `${brandName} ${modelName}`.trim();
+  const modelName = car.model || "";
+  // S'assurer que le titre n'inclut pas l'ID numérique
+  const carTitle = brandName ? `${brandName} ${modelName}`.trim() : modelName;
   const fuelTypeName = getFuelTypeName();
   const transmissionName = getTransmissionName();
   
@@ -128,7 +134,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
       
       <CardContent className="p-3 md:p-4">
         <h3 className="text-lg md:text-xl font-bold mb-2 text-stone-800 truncate">
-          {carTitle !== " " ? carTitle : "-"}
+          {carTitle || "-"}
         </h3>
         
         <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-3 md:mb-4">
