@@ -15,109 +15,64 @@ export const useFilterOptions = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Charge uniquement les marques et types de carburant utilisés dans les véhicules existants
+    // Récupérer toutes les options de marque, carburant et transmission disponibles
     const fetchFilterOptions = async () => {
       try {
-        // Récupérer toutes les voitures pour analyser leurs attributs
-        const { data: carsData, error: carsError } = await supabase
-          .from("cars")
-          .select("brand_id, fuel_type_id, transmission_id");
+        // Récupérer toutes les marques disponibles
+        const { data: brandsData, error: brandsError } = await supabase
+          .from('car_brands')
+          .select('id, name');
+      
+        if (brandsError) throw brandsError;
         
-        if (carsError) throw carsError;
+        if (brandsData) {
+          // Trier les marques par ordre alphabétique
+          const formattedBrands = brandsData
+            .map(brand => ({
+              id: brand.id.toString(),
+              name: brand.name
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+            
+          setBrands(formattedBrands);
+        }
         
-        if (carsData) {
-          // Extraire les IDs uniques de marques utilisées
-          const uniqueBrandIds = Array.from(
-            new Set(
-              carsData
-                .filter(car => car.brand_id && car.brand_id !== "undefined" && car.brand_id !== "null")
-                .map(car => car.brand_id)
-            )
-          );
-          
-          // Récupérer seulement les marques qui sont utilisées dans des voitures
-          if (uniqueBrandIds.length > 0) {
-            const { data: brandsData, error: brandsError } = await supabase
-              .from('car_brands')
-              .select('id, name')
-              .in('id', toNumberArray(uniqueBrandIds));
-          
-            if (brandsError) throw brandsError;
+        // Récupérer tous les types de carburant disponibles
+        const { data: fuelTypesData, error: fuelTypesError } = await supabase
+          .from('fuel_types')
+          .select('id, name');
+      
+        if (fuelTypesError) throw fuelTypesError;
+        
+        if (fuelTypesData) {
+          // Trier les types de carburant par ordre alphabétique
+          const formattedFuelTypes = fuelTypesData
+            .map(fuel => ({
+              id: fuel.id.toString(),
+              name: fuel.name
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
             
-            if (brandsData) {
-              // Trier les marques par ordre alphabétique
-              const formattedBrands = brandsData
-                .map(brand => ({
-                  id: brand.id.toString(),
-                  name: brand.name
-                }))
-                .sort((a, b) => a.name.localeCompare(b.name));
-                
-              setBrands(formattedBrands);
-            }
-          }
-          
-          // Extraire les IDs uniques de types de carburant utilisés
-          const uniqueFuelIds = Array.from(
-            new Set(
-              carsData
-                .filter(car => car.fuel_type_id && car.fuel_type_id !== "undefined" && car.fuel_type_id !== "null")
-                .map(car => car.fuel_type_id)
-            )
-          );
-          
-          // Récupérer seulement les types de carburant qui sont utilisés dans des voitures
-          if (uniqueFuelIds.length > 0) {
-            const { data: fuelTypesData, error: fuelTypesError } = await supabase
-              .from('fuel_types')
-              .select('id, name')
-              .in('id', toNumberArray(uniqueFuelIds));
-          
-            if (fuelTypesError) throw fuelTypesError;
+          setFuelTypes(formattedFuelTypes);
+        }
+        
+        // Récupérer toutes les transmissions disponibles
+        const { data: transmissionsData, error: transmissionsError } = await supabase
+          .from('transmission_types')
+          .select('id, name');
+      
+        if (transmissionsError) throw transmissionsError;
+        
+        if (transmissionsData) {
+          // Trier les transmissions par ordre alphabétique
+          const formattedTransmissions = transmissionsData
+            .map(transmission => ({
+              id: transmission.id.toString(),
+              name: transmission.name
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
             
-            if (fuelTypesData) {
-              // Trier les types de carburant par ordre alphabétique
-              const formattedFuelTypes = fuelTypesData
-                .map(fuel => ({
-                  id: fuel.id.toString(),
-                  name: fuel.name
-                }))
-                .sort((a, b) => a.name.localeCompare(b.name));
-                
-              setFuelTypes(formattedFuelTypes);
-            }
-          }
-          
-          // Extraire les IDs uniques de transmission utilisées
-          const uniqueTransmissionIds = Array.from(
-            new Set(
-              carsData
-                .filter(car => car.transmission_id && car.transmission_id !== "undefined" && car.transmission_id !== "null")
-                .map(car => car.transmission_id)
-            )
-          );
-          
-          // Récupérer seulement les transmissions qui sont utilisées dans des voitures
-          if (uniqueTransmissionIds.length > 0) {
-            const { data: transmissionsData, error: transmissionsError } = await supabase
-              .from('transmission_types')
-              .select('id, name')
-              .in('id', toNumberArray(uniqueTransmissionIds));
-          
-            if (transmissionsError) throw transmissionsError;
-            
-            if (transmissionsData) {
-              // Trier les transmissions par ordre alphabétique
-              const formattedTransmissions = transmissionsData
-                .map(transmission => ({
-                  id: transmission.id.toString(),
-                  name: transmission.name
-                }))
-                .sort((a, b) => a.name.localeCompare(b.name));
-                
-              setTransmissions(formattedTransmissions);
-            }
-          }
+          setTransmissions(formattedTransmissions);
         }
       } catch (error) {
         console.error("Error fetching filter data:", error);

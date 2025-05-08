@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -32,18 +31,23 @@ const CarsList: React.FC<CarsListProps> = ({
   
   // Helper functions to get display names from IDs
   const getBrandName = (brandId: string) => {
+    if (!brandId) return "Non spécifié";
     const brand = brands.find(b => b.id.toString() === brandId);
-    return brand ? brand.name : brandId;
+    return brand ? brand.name : "Non spécifié";
   };
   
   const getFuelTypeName = (fuelTypeId: string) => {
+    if (!fuelTypeId) return "Non spécifié";
     const fuelType = fuelTypes.find(f => f.id.toString() === fuelTypeId);
-    return fuelType ? fuelType.name : fuelTypeId;
+    return fuelType ? fuelType.name : "Non spécifié";
   };
   
   const getTransmissionName = (transmissionId: string) => {
-    const transmission = transmissions.find(t => t.id.toString() === transmissionId || t.name === transmissionId);
-    return transmission ? transmission.name : transmissionId;
+    if (!transmissionId) return "Non spécifié";
+    const transmission = transmissions.find(t => 
+      t.id.toString() === transmissionId || t.name === transmissionId
+    );
+    return transmission ? transmission.name : "Non spécifié";
   };
   
   // Gérer la suppression d'une voiture

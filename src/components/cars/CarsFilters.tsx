@@ -55,9 +55,13 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Toutes les marques</SelectItem>
-              {brands.map(brand => (
-                <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
-              ))}
+              {brands && brands.length > 0 ? (
+                brands.map(brand => (
+                  <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
+                ))
+              ) : (
+                <SelectItem value="no-brands" disabled>Aucune marque disponible</SelectItem>
+              )}
             </SelectContent>
           </Select>
         </div>
@@ -73,9 +77,13 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tous les carburants</SelectItem>
-              {fuelTypes.map(fuel => (
-                <SelectItem key={fuel.id} value={fuel.id}>{fuel.name}</SelectItem>
-              ))}
+              {fuelTypes && fuelTypes.length > 0 ? (
+                fuelTypes.map(fuel => (
+                  <SelectItem key={fuel.id} value={fuel.id}>{fuel.name}</SelectItem>
+                ))
+              ) : (
+                <SelectItem value="no-fuels" disabled>Aucun carburant disponible</SelectItem>
+              )}
             </SelectContent>
           </Select>
         </div>
@@ -91,9 +99,13 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Toutes les transmissions</SelectItem>
-              {transmissions.map(trans => (
-                <SelectItem key={trans.id} value={trans.id}>{trans.name}</SelectItem>
-              ))}
+              {transmissions && transmissions.length > 0 ? (
+                transmissions.map(trans => (
+                  <SelectItem key={trans.id} value={trans.id}>{trans.name}</SelectItem>
+                ))
+              ) : (
+                <SelectItem value="no-transmissions" disabled>Aucune transmission disponible</SelectItem>
+              )}
             </SelectContent>
           </Select>
         </div>
