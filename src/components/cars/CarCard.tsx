@@ -7,8 +7,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
 import CarGallery from "@/components/home/CarGallery";
 import { predefinedFuelTypes } from "@/components/admin/car-form/fuelTypes";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
 
 interface CarCardProps {
   car: CarWithDetails;
@@ -30,15 +28,6 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const formattedMileage = car.mileage !== undefined && car.mileage !== null
     ? new Intl.NumberFormat('fr-FR').format(car.mileage) + " km"
     : "0 km";
-  
-  // Formatter les dates en format français
-  const formattedCreatedAt = car.created_at 
-    ? format(new Date(car.created_at), 'dd/MM/yyyy', { locale: fr })
-    : "";
-  
-  const formattedUpdatedAt = car.updated_at && car.updated_at !== car.created_at
-    ? format(new Date(car.updated_at), 'dd/MM/yyyy', { locale: fr })
-    : "";
   
   // Obtenir le nom de la marque de manière plus robuste
   const getBrandName = () => {
@@ -147,19 +136,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             <span>{fuelTypeName}</span>
             <span className="mt-1">{transmissionName}</span>
           </div>
-          <div className="flex flex-col items-end">
-            <span>{formattedMileage}</span>
-            {formattedCreatedAt && (
-              <span className="mt-1 text-xs text-gray-500">
-                Ajouté le {formattedCreatedAt}
-              </span>
-            )}
-            {formattedUpdatedAt && (
-              <span className="text-xs text-gray-500">
-                Mis à jour le {formattedUpdatedAt}
-              </span>
-            )}
-          </div>
+          <span>{formattedMileage}</span>
         </div>
         <div className="flex items-center justify-between mb-3">
           <div className="mr-2">
