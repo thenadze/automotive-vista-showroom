@@ -6,6 +6,6 @@
 export const toNumberArray = (values: string[]): number[] => {
   // Filter out any non-convertible values first to avoid NaN
   return values
-    .filter(value => value && !isNaN(Number(value)))
+    .filter(value => value && value !== "undefined" && value !== "null" && !isNaN(Number(value)))
     .map(value => Number(value));
 };

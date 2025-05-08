@@ -47,14 +47,14 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
         <div>
           <label className="block mb-1 text-sm font-medium">Marque</label>
           <Select 
-            value={selectedBrand || ""} 
+            value={selectedBrand || "all"} 
             onValueChange={handleBrandChange}
           >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Toutes les marques" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Toutes les marques</SelectItem>
+              <SelectItem value="all">Toutes les marques</SelectItem>
               {brands.map(brand => (
                 <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
               ))}
@@ -65,14 +65,14 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
         <div>
           <label className="block mb-1 text-sm font-medium">Carburant</label>
           <Select 
-            value={selectedFuel || ""} 
+            value={selectedFuel || "all"} 
             onValueChange={handleFuelChange}
           >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Tous les carburants" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Tous les carburants</SelectItem>
+              <SelectItem value="all">Tous les carburants</SelectItem>
               {fuelTypes.map(fuel => (
                 <SelectItem key={fuel.id} value={fuel.id}>{fuel.name}</SelectItem>
               ))}
@@ -83,14 +83,14 @@ const CarsFilters: React.FC<CarsFiltersProps> = ({
         <div>
           <label className="block mb-1 text-sm font-medium">Transmission</label>
           <Select 
-            value={selectedTransmission || ""} 
+            value={selectedTransmission || "all"} 
             onValueChange={handleTransmissionChange}
           >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Toutes les transmissions" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Toutes les transmissions</SelectItem>
+              <SelectItem value="all">Toutes les transmissions</SelectItem>
               {transmissions.map(trans => (
                 <SelectItem key={trans.id} value={trans.id}>{trans.name}</SelectItem>
               ))}

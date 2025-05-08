@@ -23,15 +23,15 @@ export const useCarFilters = () => {
   });
 
   const handleBrandChange = (value: string) => {
-    setSelectedBrand(value === "" ? null : value);
+    setSelectedBrand(value === "all" ? null : value);
   };
   
   const handleFuelChange = (value: string) => {
-    setSelectedFuel(value === "" ? null : value);
+    setSelectedFuel(value === "all" ? null : value);
   };
   
   const handleTransmissionChange = (value: string) => {
-    setSelectedTransmission(value === "" ? null : value);
+    setSelectedTransmission(value === "all" ? null : value);
   };
   
   const handleYearMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
