@@ -23,7 +23,7 @@ export const useHomepageData = () => {
           supabase.from("company_info").select("*").single(),
           supabase.from("cars")
             .select("*")
-            .order('display_order', { ascending: true, nullsLast: true })
+            .order('display_order', { ascending: true })
             .limit(6),
           supabase.from("car_brands").select("*")
         ]);
@@ -54,9 +54,24 @@ export const useHomepageData = () => {
         } else {
           console.log("Cars fetched successfully:", carsResult.data);
           
+          // Trier les véhicules en mettant les valeurs null à la fin
+          const sortedCars = [...carsResult.data].sort((a, b) => {
+            // Si les deux ont un display_order, on les compare
+            if (a.display_order !== null && b.display_order !== null) {
+              return a.display_order - b.display_order;
+            }
+            // Si seul a a un display_order, a vient en premier
+            if (a.display_order !== null) return -1;
+            // Si seul b a un display_order, b vient en premier
+            if (b.display_order !== null) return 1;
+            // Si aucun n'a de display_order, on ne change pas leur ordre
+            return 0;
+          });
+          console.log("Cars sorted with nulls last:", sortedCars);
+          
           // Récupérer les photos pour chaque voiture et associer la marque correcte
           const carsWithDetails = await Promise.all(
-            carsResult.data.map(async (car: any) => {
+            sortedCars.map(async (car: any) => {
               const { data: photoData, error: photoError } = await supabase
                 .from("car_photos")
                 .select("*")
