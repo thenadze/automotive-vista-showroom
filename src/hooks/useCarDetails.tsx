@@ -33,6 +33,7 @@ export const useCarDetails = (id: string | undefined) => {
         // Amélioration: conversion correcte des IDs en nombre ou gestion des valeurs string
         const brandId = carData.brand_id ? parseInt(carData.brand_id) || 0 : 0;
         const fuelTypeId = carData.fuel_type_id ? parseInt(carData.fuel_type_id) || 0 : 0;
+        const transmissionId = carData.transmission_id ? parseInt(carData.transmission_id) || 0 : 0;
         
         // Fetch related data separately
         const [brandResult, fuelTypeResult, transmissionResult, photosResult] = await Promise.all([
@@ -50,11 +51,11 @@ export const useCarDetails = (id: string | undefined) => {
             .eq("id", fuelTypeId)
             .maybeSingle(),
             
-          // Get transmission info
+          // Get transmission info - ajout de la recherche par ID
           supabase
             .from("transmission_types")
             .select("*")
-            .eq("name", carData.transmission_id)
+            .or(`id.eq.${transmissionId},name.eq.${carData.transmission_id}`)
             .maybeSingle(),
           
           // Get photos
@@ -150,15 +151,50 @@ export const useCarDetails = (id: string | undefined) => {
           }
         }
         
+        // Amélioration de la gestion des transmissions
         let transmission: TransmissionType | null = null;
         if (!transmissionResult.error && transmissionResult.data) {
           transmission = transmissionResult.data;
+          console.log("Transmission found in database:", transmission);
         } else {
-          console.error("Error fetching transmission:", transmissionResult.error);
-          transmission = { 
-            id: 0,
-            name: carData.transmission_id || "-" 
-          };
+          console.log("Transmission not found in database, attempting fallback methods");
+          
+          // Vérifier si transmission_id est une chaîne
+          if (carData.transmission_id && typeof carData.transmission_id === 'string') {
+            // Essayer de trouver la transmission dans la table
+            try {
+              const { data: transmissionByName } = await supabase
+                .from("transmission_types")
+                .select("*")
+                .eq("name", carData.transmission_id)
+                .maybeSingle();
+                
+              if (transmissionByName) {
+                transmission = transmissionByName;
+                console.log("Found transmission by name:", transmission);
+              } else {
+                // Créer un objet transmission avec l'ID et le nom étant la valeur de transmission_id
+                transmission = { 
+                  id: transmissionId || 0,
+                  name: carData.transmission_id 
+                };
+                console.log("Created transmission from string value:", transmission);
+              }
+            } catch (e) {
+              console.error("Failed to fetch transmission by name as fallback:", e);
+              transmission = { 
+                id: 0,
+                name: carData.transmission_id || "Automatique" 
+              };
+            }
+          } else {
+            // Valeur par défaut si aucune donnée n'est disponible
+            transmission = { 
+              id: 0,
+              name: "Automatique" 
+            };
+            console.log("Using default transmission name");
+          }
         }
         
         // Traitement spécifique pour les photos

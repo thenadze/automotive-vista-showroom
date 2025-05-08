@@ -81,11 +81,30 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
     return "Essence";  // Valeur par défaut
   };
   
+  // Nouveau - Obtenir le nom du type de transmission de façon robuste
+  const getTransmissionName = () => {
+    // Si l'objet transmission est disponible avec le nom
+    if (car.transmission && car.transmission.name) {
+      return car.transmission.name;
+    }
+    
+    // Si transmission_id est défini
+    if (car.transmission_id) {
+      // Si c'est une chaîne de caractères, l'utiliser directement
+      if (isNaN(Number(car.transmission_id))) {
+        return car.transmission_id;
+      }
+    }
+    
+    return "Automatique";  // Valeur par défaut
+  };
+  
   // Préparation du titre avec marque et modèle
   const brandName = getBrandName();
   const modelName = car.model || "-";
   const carTitle = `${brandName} ${modelName}`.trim();
   const fuelTypeName = getFuelTypeName();
+  const transmissionName = getTransmissionName(); // Nouveau
   
   return (
     <Card 
@@ -112,7 +131,10 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
         </h3>
         
         <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-3 md:mb-4">
-          <span>{fuelTypeName}</span>
+          <div className="flex flex-col">
+            <span>{fuelTypeName}</span>
+            <span className="mt-1">{transmissionName}</span>
+          </div>
           <span>{formattedMileage}</span>
         </div>
         

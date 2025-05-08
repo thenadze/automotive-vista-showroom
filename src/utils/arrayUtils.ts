@@ -16,3 +16,10 @@ export const toNumberArray = (values: string[]): number[] => {
     })
     .map(value => Number(value));
 };
+
+/**
+ * Checks if a string can be converted to a number
+ */
+export const isNumeric = (value: string): boolean => {
+  return !isNaN(Number(value));
+};
