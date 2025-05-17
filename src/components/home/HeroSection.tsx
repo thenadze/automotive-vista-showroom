@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CompanyInfo } from "@/types";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronUp, Clock } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
 
@@ -18,19 +18,24 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   const isMobile = useIsMobile();
   const [isVisible, setIsVisible] = useState(false);
 
-  const fullText = "Fondée en 2023 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis, adaptés à tous les styles de vie et à tous les usages. Dès les premiers échanges, l'entreprise accompagne chaque client avec attention : conseils personnalisés, transparence, et préparation rigoureuse des véhicules avant la vente. \n\nAutomotive incarne une nouvelle vision de la vente automobile, fondée sur la proximité, la confiance et l'exigence de qualité.";
+  const fullText = "Fondée en 2023 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis, adaptés à tous les styles de vie et à tous les usages. Dès les premiers échanges, l'entreprise accompagne chaque client avec attention : conseils personnalisés, transparence, et préparation rigoureuse des véhicules avant la vente. Nous vous accueillons dans notre établissement <a href='#contact' class='text-orange-500 hover:underline'>ouvert tous les jours de 10h à 19h <Clock className='inline-block w-4 h-4 mb-1' /></a>, sur rendez-vous en semaine et sans rendez-vous le weekend. \n\nAutomotive incarne une nouvelle vision de la vente automobile, fondée sur la proximité, la confiance et l'exigence de qualité.";
   
   // Version encore plus courte pour mobile
-  const mobileShortenedText = "Fondée en 2023 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis.";
+  const mobileShortenedText = "Fondée en 2023 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis. <a href='#contact' class='text-orange-500 hover:underline'>Ouvert 7j/7 de 10h à 19h <Clock className='inline-block w-3 h-3 mb-0.5' /></a>";
   
   // Version pour desktop
-  const desktopShortenedText = fullText.split('\n\n')[0];
+  const desktopShortenedText = "Fondée en 2023 à Bezons, Automotive propose une sélection de véhicules soigneusement choisis, adaptés à tous les styles de vie et à tous les usages. Dès les premiers échanges, l'entreprise accompagne chaque client avec attention : conseils personnalisés, transparence, et préparation rigoureuse des véhicules avant la vente. Nous vous accueillons dans notre établissement <a href='#contact' class='text-orange-500 hover:underline'>ouvert tous les jours de 10h à 19h <Clock className='inline-block w-4 h-4 mb-1' /></a>, sur rendez-vous en semaine et sans rendez-vous le weekend.";
   
   // Sélectionne la version appropriée selon le dispositif
   const shortenedText = isMobile ? mobileShortenedText : desktopShortenedText;
 
   const toggleText = () => {
     setExpanded(!expanded);
+  };
+  
+  // Fonction pour créer du HTML balisé à partir des chaînes de texte
+  const createMarkup = (htmlString: string) => {
+    return { __html: htmlString };
   };
 
   useEffect(() => {
@@ -250,9 +255,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             <motion.div 
               variants={itemVariants}
               className="text-base sm:text-lg mb-2 opacity-90 text-slate-50 font-normal px-0 mx-auto"
-            >
-              {expanded ? fullText : shortenedText}
-            </motion.div>
+              dangerouslySetInnerHTML={createMarkup(expanded ? fullText : shortenedText)}
+            />
             
             <motion.div variants={itemVariants}>
               <Button 
