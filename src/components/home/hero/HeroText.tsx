@@ -34,14 +34,16 @@ const HeroText: React.FC<HeroTextProps> = ({ createMarkup }) => {
         dangerouslySetInnerHTML={createMarkup(expanded ? fullText : shortenedText)}
       />
       
-      <Button 
-        variant="link" 
-        className="text-slate-50 hover:text-slate-200 mb-6 flex items-center gap-1"
-        onClick={toggleText}
-      >
-        {expanded ? "Voir moins" : "Lire plus"}
-        {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-      </Button>
+      <div className="flex justify-center mb-6">
+        <Button 
+          variant="link" 
+          className="text-slate-50 hover:text-slate-200 flex items-center gap-1"
+          onClick={toggleText}
+        >
+          {expanded ? "Voir moins" : "Lire plus"}
+          {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </Button>
+      </div>
     </>
   );
 };
