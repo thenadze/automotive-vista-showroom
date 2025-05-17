@@ -8,11 +8,11 @@ const ServicesSection: React.FC = () => {
 
   useEffect(() => {
     AOS.init({
-      once: false, // Animation se déclenche à chaque scroll
-      duration: 800, // Durée de l'animation
-      easing: "ease-out-cubic", // Type d'easing amélioré
-      delay: 100, // Délai initial
-      offset: 100, // Déclencher plus tôt
+      once: false,
+      duration: 800,
+      easing: "ease-out-cubic",
+      delay: 100,
+      offset: 100,
     });
   }, []);
 
@@ -91,9 +91,9 @@ const ServicesSection: React.FC = () => {
               <h3 className="text-xl font-semibold mb-3 text-stone-800">{service.title}</h3>
               <p className="text-stone-600 leading-relaxed">{service.description}</p>
               
-              {/* Effet décoratif */}
+              {/* Effet décoratif - modified to not overlap content */}
               <div className={`
-                absolute -bottom-2 -right-2 w-24 h-24 bg-stone-100 rounded-full opacity-30
+                absolute -bottom-2 -right-2 w-24 h-24 bg-stone-100 rounded-full opacity-30 -z-10
                 transition-all duration-500 ease-out
                 ${hoveredIndex === index ? 'scale-150 opacity-10' : 'scale-100'}
               `}></div>
