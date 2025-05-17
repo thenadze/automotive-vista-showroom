@@ -59,7 +59,7 @@ const Footer = () => {
                 <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center mr-2 text-orange-500 group-hover:-translate-y-1 transition-transform duration-300">
                   <Clock className="w-5 h-5" />
                 </span>
-                <span>Lun - Sam: 9h00 - 20h00</span>
+                <span>Lun-Dim 10h-19H | Semaine RDV et WE sans RDV</span>
               </li>
             </ul>
           </div>
