@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { FileText, MapPin, Phone, Mail, Clock } from "lucide-react";
@@ -50,7 +51,7 @@ const Footer = () => {
                 <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center mr-2 text-orange-500 group-hover:-translate-y-1 transition-transform duration-300">
                   <Mail className="w-5 h-5" />
                 </span>
-                <span>À daéfinir</span>
+                <span>sada.automotive@gmail.com</span>
               </li>
               <li className="flex items-start group">
                 <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center mr-2 text-orange-500 group-hover:-translate-y-1 transition-transform duration-300">
