@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
+import Navbar from "./navbar/Navbar";
 import Footer from "./Footer";
 import { Skeleton } from "./ui/skeleton";
 import PageLoader from "./Loader";
