@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,7 +59,9 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       setLoading(true);
+      // Store the local value to use with toast after logout
       const { error } = await supabase.auth.signOut();
+      
       if (error) {
         console.error("Erreur lors de la déconnexion:", error);
         toast({
@@ -67,11 +70,18 @@ const Navbar = () => {
           variant: "destructive",
         });
       } else {
+        // Manually update authentication state to ensure UI updates
+        setIsAuthenticated(false);
+        
         toast({
           title: "Déconnexion réussie",
           description: "Vous avez été déconnecté avec succès.",
         });
-        navigate("/");
+        
+        // Navigate after state updates
+        setTimeout(() => {
+          navigate("/");
+        }, 100);
       }
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
@@ -149,8 +159,14 @@ const Navbar = () => {
                   Admin
                 </Link>
                 <Separator orientation="vertical" className="h-6 mx-2 bg-gray-600" />
-                <button onClick={handleLogout} className="text-sm text-gray-300 hover:text-orange-500">
-                  Déconnexion
+                <button 
+                  onClick={handleLogout} 
+                  className="text-sm text-gray-300 hover:text-orange-500"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin mr-1"></span>
+                  ) : "Déconnexion"}
                 </button>
               </div>
             ) : null}
@@ -195,12 +211,15 @@ const Navbar = () => {
                 </Link>
                 <button 
                   onClick={() => {
-                    handleLogout();
                     setMobileMenuOpen(false);
+                    handleLogout();
                   }} 
                   className="w-full text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors"
+                  disabled={loading}
                 >
-                  Déconnexion
+                  {loading ? (
+                    <span className="inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin mr-1"></span>
+                  ) : "Déconnexion"}
                 </button>
               </>
             )}
