@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 interface AuthButtonsProps {
@@ -23,7 +24,7 @@ export const AuthButtons = ({
   onLogout
 }: AuthButtonsProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { toast: shadowToast } = useToast();
   const [logoutInProgress, setLogoutInProgress] = useState(false);
 
   const handleLogout = async () => {
@@ -31,25 +32,25 @@ export const AuthButtons = ({
     
     try {
       setLogoutInProgress(true);
+      console.log("Déconnexion en cours...");
       
       // Effectuer la déconnexion
       const { error } = await supabase.auth.signOut();
       
       if (error) {
         console.error("Erreur lors de la déconnexion:", error);
-        toast({
-          title: "Erreur de déconnexion",
-          description: "Une erreur s'est produite lors de la déconnexion.",
-          variant: "destructive",
+        toast.error("Erreur de déconnexion", {
+          description: "Une erreur s'est produite lors de la déconnexion."
         });
       } else {
+        console.log("Déconnexion réussie");
+        
         // Mettre à jour l'état d'authentification manuellement pour être sûr
         setIsAuthenticated(false);
         
-        // Afficher une notification de succès
-        toast({
-          title: "Déconnexion réussie",
-          description: "Vous avez été déconnecté avec succès.",
+        // Afficher une notification de succès en utilisant Sonner
+        toast.success("Déconnexion réussie", {
+          description: "Vous avez été déconnecté avec succès."
         });
         
         // Appeler la fonction de callback si fournie (pour le menu mobile)
@@ -59,19 +60,21 @@ export const AuthButtons = ({
         
         // Naviguer vers la page d'accueil avec un délai pour permettre à tous les états de se mettre à jour
         setTimeout(() => {
+          console.log("Redirection vers la page d'accueil...");
           navigate("/");
-        }, 500);
+        }, 800);
       }
     } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
-      toast({
-        title: "Erreur de déconnexion",
-        description: "Une erreur s'est produite lors de la déconnexion.",
-        variant: "destructive",
+      console.error("Exception lors de la déconnexion:", error);
+      toast.error("Erreur de déconnexion", {
+        description: "Une erreur s'est produite lors de la déconnexion."
       });
     } finally {
-      setLoading(false);
-      setLogoutInProgress(false);
+      // On réinitialise l'état dans tous les cas, même en cas d'erreur
+      setTimeout(() => {
+        setLogoutInProgress(false);
+        setLoading(false);
+      }, 200);
     }
   };
 
