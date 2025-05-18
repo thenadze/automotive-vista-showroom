@@ -1,11 +1,11 @@
-
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
+import { useToast } from "@/hooks/use-toast";
 
 /**
  * Barre de navigation du site avec style épuré et élégant
@@ -16,6 +16,8 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [logoAnimating, setLogoAnimating] = useState(false);
   const { scrollToElement } = useSmoothScroll();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     let isMounted = true;
@@ -55,12 +57,31 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error("Erreur lors de la déconnexion:", error);
+        toast({
+          title: "Erreur de déconnexion",
+          description: "Une erreur s'est produite lors de la déconnexion.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Déconnexion réussie",
+          description: "Vous avez été déconnecté avec succès.",
+        });
+        navigate("/");
       }
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
+      toast({
+        title: "Erreur de déconnexion",
+        description: "Une erreur s'est produite lors de la déconnexion.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
