@@ -31,7 +31,6 @@ export const AuthButtons = ({
     
     try {
       setLogoutInProgress(true);
-      setLoading(true);
       
       // Effectuer la déconnexion
       const { error } = await supabase.auth.signOut();
@@ -44,7 +43,7 @@ export const AuthButtons = ({
           variant: "destructive",
         });
       } else {
-        // Mettre à jour l'état d'authentification
+        // Mettre à jour l'état d'authentification manuellement pour être sûr
         setIsAuthenticated(false);
         
         // Afficher une notification de succès
@@ -61,7 +60,7 @@ export const AuthButtons = ({
         // Naviguer vers la page d'accueil avec un délai pour permettre à tous les états de se mettre à jour
         setTimeout(() => {
           navigate("/");
-        }, 300);
+        }, 500);
       }
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);

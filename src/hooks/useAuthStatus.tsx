@@ -46,16 +46,20 @@ export const useAuthStatus = () => {
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (!isMounted) return;
       
+      console.log("Auth state changed:", event, !!session);
+      
       if (event === 'SIGNED_OUT') {
         setIsAuthenticated(false);
-      } else if (event === 'SIGNED_IN') {
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         setIsAuthenticated(true);
       }
     });
     
     return () => {
       isMounted = false;
-      authListener.subscription.unsubscribe();
+      if (authListener?.subscription) {
+        authListener.subscription.unsubscribe();
+      }
     };
   }, []);
 

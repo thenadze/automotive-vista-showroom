@@ -26,7 +26,7 @@ const App = () => (
     <HelmetProvider>
       <TooltipProvider>
         <Toaster />
-        <Sonner />
+        <Sonner position="top-center" />
         <BrowserRouter>
           <Layout>
             <Routes>
