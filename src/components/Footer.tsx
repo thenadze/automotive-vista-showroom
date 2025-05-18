@@ -1,7 +1,6 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
-import { Instagram, FileText, MapPin, Phone, Mail, Clock } from "lucide-react";
+import { FileText, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Separator } from "./ui/separator";
 
 const Footer = () => {
@@ -16,9 +15,6 @@ const Footer = () => {
             <p className="text-gray-400 mb-4">Votre partenaire de confiance pour la vente de véhicules légers en France.</p>
             
             <div className="flex space-x-4">
-              <a href="#" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
-                <Instagram className="w-4 h-4" />
-              </a>
               <a href="https://www.tiktok.com/@automotive321" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-orange-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
                 {/* TikTok custom SVG icon since it's not available in lucide-react */}
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
