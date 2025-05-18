@@ -24,10 +24,16 @@ export const AuthButtons = ({
 }: AuthButtonsProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [logoutInProgress, setLogoutInProgress] = useState(false);
 
   const handleLogout = async () => {
+    if (logoutInProgress) return; // Empêcher plusieurs clics simultanés
+    
     try {
+      setLogoutInProgress(true);
       setLoading(true);
+      
+      // Effectuer la déconnexion
       const { error } = await supabase.auth.signOut();
       
       if (error) {
@@ -38,23 +44,24 @@ export const AuthButtons = ({
           variant: "destructive",
         });
       } else {
-        // Manually update authentication state to ensure UI updates
+        // Mettre à jour l'état d'authentification
         setIsAuthenticated(false);
         
+        // Afficher une notification de succès
         toast({
           title: "Déconnexion réussie",
           description: "Vous avez été déconnecté avec succès.",
         });
         
-        // Navigate after state updates
+        // Appeler la fonction de callback si fournie (pour le menu mobile)
+        if (onLogout) {
+          onLogout();
+        }
+        
+        // Naviguer vers la page d'accueil avec un délai pour permettre à tous les états de se mettre à jour
         setTimeout(() => {
           navigate("/");
-        }, 100);
-      }
-
-      // Call onLogout callback if provided (for mobile menu)
-      if (onLogout) {
-        onLogout();
+        }, 300);
       }
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
@@ -65,6 +72,7 @@ export const AuthButtons = ({
       });
     } finally {
       setLoading(false);
+      setLogoutInProgress(false);
     }
   };
 
@@ -86,9 +94,9 @@ export const AuthButtons = ({
         <button 
           onClick={handleLogout}
           className="w-full text-center py-3 text-white hover:bg-gray-900 hover:text-orange-500 transition-colors"
-          disabled={loading}
+          disabled={loading || logoutInProgress}
         >
-          {loading ? (
+          {(loading || logoutInProgress) ? (
             <span className="inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin mr-1"></span>
           ) : "Déconnexion"}
         </button>
@@ -105,9 +113,9 @@ export const AuthButtons = ({
       <button 
         onClick={handleLogout}
         className="text-sm text-gray-300 hover:text-orange-500"
-        disabled={loading}
+        disabled={loading || logoutInProgress}
       >
-        {loading ? (
+        {(loading || logoutInProgress) ? (
           <span className="inline-block w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin mr-1"></span>
         ) : "Déconnexion"}
       </button>

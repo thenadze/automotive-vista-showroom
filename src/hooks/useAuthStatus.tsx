@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const useAuthStatus = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -12,32 +13,44 @@ export const useAuthStatus = () => {
     const checkAuth = async () => {
       try {
         if (!isMounted) return;
-        setLoading(true);
+        
+        // Vérifier la session actuelle
         const { data, error } = await supabase.auth.getSession();
+        
         if (!isMounted) return;
+        
         if (error) {
           console.error("Erreur lors de la vérification de l'authentification:", error);
           setLoading(false);
+          setInitialized(true);
           return;
         }
+        
+        // Mettre à jour l'état d'authentification
         setIsAuthenticated(!!data.session);
+        setLoading(false);
+        setInitialized(true);
       } catch (error) {
         console.error("Erreur d'authentification:", error);
         if (isMounted) {
           setIsAuthenticated(false);
-        }
-      } finally {
-        if (isMounted) {
           setLoading(false);
+          setInitialized(true);
         }
       }
     };
     
     checkAuth();
     
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+    // Surveiller les changements d'état d'authentification
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (!isMounted) return;
-      setIsAuthenticated(!!session);
+      
+      if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false);
+      } else if (event === 'SIGNED_IN') {
+        setIsAuthenticated(true);
+      }
     });
     
     return () => {
@@ -46,5 +59,5 @@ export const useAuthStatus = () => {
     };
   }, []);
 
-  return { isAuthenticated, loading, setLoading, setIsAuthenticated };
+  return { isAuthenticated, loading, setLoading, setIsAuthenticated, initialized };
 };
