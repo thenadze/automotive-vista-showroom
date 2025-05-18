@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FileText, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Separator } from "./ui/separator";
-
 const Footer = () => {
   return <footer className="text-white pt-12 pb-6 bg-zinc-950">
       <div className="container mx-auto px-4">
@@ -51,7 +50,7 @@ const Footer = () => {
                 <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center mr-2 text-orange-500 group-hover:-translate-y-1 transition-transform duration-300">
                   <Mail className="w-5 h-5" />
                 </span>
-                <span>À définir</span>
+                <span>À daéfinir</span>
               </li>
               <li className="flex items-start group">
                 <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center mr-2 text-orange-500 group-hover:-translate-y-1 transition-transform duration-300">
