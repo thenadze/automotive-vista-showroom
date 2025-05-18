@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LogIn, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
@@ -132,14 +132,7 @@ const Navbar = () => {
                   Déconnexion
                 </button>
               </div>
-            ) : (
-              <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white" asChild>
-                <Link to="/login">
-                  <LogIn className="h-4 w-4 mr-1" />
-                  <span>Connexion</span>
-                </Link>
-              </Button>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
