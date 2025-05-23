@@ -28,9 +28,9 @@ const ServicesSection: React.FC = () => {
       description: "Nous offrons une garantie étendue sur tous nos véhicules pour votre tranquillité d'esprit."
     },
     {
-      icon: "chevron-down",
-      title: "Financement",
-      description: "Des options de financement flexibles pour vous aider à acheter la voiture de vos rêves."
+      icon: "shield",
+      title: "Fiabilité",
+      description: "Des véhicules soigneusement sélectionnés et inspectés pour vous assurer une tranquillité d'esprit totale."
     }
   ];
 
@@ -83,8 +83,8 @@ const ServicesSection: React.FC = () => {
                   {service.icon === "check" && (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   )}
-                  {service.icon === "chevron-down" && (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  {service.icon === "shield" && (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                   )}
                 </svg>
               </div>
