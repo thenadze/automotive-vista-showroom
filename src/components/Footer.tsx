@@ -59,7 +59,7 @@ const Footer = () => {
                 </span>
                 <div className="flex flex-col">
                   <span>Lun-Dim: 10h-19h</span>
-                  <span className="text-sm text-gray-500">Semaine sur RDV | Weekend sans RDV</span>
+                  <span className="text-sm text-gray-500">Ouvert 7j/7 sans rendez-vous</span>
                 </div>
               </li>
             </ul>
