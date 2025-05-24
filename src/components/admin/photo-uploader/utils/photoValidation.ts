@@ -13,7 +13,7 @@ export interface PhotoValidationOptions {
  * Default validation options for photos
  */
 const defaultValidationOptions: PhotoValidationOptions = {
-  maxSizeInMB: 5,
+  maxSizeInMB: 20, // Augmenté de 5MB à 20MB
   allowedTypes: ['image/'],
 };
 
@@ -29,7 +29,7 @@ export const validateFiles = (
   toast: ReturnType<typeof useToast>['toast'],
   options: PhotoValidationOptions = defaultValidationOptions
 ): boolean => {
-  const { maxSizeInMB = 5, allowedTypes = ['image/'] } = options;
+  const { maxSizeInMB = 20, allowedTypes = ['image/'] } = options; // Augmenté la valeur par défaut
   
   // Verify file sizes
   const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
