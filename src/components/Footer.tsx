@@ -1,10 +1,11 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { FileText, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Separator } from "./ui/separator";
+
 const Footer = () => {
-  return <footer className="text-white pt-12 pb-6 bg-zinc-950">
+  return (
+    <footer className="text-white pt-12 pb-6 bg-zinc-950">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           <div>
@@ -59,7 +60,7 @@ const Footer = () => {
                 </span>
                 <div className="flex flex-col">
                   <span>Lun-Dim: 10h-19h</span>
-                  <span className="text-sm text-gray-500">Ouvert 7j/7 sans rendez-vous</span>
+                  <span className="text-sm text-gray-500">Ouvert 7j/7 avec rendez-vous</span>
                 </div>
               </li>
             </ul>
@@ -94,6 +95,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;
