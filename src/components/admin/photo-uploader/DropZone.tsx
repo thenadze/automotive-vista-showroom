@@ -58,7 +58,7 @@ const DropZone: React.FC<DropZoneProps> = ({
         disabled={disabled}
       />
       <p className="mt-2 text-xs text-gray-500">
-        PNG, JPG ou JPEG jusqu'à 5MB
+        PNG, JPG ou JPEG
       </p>
     </div>
   );
