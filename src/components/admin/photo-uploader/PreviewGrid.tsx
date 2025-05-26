@@ -20,13 +20,8 @@ const PreviewGrid: React.FC<PreviewGridProps> = ({
   onRemoveExisting,
   disabled = false,
 }) => {
-  console.log('PreviewGrid rendering:', { 
-    existingPhotosCount: existingPhotos.length, 
-    previewsCount: previews.length 
-  });
-  
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
       {/* Photos existantes */}
       {existingPhotos?.map((photoUrl, index) => (
         <PhotoPreview

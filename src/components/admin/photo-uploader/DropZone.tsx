@@ -23,30 +23,30 @@ const DropZone: React.FC<DropZoneProps> = ({
   fileInputRef,
   onFileChange,
 }) => {
-  console.log('DropZone rendering on mobile');
-  
   return (
     <div
-      className={`border-2 border-dashed rounded-lg p-8 text-center ${
-        disabled ? 'bg-gray-100 border-gray-300' : 'border-gray-300 hover:border-blue-500'
+      className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-300 ${
+        disabled 
+          ? 'bg-gray-100 border-gray-300' 
+          : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
       }`}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <Image className="mx-auto h-16 w-16 text-gray-400" />
-      <div className="mt-6">
-        <p className="text-base text-gray-600 font-medium leading-relaxed">
+      <Image className="mx-auto h-12 w-12 text-gray-400 transition-transform duration-300 hover:scale-110" />
+      <div className="mt-4">
+        <p className="text-base text-gray-600 font-medium">
           Glissez-déposez des photos ici, ou
         </p>
         <Button
           type="button"
           variant="outline"
           size="lg"
-          className="mt-6 text-base px-8 py-4 font-medium h-auto"
+          className="mt-4 text-base px-6 py-3 font-medium transition-all duration-200 hover:scale-105"
           onClick={onClick}
           disabled={disabled}
         >
-          <Plus className="mr-3 h-5 w-5" />
+          <Plus className="mr-2 h-5 w-5" />
           Parcourir
         </Button>
       </div>
@@ -59,7 +59,7 @@ const DropZone: React.FC<DropZoneProps> = ({
         className="hidden"
         disabled={disabled}
       />
-      <p className="mt-6 text-sm text-gray-500 font-medium">
+      <p className="mt-4 text-sm text-gray-500">
         PNG, JPG ou JPEG
       </p>
     </div>

@@ -20,18 +20,16 @@ const PhotoPreview: React.FC<PhotoPreviewProps> = ({
   onRemove,
   isExisting = false,
 }) => {
-  console.log('PhotoPreview rendering:', { index, isExisting });
-  
   return (
     <div className="relative group">
       <img
         src={preview}
         alt={`${isExisting ? 'Photo existante' : 'Aperçu'} ${index + 1}`}
-        className="h-32 w-full object-cover rounded-lg"
+        className="h-24 w-full object-cover rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
       />
       
       {isExisting && (
-        <span className="absolute top-2 left-2 bg-gray-900 bg-opacity-95 text-white px-3 py-1.5 text-sm font-semibold rounded-md">
+        <span className="absolute top-1.5 left-1.5 bg-gray-900 bg-opacity-90 text-white px-2 py-1 text-xs font-medium rounded">
           Existante
         </span>
       )}
@@ -40,10 +38,10 @@ const PhotoPreview: React.FC<PhotoPreviewProps> = ({
         <button
           type="button"
           onClick={() => onRemove(index)}
-          className="absolute top-2 right-2 p-2.5 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"
+          className="absolute top-1.5 right-1.5 p-1.5 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg hover:bg-red-600 hover:scale-110"
           title="Supprimer"
         >
-          <Trash2 className="h-5 w-5" />
+          <Trash2 className="h-3.5 w-3.5" />
         </button>
       )}
     </div>
