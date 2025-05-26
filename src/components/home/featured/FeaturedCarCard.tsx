@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -146,7 +147,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
           <CarGallery 
             photos={car.photos || []} 
             className="w-full"
-            style={{ height: isMobile ? "120px" : "140px" }}
+            style={{ height: isMobile ? "140px" : "180px" }}
           />
           
           {car.year && (
@@ -171,7 +172,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
           
           <div className="flex items-center justify-between mb-2">
             <div className="mr-2">
-              <span className="block text-stone-500 text-xs">Prix/jour</span>
+              <span className="block text-stone-500 text-xs">Prix</span>
               <span className="text-base md:text-lg font-bold text-stone-700 whitespace-nowrap">
                 {formattedPrice}
               </span>

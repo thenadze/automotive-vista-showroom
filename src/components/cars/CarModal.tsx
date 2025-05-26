@@ -141,7 +141,7 @@ const CarModal: React.FC<CarModalProps> = ({ car, isOpen, onClose }) => {
               <h3 className="text-lg font-semibold text-stone-700">Tarif</h3>
               <div className="bg-stone-50 p-4 rounded-lg">
                 <div className="text-center">
-                  <span className="block text-stone-500 text-sm mb-1">Prix par jour</span>
+                  <span className="block text-stone-500 text-sm mb-1">Prix</span>
                   <span className="text-3xl font-bold text-stone-700">
                     {formattedPrice}
                   </span>

@@ -148,7 +148,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           <CarGallery 
             photos={car.photos || []} 
             className="w-full" 
-            style={{ height: isMobile ? "120px" : "140px" }}
+            style={{ height: isMobile ? "140px" : "180px" }}
           />
           
           {car.year && (
@@ -170,7 +170,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           </div>
           <div className="flex items-center justify-between">
             <div className="mr-2">
-              <span className="block text-stone-500 text-xs">Prix/jour</span>
+              <span className="block text-stone-500 text-xs">Prix</span>
               <span className="text-base md:text-lg font-bold text-stone-700 whitespace-nowrap">
                 {formattedPrice}
               </span>
