@@ -125,7 +125,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
   return (
     <>
       <Card 
-        className="bg-white rounded-lg overflow-hidden shadow car-card-interactive car-card-glow cursor-pointer"
+        className="bg-white rounded-lg overflow-hidden shadow cursor-pointer transition-all duration-300 hover:shadow-lg"
         onClick={handleCardClick}
       >
         <div className="relative w-full">
@@ -133,6 +133,8 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             photos={car.photos || []} 
             className="w-full" 
             style={{ height: isMobile ? "140px" : "180px" }}
+            autoSlide={true}
+            autoSlideInterval={4000}
           />
           
           {car.year && (

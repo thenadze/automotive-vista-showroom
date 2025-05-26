@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CarPhoto } from "@/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -10,6 +10,8 @@ interface CarGalleryProps {
   style?: React.CSSProperties;
   enableSwipe?: boolean;
   showArrows?: boolean;
+  autoSlide?: boolean;
+  autoSlideInterval?: number;
 }
 
 const CarGallery: React.FC<CarGalleryProps> = ({ 
@@ -17,7 +19,9 @@ const CarGallery: React.FC<CarGalleryProps> = ({
   className = "", 
   style = {},
   enableSwipe = true,
-  showArrows = true
+  showArrows = true,
+  autoSlide = false,
+  autoSlideInterval = 4000
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -25,7 +29,9 @@ const CarGallery: React.FC<CarGalleryProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const isMobile = useIsMobile();
+  const autoSlideIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Filtrer les photos valides
   const validPhotos = photos?.filter(photo => 
@@ -34,8 +40,55 @@ const CarGallery: React.FC<CarGalleryProps> = ({
 
   const minSwipeDistance = 50;
 
+  // Fonction pour aller à l'image suivante
+  const goToNext = () => {
+    if (isAnimating || validPhotos.length <= 1) return;
+    setIsAnimating(true);
+    setCurrentIndex(prev => (prev + 1) % validPhotos.length);
+    setTimeout(() => setIsAnimating(false), 400);
+  };
+
+  const goToPrevious = () => {
+    if (isAnimating || validPhotos.length <= 1) return;
+    setIsAnimating(true);
+    setCurrentIndex(prev => prev > 0 ? prev - 1 : validPhotos.length - 1);
+    setTimeout(() => setIsAnimating(false), 400);
+  };
+
+  // Diaporama automatique
+  useEffect(() => {
+    if (!autoSlide || validPhotos.length <= 1 || isPaused) {
+      if (autoSlideIntervalRef.current) {
+        clearInterval(autoSlideIntervalRef.current);
+        autoSlideIntervalRef.current = null;
+      }
+      return;
+    }
+
+    autoSlideIntervalRef.current = setInterval(() => {
+      goToNext();
+    }, autoSlideInterval);
+
+    return () => {
+      if (autoSlideIntervalRef.current) {
+        clearInterval(autoSlideIntervalRef.current);
+        autoSlideIntervalRef.current = null;
+      }
+    };
+  }, [autoSlide, validPhotos.length, isPaused, autoSlideInterval, currentIndex]);
+
+  // Pause le diaporama au survol (desktop) ou lors d'interaction (mobile)
+  const handleMouseEnter = () => {
+    if (!isMobile) setIsPaused(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isMobile) setIsPaused(false);
+  };
+
   const onTouchStart = (e: React.TouchEvent) => {
     if (!enableSwipe || validPhotos.length <= 1) return;
+    setIsPaused(true); // Pause pendant l'interaction
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
     setIsDragging(true);
@@ -58,19 +111,16 @@ const CarGallery: React.FC<CarGalleryProps> = ({
     
     setIsDragging(false);
     setDragOffset(0);
+    setIsPaused(false); // Reprendre le diaporama
     
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
-    if (isLeftSwipe && currentIndex < validPhotos.length - 1) {
-      setIsAnimating(true);
-      setCurrentIndex(currentIndex + 1);
-      setTimeout(() => setIsAnimating(false), 400);
-    } else if (isRightSwipe && currentIndex > 0) {
-      setIsAnimating(true);
-      setCurrentIndex(currentIndex - 1);
-      setTimeout(() => setIsAnimating(false), 400);
+    if (isLeftSwipe) {
+      goToNext();
+    } else if (isRightSwipe) {
+      goToPrevious();
     } else {
       // Animation de rebond si le swipe n'est pas assez fort
       if (Math.abs(distance) > 10) {
@@ -86,26 +136,21 @@ const CarGallery: React.FC<CarGalleryProps> = ({
     }
   };
 
-  const goToPrevious = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : validPhotos.length - 1);
-    setTimeout(() => setIsAnimating(false), 400);
-  };
-
-  const goToNext = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex(currentIndex < validPhotos.length - 1 ? currentIndex + 1 : 0);
-    setTimeout(() => setIsAnimating(false), 400);
-  };
-
   // Reset index if photos change
   useEffect(() => {
     if (currentIndex >= validPhotos.length && validPhotos.length > 0) {
       setCurrentIndex(0);
     }
   }, [validPhotos.length, currentIndex]);
+
+  // Cleanup à la destruction du composant
+  useEffect(() => {
+    return () => {
+      if (autoSlideIntervalRef.current) {
+        clearInterval(autoSlideIntervalRef.current);
+      }
+    };
+  }, []);
 
   if (!validPhotos || validPhotos.length === 0) {
     return (
@@ -121,7 +166,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({
         <img
           src={validPhotos[0].photo_url}
           alt="Véhicule"
-          className="w-full h-full object-cover image-transition"
+          className="w-full h-full object-cover"
           onError={(e) => {
             console.error("Error loading image:", validPhotos[0].photo_url);
             (e.target as HTMLImageElement).src = "/placeholder.svg";
@@ -147,12 +192,14 @@ const CarGallery: React.FC<CarGalleryProps> = ({
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div 
-        className={`flex h-full swipe-gallery ${isDragging ? 'swiping' : ''} ${isAnimating ? 'transition-transform duration-400 ease-out' : ''}`}
+        className={`flex h-full swipe-gallery ${isDragging ? 'swiping' : ''}`}
         style={{ 
           transform: `translateX(${getTransformValue()}%)`,
-          transitionDuration: isDragging ? '0ms' : '400ms'
+          transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }}
       >
         {validPhotos.map((photo, index) => (
@@ -160,7 +207,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({
             <img
               src={photo.photo_url}
               alt={`Véhicule ${index + 1}`}
-              className={`w-full h-full object-cover ${index === currentIndex ? 'image-transition' : ''}`}
+              className="w-full h-full object-cover"
               onError={(e) => {
                 console.error("Error loading image:", photo.photo_url);
                 (e.target as HTMLImageElement).src = "/placeholder.svg";
@@ -175,7 +222,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all z-10"
             aria-label="Photo précédente"
             disabled={isAnimating}
           >
@@ -183,7 +230,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all z-10"
             aria-label="Photo suivante"
             disabled={isAnimating}
           >
@@ -194,7 +241,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({
 
       {/* Indicateurs de pagination */}
       {validPhotos.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
           {validPhotos.map((_, index) => (
             <button
               key={index}
@@ -202,6 +249,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({
                 if (!isAnimating) {
                   setIsAnimating(true);
                   setCurrentIndex(index);
+                  setIsPaused(false); // Reprendre le diaporama après clic manuel
                   setTimeout(() => setIsAnimating(false), 400);
                 }
               }}

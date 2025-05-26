@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -120,7 +121,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
   return (
     <>
       <Card 
-        className="bg-white rounded-lg overflow-hidden shadow car-card-interactive car-card-glow cursor-pointer"
+        className="bg-white rounded-lg overflow-hidden shadow cursor-pointer transition-all duration-300 hover:shadow-lg"
         onClick={handleCardClick}
       >
         <div className="relative w-full">
@@ -128,6 +129,8 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
             photos={car.photos || []} 
             className="w-full"
             style={{ height: isMobile ? "140px" : "180px" }}
+            autoSlide={true}
+            autoSlideInterval={4500}
           />
           
           {car.year && (
