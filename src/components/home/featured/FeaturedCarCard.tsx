@@ -120,7 +120,7 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
   return (
     <>
       <Card 
-        className="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow duration-200 cursor-pointer"
+        className="bg-white rounded-lg overflow-hidden shadow car-card-interactive car-card-glow cursor-pointer"
         onClick={handleCardClick}
       >
         <div className="relative w-full">

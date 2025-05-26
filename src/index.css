@@ -113,8 +113,84 @@
     @apply bg-gradient-to-r from-stone-700 to-stone-900;
   }
   
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  /* Animation interactive pour les cartes de véhicules */
+  .car-card-interactive {
+    @apply transition-all duration-300 ease-out relative;
+    transform: scale(1);
+  }
+  
+  .car-card-interactive:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .car-card-interactive:active {
+    transform: scale(0.98);
+    transition-duration: 150ms;
+  }
+  
+  /* Effet de lumière au survol */
+  .car-card-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  
+  .car-card-glow:hover::before {
+    opacity: 1;
+  }
+  
+  /* Animation de swipe fluide pour mobile */
+  .swipe-gallery {
+    @apply transition-transform duration-300 ease-out;
+  }
+  
+  .swipe-gallery.swiping {
+    transition-duration: 150ms;
+  }
+  
+  .swipe-gallery.bounce-left {
+    animation: bounce-left 0.3s ease-out;
+  }
+  
+  .swipe-gallery.bounce-right {
+    animation: bounce-right 0.3s ease-out;
+  }
+  
+  @keyframes bounce-left {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+  }
+  
+  @keyframes bounce-right {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+  }
+  
+  /* Animation de changement d'image fluide */
+  .image-transition {
+    animation: image-fade-in 0.4s ease-out;
+  }
+  
+  @keyframes image-fade-in {
+    0% {
+      opacity: 0;
+      transform: scale(1.05);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   
   .bg-overlay {
