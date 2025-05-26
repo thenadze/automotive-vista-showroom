@@ -25,26 +25,26 @@ const DropZone: React.FC<DropZoneProps> = ({
 }) => {
   return (
     <div
-      className={`border-2 border-dashed rounded-lg p-6 text-center ${
+      className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center ${
         disabled ? 'bg-gray-100 border-gray-300' : 'border-gray-300 hover:border-blue-500'
       }`}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <Image className="mx-auto h-12 w-12 text-gray-400" />
+      <Image className="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
       <div className="mt-2">
-        <p className="text-sm text-gray-600">
+        <p className="text-xs sm:text-sm text-gray-600">
           Glissez-déposez des photos ici, ou
         </p>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="mt-2"
+          className="mt-2 text-xs sm:text-sm px-3 py-1 sm:px-4 sm:py-2"
           onClick={onClick}
           disabled={disabled}
         >
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
           Parcourir
         </Button>
       </div>
