@@ -1,4 +1,3 @@
-
 import React from "react";
 import { CarWithDetails } from "@/types";
 import {
@@ -12,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import CarGallery from "@/components/home/CarGallery";
 import { predefinedFuelTypes } from "@/components/admin/car-form/fuelTypes";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CarModalProps {
   car: CarWithDetails | null;
@@ -20,6 +20,8 @@ interface CarModalProps {
 }
 
 const CarModal: React.FC<CarModalProps> = ({ car, isOpen, onClose }) => {
+  const isMobile = useIsMobile();
+  
   if (!car) return null;
 
   const formattedPrice = car.daily_price 
@@ -95,7 +97,9 @@ const CarModal: React.FC<CarModalProps> = ({ car, isOpen, onClose }) => {
           <CarGallery 
             photos={car.photos || []} 
             className="w-full"
-            style={{ height: "250px" }}
+            style={{ height: isMobile ? "200px" : "250px" }}
+            enableSwipe={true}
+            showArrows={!isMobile}
           />
           
           {car.year && (
@@ -105,44 +109,44 @@ const CarModal: React.FC<CarModalProps> = ({ car, isOpen, onClose }) => {
           )}
         </div>
         
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <DialogHeader className="mb-4">
-            <DialogTitle className="text-2xl font-bold text-stone-800">
+            <DialogTitle className="text-xl md:text-2xl font-bold text-stone-800">
               {carTitle || "-"}
             </DialogTitle>
           </DialogHeader>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-stone-700">Caractéristiques</h3>
+          <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'} gap-4 md:gap-6 mb-4 md:mb-6`}>
+            <div className="space-y-3 md:space-y-4">
+              <h3 className="text-base md:text-lg font-semibold text-stone-700">Caractéristiques</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-stone-600">Carburant:</span>
-                  <span className="font-medium">{fuelTypeName}</span>
+                  <span className="text-stone-600 text-sm">Carburant:</span>
+                  <span className="font-medium text-sm">{fuelTypeName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-stone-600">Transmission:</span>
-                  <span className="font-medium">{transmissionName}</span>
+                  <span className="text-stone-600 text-sm">Transmission:</span>
+                  <span className="font-medium text-sm">{transmissionName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-stone-600">Kilométrage:</span>
-                  <span className="font-medium">{formattedMileage}</span>
+                  <span className="text-stone-600 text-sm">Kilométrage:</span>
+                  <span className="font-medium text-sm">{formattedMileage}</span>
                 </div>
                 {car.year && (
                   <div className="flex justify-between">
-                    <span className="text-stone-600">Année:</span>
-                    <span className="font-medium">{car.year}</span>
+                    <span className="text-stone-600 text-sm">Année:</span>
+                    <span className="font-medium text-sm">{car.year}</span>
                   </div>
                 )}
               </div>
             </div>
             
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-stone-700">Tarif</h3>
-              <div className="bg-stone-50 p-4 rounded-lg">
+            <div className="space-y-3 md:space-y-4">
+              <h3 className="text-base md:text-lg font-semibold text-stone-700">Tarif</h3>
+              <div className="bg-stone-50 p-3 md:p-4 rounded-lg">
                 <div className="text-center">
-                  <span className="block text-stone-500 text-sm mb-1">Prix</span>
-                  <span className="text-3xl font-bold text-stone-700">
+                  <span className="block text-stone-500 text-xs md:text-sm mb-1">Prix</span>
+                  <span className="text-xl md:text-3xl font-bold text-stone-700">
                     {formattedPrice}
                   </span>
                 </div>
@@ -150,17 +154,17 @@ const CarModal: React.FC<CarModalProps> = ({ car, isOpen, onClose }) => {
             </div>
           </div>
           
-          {car.description && (
+          {!isMobile && car.description && (
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-stone-700 mb-2">Description</h3>
               <p className="text-stone-600 leading-relaxed">{car.description}</p>
             </div>
           )}
           
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
             <Button
               asChild
-              className="flex-1 bg-stone-700 hover:bg-stone-800 text-white"
+              className="flex-1 bg-stone-700 hover:bg-stone-800 text-white text-sm md:text-base"
             >
               <Link to={`/cars/${car.id}`} onClick={onClose}>
                 Voir tous les détails
@@ -169,7 +173,7 @@ const CarModal: React.FC<CarModalProps> = ({ car, isOpen, onClose }) => {
             <Button
               variant="outline"
               onClick={onClose}
-              className="flex-1 border-stone-300 text-stone-700 hover:bg-stone-50"
+              className="flex-1 border-stone-300 text-stone-700 hover:bg-stone-50 text-sm md:text-base"
             >
               Fermer
             </Button>

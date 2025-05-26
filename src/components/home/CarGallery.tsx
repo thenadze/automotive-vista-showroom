@@ -1,53 +1,94 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { CarPhoto } from "@/types";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CarGalleryProps {
   photos: CarPhoto[];
   className?: string;
   style?: React.CSSProperties;
+  enableSwipe?: boolean;
+  showArrows?: boolean;
 }
 
-const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => {
-  // Si pas de photos, afficher un placeholder
-  if (!photos || photos.length === 0) {
+const CarGallery: React.FC<CarGalleryProps> = ({ 
+  photos, 
+  className = "", 
+  style = {},
+  enableSwipe = true,
+  showArrows = true
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const isMobile = useIsMobile();
+
+  // Filtrer les photos valides
+  const validPhotos = photos?.filter(photo => 
+    photo && photo.photo_url && typeof photo.photo_url === 'string'
+  ) || [];
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (!enableSwipe) return;
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!enableSwipe) return;
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!enableSwipe || !touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && currentIndex < validPhotos.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+    if (isRightSwipe && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : validPhotos.length - 1);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex(currentIndex < validPhotos.length - 1 ? currentIndex + 1 : 0);
+  };
+
+  // Reset index if photos change
+  useEffect(() => {
+    if (currentIndex >= validPhotos.length && validPhotos.length > 0) {
+      setCurrentIndex(0);
+    }
+  }, [validPhotos.length, currentIndex]);
+
+  if (!validPhotos || validPhotos.length === 0) {
     return (
-      <div 
-        className={cn("w-full h-full bg-stone-100", className)}
-        style={style}
-      >
-        <img 
-          src="/placeholder.svg" 
-          alt="Aucune photo"
-          className="w-full h-full object-cover"
-        />
+      <div className={`relative bg-gray-200 flex items-center justify-center ${className}`} style={style}>
+        <p className="text-gray-500 text-sm">Aucune photo disponible</p>
       </div>
     );
   }
 
-  // Si une seule photo, pas besoin de carousel
-  if (photos.length === 1) {
+  if (validPhotos.length === 1) {
     return (
-      <div 
-        className={cn("w-full h-full relative overflow-hidden rounded-t-lg", className)}
-        style={style}
-        data-aos="fade-up"
-        data-aos-once="true"
-      >
-        <img 
-          src={photos[0].photo_url} 
-          alt="Photo du véhicule"
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+      <div className={`relative ${className}`} style={style}>
+        <img
+          src={validPhotos[0].photo_url}
+          alt="Véhicule"
+          className="w-full h-full object-cover"
           onError={(e) => {
+            console.error("Error loading image:", validPhotos[0].photo_url);
             (e.target as HTMLImageElement).src = "/placeholder.svg";
           }}
         />
@@ -55,45 +96,71 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => 
     );
   }
 
-  // Sinon, afficher le carousel
   return (
-    <Carousel 
-      className={cn("w-full", className)}
+    <div 
+      className={`relative overflow-hidden ${className}`} 
       style={style}
-      data-aos="fade-up"
-      data-aos-once="true"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     >
-      <CarouselContent>
-        {photos.map((photo, index) => (
-          <CarouselItem key={photo.id || index}>
-            <Card className="border-none">
-              <CardContent className="p-0 overflow-hidden rounded-lg">
-                <div className="overflow-hidden">
-                  <img
-                    src={photo.photo_url}
-                    alt={`Photo ${index + 1} du véhicule`}
-                    className="w-full h-full object-cover transition-all duration-300 hover:scale-105"
-                    style={style || { height: "180px" }}
-                    loading="lazy" 
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/placeholder.svg";
-                    }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </CarouselItem>
+      <div 
+        className="flex transition-transform duration-300 ease-in-out h-full"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
+        {validPhotos.map((photo, index) => (
+          <div key={photo.id || index} className="min-w-full h-full">
+            <img
+              src={photo.photo_url}
+              alt={`Véhicule ${index + 1}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error("Error loading image:", photo.photo_url);
+                (e.target as HTMLImageElement).src = "/placeholder.svg";
+              }}
+            />
+          </div>
         ))}
-      </CarouselContent>
-      <div className="absolute inset-0 flex items-center justify-between px-2 opacity-0 hover:opacity-100 transition-opacity">
-        <CarouselPrevious 
-          className="relative rounded-full bg-stone-100/80 hover:bg-stone-100 border-stone-200 shadow-md h-6 w-6 left-0"
-        />
-        <CarouselNext 
-          className="relative rounded-full bg-stone-100/80 hover:bg-stone-100 border-stone-200 shadow-md h-6 w-6 right-0"
-        />
       </div>
-    </Carousel>
+
+      {/* Navigation flèches (desktop uniquement) */}
+      {showArrows && !isMobile && validPhotos.length > 1 && (
+        <>
+          <button
+            onClick={goToPrevious}
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all"
+            aria-label="Photo précédente"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            onClick={goToNext}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all"
+            aria-label="Photo suivante"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </>
+      )}
+
+      {/* Indicateurs de pagination */}
+      {validPhotos.length > 1 && (
+        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {validPhotos.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all ${
+                index === currentIndex 
+                  ? 'bg-white' 
+                  : 'bg-white bg-opacity-50'
+              }`}
+              aria-label={`Aller à la photo ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
