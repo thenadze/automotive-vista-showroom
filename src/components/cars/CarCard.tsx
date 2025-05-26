@@ -16,7 +16,6 @@ interface CarCardProps {
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const isMobile = useIsMobile();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
   
   // Formatter le prix avec format français
   const formattedPrice = car.daily_price 
@@ -123,26 +122,11 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     setIsModalOpen(true);
   };
 
-  const handleTouchStart = () => {
-    setIsPressed(true);
-  };
-
-  const handleTouchEnd = () => {
-    setIsPressed(false);
-  };
-
   return (
     <>
       <Card 
-        className={`bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300 cursor-pointer
-          ${isPressed ? 'scale-105 shadow-xl' : 'hover:scale-102'}
-          active:scale-105 touch-manipulation`}
+        className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300 cursor-pointer"
         onClick={handleCardClick}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onMouseDown={() => setIsPressed(true)}
-        onMouseUp={() => setIsPressed(false)}
-        onMouseLeave={() => setIsPressed(false)}
       >
         <div className="relative w-full">
           <CarGallery 
