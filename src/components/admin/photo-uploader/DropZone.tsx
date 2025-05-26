@@ -25,26 +25,26 @@ const DropZone: React.FC<DropZoneProps> = ({
 }) => {
   return (
     <div
-      className={`border-2 border-dashed rounded-lg p-4 sm:p-6 text-center ${
+      className={`border-2 border-dashed rounded-lg p-6 sm:p-8 text-center ${
         disabled ? 'bg-gray-100 border-gray-300' : 'border-gray-300 hover:border-blue-500'
       }`}
       onDragOver={onDragOver}
       onDrop={onDrop}
     >
-      <Image className="mx-auto h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
-      <div className="mt-2">
-        <p className="text-xs sm:text-sm text-gray-600">
+      <Image className="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-gray-400" />
+      <div className="mt-4">
+        <p className="text-sm sm:text-base text-gray-600 font-medium">
           Glissez-déposez des photos ici, ou
         </p>
         <Button
           type="button"
           variant="outline"
-          size="sm"
-          className="mt-2 text-xs sm:text-sm px-3 py-1 sm:px-4 sm:py-2"
+          size="lg"
+          className="mt-4 text-sm sm:text-base px-6 py-3 font-medium"
           onClick={onClick}
           disabled={disabled}
         >
-          <Plus className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+          <Plus className="mr-2 h-5 w-5" />
           Parcourir
         </Button>
       </div>
@@ -57,7 +57,7 @@ const DropZone: React.FC<DropZoneProps> = ({
         className="hidden"
         disabled={disabled}
       />
-      <p className="mt-2 text-xs text-gray-500">
+      <p className="mt-4 text-xs sm:text-sm text-gray-500">
         PNG, JPG ou JPEG
       </p>
     </div>
