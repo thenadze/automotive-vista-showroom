@@ -125,7 +125,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
   return (
     <>
       <Card 
-        className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+        className="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow duration-200 cursor-pointer"
         onClick={handleCardClick}
       >
         <div className="relative w-full">
