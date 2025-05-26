@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import CarGallery from "@/components/home/CarGallery";
 import { predefinedFuelTypes } from "@/components/admin/car-form/fuelTypes";
+import CarModal from "@/components/cars/CarModal";
 
 interface FeaturedCarCardProps {
   car: CarWithDetails;
@@ -15,6 +16,8 @@ interface FeaturedCarCardProps {
 
 const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
   const isMobile = useIsMobile();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
   
   // Préparer le prix avec format français
   const formattedPrice = car.daily_price 
@@ -110,78 +113,108 @@ const FeaturedCarCard: React.FC<FeaturedCarCardProps> = ({ car, index }) => {
   const fuelTypeName = getFuelTypeName();
   const transmissionName = getTransmissionName();
   
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsModalOpen(true);
+  };
+
+  const handleTouchStart = () => {
+    setIsPressed(true);
+  };
+
+  const handleTouchEnd = () => {
+    setIsPressed(false);
+  };
+  
   return (
-    <Card 
-      className="bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300"
-      data-aos="fade-up" 
-      data-aos-delay={(index % 3) * 100}
-      data-aos-once="true"
-    >
-      <div className="relative w-full">
-        <CarGallery 
-          photos={car.photos || []} 
-          className="w-full"
-          style={{ height: isMobile ? "140px" : "180px" }}
-        />
-        
-        {car.year && (
-          <div className="absolute top-2 right-2 z-10">
-            <Badge className="bg-stone-700 text-white text-xs">{car.year}</Badge>
-          </div>
-        )}
-      </div>
-      
-      <CardContent className="p-3 md:p-4">
-        <h3 className="text-base md:text-lg font-bold mb-2 text-stone-800 truncate">
-          {carTitle || "-"}
-        </h3>
-        
-        <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-2">
-          <div className="flex flex-col space-y-1">
-            <span>{fuelTypeName}</span>
-            <span>{transmissionName}</span>
-          </div>
-          <span className="text-right">{formattedMileage}</span>
+    <>
+      <Card 
+        className={`bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300 cursor-pointer
+          ${isPressed ? 'scale-105 shadow-xl' : 'hover:scale-102'}
+          active:scale-105 touch-manipulation`}
+        data-aos="fade-up" 
+        data-aos-delay={(index % 3) * 100}
+        data-aos-once="true"
+        onClick={handleCardClick}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={() => setIsPressed(true)}
+        onMouseUp={() => setIsPressed(false)}
+        onMouseLeave={() => setIsPressed(false)}
+      >
+        <div className="relative w-full">
+          <CarGallery 
+            photos={car.photos || []} 
+            className="w-full"
+            style={{ height: isMobile ? "120px" : "140px" }}
+          />
+          
+          {car.year && (
+            <div className="absolute top-2 right-2 z-10">
+              <Badge className="bg-stone-700 text-white text-xs">{car.year}</Badge>
+            </div>
+          )}
         </div>
         
-        <div className="flex items-center justify-between mb-2">
-          <div className="mr-2">
-            <span className="block text-stone-500 text-xs">Prix/jour</span>
-            <span className="text-base md:text-lg font-bold text-stone-700 whitespace-nowrap">
-              {formattedPrice}
-            </span>
+        <CardContent className="p-3 md:p-4">
+          <h3 className="text-base md:text-lg font-bold mb-2 text-stone-800 truncate">
+            {carTitle || "-"}
+          </h3>
+          
+          <div className="flex justify-between text-xs md:text-sm text-stone-600 mb-2">
+            <div className="flex flex-col space-y-1">
+              <span>{fuelTypeName}</span>
+              <span>{transmissionName}</span>
+            </div>
+            <span className="text-right">{formattedMileage}</span>
           </div>
           
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            className="border-stone-700 text-stone-700 hover:bg-stone-700 hover:text-white whitespace-nowrap text-xs"
-          >
-            <Link to={`/cars/${car.id}`}>
-              Détails
-            </Link>
-          </Button>
-        </div>
-        
-        <div className="flex flex-wrap gap-2 text-xs text-stone-500">
-          <span className="flex items-center">
-            <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Disponible
-          </span>
-          <span className="flex items-center ml-auto">
-            <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            Réponse rapide
-          </span>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="flex items-center justify-between mb-2">
+            <div className="mr-2">
+              <span className="block text-stone-500 text-xs">Prix/jour</span>
+              <span className="text-base md:text-lg font-bold text-stone-700 whitespace-nowrap">
+                {formattedPrice}
+              </span>
+            </div>
+            
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="border-stone-700 text-stone-700 hover:bg-stone-700 hover:text-white whitespace-nowrap text-xs"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Link to={`/cars/${car.id}`}>
+                Détails
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="flex flex-wrap gap-2 text-xs text-stone-500">
+            <span className="flex items-center">
+              <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              Disponible
+            </span>
+            <span className="flex items-center ml-auto">
+              <svg className="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+              Réponse rapide
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <CarModal 
+        car={car}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 };
 
