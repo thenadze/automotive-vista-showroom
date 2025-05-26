@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -133,30 +132,30 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
         <CarGallery 
           photos={car.photos || []} 
           className="w-full" 
-          style={{ height: isMobile ? "200px" : "300px" }}
+          style={{ height: isMobile ? "140px" : "180px" }}
         />
         
         {car.year && (
-          <div className="absolute top-3 right-3 z-10">
-            <Badge className="bg-stone-700 text-white">{car.year}</Badge>
+          <div className="absolute top-2 right-2 z-10">
+            <Badge className="bg-stone-700 text-white text-xs">{car.year}</Badge>
           </div>
         )}
       </div>
       <CardContent className="p-3 md:p-4">
-        <h3 className="text-lg md:text-xl font-semibold mb-2 truncate">
+        <h3 className="text-base md:text-lg font-semibold mb-2 truncate">
           {carTitle || "-"}
         </h3>
-        <div className="flex justify-between text-xs md:text-sm text-gray-600 mb-3">
-          <div className="flex flex-col">
+        <div className="flex justify-between text-xs md:text-sm text-gray-600 mb-2">
+          <div className="flex flex-col space-y-1">
             <span>{fuelTypeName}</span>
-            <span className="mt-1">{transmissionName}</span>
+            <span>{transmissionName}</span>
           </div>
-          <span>{formattedMileage}</span>
+          <span className="text-right">{formattedMileage}</span>
         </div>
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between">
           <div className="mr-2">
-            <span className="block text-stone-500 text-xs">Prix</span>
-            <span className="text-lg md:text-xl font-bold text-stone-700 whitespace-nowrap">
+            <span className="block text-stone-500 text-xs">Prix/jour</span>
+            <span className="text-base md:text-lg font-bold text-stone-700 whitespace-nowrap">
               {formattedPrice}
             </span>
           </div>
@@ -164,8 +163,8 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
           <Button
             asChild
             variant="outline"
-            size={isMobile ? "sm" : "default"}
-            className="border-stone-700 text-stone-700 hover:bg-stone-700 hover:text-white whitespace-nowrap"
+            size="sm"
+            className="border-stone-700 text-stone-700 hover:bg-stone-700 hover:text-white whitespace-nowrap text-xs"
           >
             <Link to={`/cars/${car.id}`}>
               Détails

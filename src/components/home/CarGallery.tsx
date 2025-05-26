@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 interface CarGalleryProps {
   photos: CarPhoto[];
   className?: string;
-  style?: React.CSSProperties; // Added style prop to the interface
+  style?: React.CSSProperties;
 }
 
 const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => {
@@ -23,13 +23,12 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => 
     return (
       <div 
         className={cn("w-full h-full bg-stone-100", className)}
-        style={style} // Apply style prop
+        style={style}
       >
         <img 
           src="/placeholder.svg" 
           alt="Aucune photo"
           className="w-full h-full object-cover"
-          style={{ minHeight: "240px" }}
         />
       </div>
     );
@@ -40,7 +39,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => 
     return (
       <div 
         className={cn("w-full h-full relative overflow-hidden rounded-t-lg", className)}
-        style={style} // Apply style prop
+        style={style}
         data-aos="fade-up"
         data-aos-once="true"
       >
@@ -60,7 +59,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => 
   return (
     <Carousel 
       className={cn("w-full", className)}
-      style={style} // Apply style prop
+      style={style}
       data-aos="fade-up"
       data-aos-once="true"
     >
@@ -74,7 +73,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => 
                     src={photo.photo_url}
                     alt={`Photo ${index + 1} du véhicule`}
                     className="w-full h-full object-cover transition-all duration-300 hover:scale-105"
-                    style={{ height: "280px" }}
+                    style={style || { height: "180px" }}
                     loading="lazy" 
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "/placeholder.svg";
@@ -88,10 +87,10 @@ const CarGallery: React.FC<CarGalleryProps> = ({ photos, className, style }) => 
       </CarouselContent>
       <div className="absolute inset-0 flex items-center justify-between px-2 opacity-0 hover:opacity-100 transition-opacity">
         <CarouselPrevious 
-          className="relative rounded-full bg-stone-100/80 hover:bg-stone-100 border-stone-200 shadow-md h-8 w-8 left-0"
+          className="relative rounded-full bg-stone-100/80 hover:bg-stone-100 border-stone-200 shadow-md h-6 w-6 left-0"
         />
         <CarouselNext 
-          className="relative rounded-full bg-stone-100/80 hover:bg-stone-100 border-stone-200 shadow-md h-8 w-8 right-0"
+          className="relative rounded-full bg-stone-100/80 hover:bg-stone-100 border-stone-200 shadow-md h-6 w-6 right-0"
         />
       </div>
     </Carousel>
