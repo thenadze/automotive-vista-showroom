@@ -17,4 +17,4 @@ const FeaturedCarsGrid: React.FC<FeaturedCarsGridProps> = ({ cars }) => {
   );
 };
 
-export default FeaturedCarsGrid;
+export default React.memo(FeaturedCarsGrid);

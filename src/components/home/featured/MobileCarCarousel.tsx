@@ -48,4 +48,4 @@ const MobileCarCarousel: React.FC<MobileCarCarouselProps> = ({ cars, startIndex 
   );
 };
 
-export default MobileCarCarousel;
+export default React.memo(MobileCarCarousel);

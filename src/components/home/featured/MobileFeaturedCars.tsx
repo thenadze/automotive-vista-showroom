@@ -17,4 +17,4 @@ const MobileFeaturedCars: React.FC<MobileFeaturedCarsProps> = ({ cars }) => {
   );
 };
 
-export default MobileFeaturedCars;
+export default React.memo(MobileFeaturedCars);

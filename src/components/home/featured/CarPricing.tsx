@@ -37,4 +37,4 @@ const CarPricing: React.FC<CarPricingProps> = ({ car, className = "" }) => {
   );
 };
 
-export default CarPricing;
+export default React.memo(CarPricing);

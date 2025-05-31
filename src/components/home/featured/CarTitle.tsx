@@ -18,4 +18,4 @@ const CarTitle: React.FC<CarTitleProps> = ({ car, className = "" }) => {
   );
 };
 
-export default CarTitle;
+export default React.memo(CarTitle);

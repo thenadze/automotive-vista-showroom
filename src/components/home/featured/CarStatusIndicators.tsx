@@ -26,4 +26,4 @@ const CarStatusIndicators: React.FC<CarStatusIndicatorsProps> = ({ className = "
   );
 };
 
-export default CarStatusIndicators;
+export default React.memo(CarStatusIndicators);

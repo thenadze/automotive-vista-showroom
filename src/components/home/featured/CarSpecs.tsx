@@ -24,4 +24,4 @@ const CarSpecs: React.FC<CarSpecsProps> = ({ car, className = "" }) => {
   );
 };
 
-export default CarSpecs;
+export default React.memo(CarSpecs);
