@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -123,13 +122,29 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     setIsModalOpen(true);
   };
 
+  const handleGalleryClick = (e: React.MouseEvent) => {
+    // Empêcher l'ouverture de la modal si on clique sur les contrôles de navigation
+    const target = e.target as HTMLElement;
+    
+    // Vérifier si le clic provient d'un bouton de navigation ou d'un indicateur
+    if (target.closest('button') || target.closest('[role="button"]')) {
+      e.stopPropagation();
+      return;
+    }
+    
+    // Si c'est un clic sur l'image elle-même, ouvrir la modal
+    handleCardClick(e);
+  };
+
   return (
     <>
       <Card 
         className="bg-white rounded-lg overflow-hidden shadow cursor-pointer transition-all duration-300 hover:shadow-lg"
-        onClick={handleCardClick}
       >
-        <div className="relative w-full">
+        <div 
+          className="relative w-full cursor-pointer"
+          onClick={handleGalleryClick}
+        >
           <CarGallery 
             photos={car.photos || []} 
             className="w-full" 
