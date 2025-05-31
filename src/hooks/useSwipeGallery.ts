@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 
 interface UseSwipeGalleryProps {
   photosLength: number;
+  currentIndex: number;
   isAnimating: boolean;
   setIsAnimating: (value: boolean) => void;
   setCurrentIndex: (index: number) => void;
@@ -11,6 +12,7 @@ interface UseSwipeGalleryProps {
 
 export const useSwipeGallery = ({
   photosLength,
+  currentIndex,
   isAnimating,
   setIsAnimating,
   setCurrentIndex,
@@ -26,16 +28,18 @@ export const useSwipeGallery = ({
   const goToNext = useCallback(() => {
     if (isAnimating || photosLength <= 1) return;
     setIsAnimating(true);
-    setCurrentIndex(prev => (prev + 1) % photosLength);
+    const nextIndex = (currentIndex + 1) % photosLength;
+    setCurrentIndex(nextIndex);
     setTimeout(() => setIsAnimating(false), 400);
-  }, [isAnimating, photosLength, setIsAnimating, setCurrentIndex]);
+  }, [isAnimating, photosLength, currentIndex, setIsAnimating, setCurrentIndex]);
 
   const goToPrevious = useCallback(() => {
     if (isAnimating || photosLength <= 1) return;
     setIsAnimating(true);
-    setCurrentIndex(prev => prev > 0 ? prev - 1 : photosLength - 1);
+    const prevIndex = currentIndex > 0 ? currentIndex - 1 : photosLength - 1;
+    setCurrentIndex(prevIndex);
     setTimeout(() => setIsAnimating(false), 400);
-  }, [isAnimating, photosLength, setIsAnimating, setCurrentIndex]);
+  }, [isAnimating, photosLength, currentIndex, setIsAnimating, setCurrentIndex]);
 
   const onTouchStart = useCallback((e: React.TouchEvent) => {
     if (photosLength <= 1) return;

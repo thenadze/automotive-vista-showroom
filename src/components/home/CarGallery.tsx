@@ -41,6 +41,7 @@ const CarGallery: React.FC<CarGalleryProps> = ({
 
   const swipeGallery = useSwipeGallery({
     photosLength: validPhotos.length,
+    currentIndex,
     isAnimating,
     setIsAnimating,
     setCurrentIndex,
