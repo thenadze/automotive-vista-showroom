@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -126,8 +127,13 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
     // Empêcher l'ouverture de la modal si on clique sur les contrôles de navigation
     const target = e.target as HTMLElement;
     
-    // Vérifier si le clic provient d'un bouton de navigation ou d'un indicateur
-    if (target.closest('button') || target.closest('[role="button"]')) {
+    // Vérifier plus précisément si le clic provient d'éléments de navigation
+    if (
+      target.closest('button') || 
+      target.closest('[role="button"]') ||
+      target.classList.contains('absolute') ||
+      target.closest('.absolute')
+    ) {
       e.stopPropagation();
       return;
     }

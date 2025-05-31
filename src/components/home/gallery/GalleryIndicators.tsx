@@ -22,7 +22,10 @@ const GalleryIndicators: React.FC<GalleryIndicatorsProps> = ({
     return null;
   }
 
-  const handleIndicatorClick = (index: number) => {
+  const handleIndicatorClick = (index: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     if (!isAnimating) {
       setIsAnimating(true);
       setCurrentIndex(index);
@@ -36,7 +39,7 @@ const GalleryIndicators: React.FC<GalleryIndicatorsProps> = ({
       {Array.from({ length: photosLength }, (_, index) => (
         <button
           key={index}
-          onClick={() => handleIndicatorClick(index)}
+          onClick={(e) => handleIndicatorClick(index, e)}
           className={`w-2 h-2 rounded-full transition-all ${
             index === currentIndex 
               ? 'bg-white' 

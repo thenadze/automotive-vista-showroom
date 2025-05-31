@@ -23,10 +23,22 @@ const GalleryNavigation: React.FC<GalleryNavigationProps> = ({
     return null;
   }
 
+  const handlePreviousClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    goToPrevious();
+  };
+
+  const handleNextClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    goToNext();
+  };
+
   return (
     <>
       <button
-        onClick={goToPrevious}
+        onClick={handlePreviousClick}
         className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all z-10"
         aria-label="Photo précédente"
         disabled={isAnimating}
@@ -34,7 +46,7 @@ const GalleryNavigation: React.FC<GalleryNavigationProps> = ({
         <ChevronLeft size={20} />
       </button>
       <button
-        onClick={goToNext}
+        onClick={handleNextClick}
         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-all z-10"
         aria-label="Photo suivante"
         disabled={isAnimating}
