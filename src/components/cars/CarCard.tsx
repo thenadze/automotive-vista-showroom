@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CarWithDetails } from "@/types";
@@ -133,7 +134,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             photos={car.photos || []} 
             className="w-full" 
             style={{ height: isMobile ? "140px" : "180px" }}
-            autoSlide={true}
+            autoSlide={false}
             autoSlideInterval={4000}
           />
           
